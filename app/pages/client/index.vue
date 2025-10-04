@@ -9,13 +9,13 @@ const drawer = ref(false);
 
 <template>
   <v-container fluid>
-    <div class="d-flex flex-row align-center mb-4">
-      <v-icon size="24" class="mr-2" icon="mdi-account-group" />
-      <h1 class="text-h5">Gerenciamento de Clientes</h1>
+    <div class="d-flex flex-row align-center mb-4 text-primary">
+      <v-icon size="28" class="mr-2" icon="mdi-account-group" />
+      <span class="text-h5">Gerenciamento de Clientes</span>
     </div>
 
     <ClientFilter v-model="drawer" />
 
-    <ClientTable @open-filter="drawer = true" />
+    <ClientTable @open-creation="drawer = true" @open-filter="drawer = true" />
   </v-container>
 </template>

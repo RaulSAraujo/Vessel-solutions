@@ -25,12 +25,12 @@ const menus = [
 </script>
 
 <template>
-  <v-menu v-for="(menu, index) in menus" :key="index" offset="10">
+  <v-menu v-for="(menu, index) in menus" :key="index" offset="13">
     <template #activator="{ props }">
       <v-btn v-bind="props"> {{ menu.title }} </v-btn>
     </template>
 
-    <v-list>
+    <v-list color="primary" rounded="lg">
       <v-list-item v-for="(item, i) in menu.items" :key="i" :to="item.to">
         <v-list-item-title>{{ item.title }}</v-list-item-title>
       </v-list-item>

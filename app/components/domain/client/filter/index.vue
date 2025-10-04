@@ -14,11 +14,38 @@ const eventFilters = ref<FilterDefinition[]>([
       clearable: true,
     },
   },
+  {
+    key: "email",
+    label: "E-mail",
+    type: "string",
+    op: "eq",
+    layout: {
+      clearable: true,
+    },
+  },
+  {
+    key: "tax_id",
+    label: "Documento",
+    type: "string",
+    op: "eq",
+    layout: {
+      clearable: true,
+    },
+  },
+  {
+    key: "phone",
+    label: "Telefone",
+    type: "string",
+    op: "eq",
+    layout: {
+      clearable: true,
+    },
+  },
 ]);
 </script>
 
 <template>
-  <v-navigation-drawer temporary location="right" width="300" class="pa-2">
+  <v-navigation-drawer temporary location="right" width="280" class="pa-2">
     <UiFilter
       v-model="activeFilters"
       :event-filters="eventFilters"

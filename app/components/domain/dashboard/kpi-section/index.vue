@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import { useClientsApi } from "~/composables/api/useClientsApi";
-import { useEventsApi } from "~/composables/api/useEventsApi";
+import { useReportsApi } from "~/composables/api/useReportsApi";
 
+// components
 import Card from "./Card.vue";
 
-const eventsApi = useEventsApi();
-const clientsApi = useClientsApi();
+const reportsApi = useReportsApi();
 
 const totalEvents = ref(0);
 const totalProfit = ref(0);
@@ -15,17 +14,12 @@ const loading = ref(false);
 async function fetchKPIs() {
   loading.value = true;
 
-  const allClients = await clientsApi.getClients();
-  if (allClients) {
-    totalClients.value = allClients.data.length;
-  }
+  const overview = await reportsApi.getKpisOverview();
 
-  const allEvents = await eventsApi.fetchEvents();
-  if (allEvents) {
-    totalEvents.value = allEvents.length;
-    totalProfit.value = allEvents.reduce((sum, event) => {
-      return sum + (event.gross_profit || 0);
-    }, 0);
+  if (overview) {
+    totalClients.value = overview.data.clients.count;
+    totalEvents.value = overview.data.events.count;
+    totalProfit.value = totalProfit.value = overview.data.events.gross_profit;
   }
 
   loading.value = false;

@@ -27,11 +27,8 @@ export interface VDataTableServerHeader {
     align?: 'start' | 'end' | 'center'; // Alinhamento do texto
     sortable?: boolean; // Se a coluna pode ser ordenada
     width?: string | number; // Largura da coluna
-    // Outras propriedades comuns que você pode querer adicionar:
-    // filterable?: boolean;
-    // class?: string | string[];
-    // cellClass?: string | string[];
-    // children?: VDataTableServerHeader[]; // Para cabeçalhos aninhados
+    minWidth?: string | number | undefined;
+    maxWidth?: string | number | undefined;
 }
 
 /**

@@ -10,7 +10,7 @@ export function useClientsApi() {
                 query: {
                     ...props,
                     filters
-                }
+                },
             });
 
             return res;

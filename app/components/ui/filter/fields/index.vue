@@ -147,77 +147,69 @@ watch(
 </script>
 
 <template>
-  <v-row>
-    <v-col v-for="filter in filters" :key="filter.key" cols="12">
-      <template v-if="filter.type === 'string'">
-        <UiTextField
-          :model-value="internalFilters[filter.key]"
-          :label="filter.label"
-          :clearable="filter.layout?.clearable"
-          @enter="emit('search')"
-          @update:model-value="(val: any) => handleFilterUpdate(filter.key, val)"
-        />
-      </template>
+  <div v-for="filter in filters" :key="filter.key" class="mb-3">
+    <template v-if="filter.type === 'string'">
+      <UiTextField
+        :model-value="internalFilters[filter.key]"
+        :label="filter.label"
+        :clearable="filter.layout?.clearable"
+        @enter="emit('search')"
+        @update:model-value="(val: any) => handleFilterUpdate(filter.key, val)"
+      />
+    </template>
 
-      <template v-else-if="filter.type === 'number'">
-        <UiNumberField
-          :model-value="internalFilters[filter.key]"
-          :label="filter.label"
-          :min="filter.layout?.min"
-          :max="filter.layout?.max"
-          :step="filter.layout?.step"
-          :clearable="filter.layout?.clearable"
-          @update:model-value="(val: any) => handleFilterUpdate(filter.key, val)"
-        />
-      </template>
+    <template v-else-if="filter.type === 'number'">
+      <UiNumberField
+        :model-value="internalFilters[filter.key]"
+        :label="filter.label"
+        :min="filter.layout?.min"
+        :max="filter.layout?.max"
+        :step="filter.layout?.step"
+        :clearable="filter.layout?.clearable"
+        @update:model-value="(val: any) => handleFilterUpdate(filter.key, val)"
+      />
+    </template>
 
-      <template v-else-if="filter.type === 'array'">
-        <UiSelectField
-          v-if="!filter.layout?.combobox"
-          :model-value="internalFilters[filter.key]"
-          :label="filter.label"
-          :items="filter.options || []"
-          :multiple="filter.layout?.multiple"
-          :clearable="filter.layout?.clearable"
-          @update:model-value="(val) => handleFilterUpdate(filter.key, val)"
-        />
+    <template v-else-if="filter.type === 'array'">
+      <UiSelectField
+        v-if="!filter.layout?.combobox"
+        :model-value="internalFilters[filter.key]"
+        :label="filter.label"
+        :items="filter.options || []"
+        :multiple="filter.layout?.multiple"
+        :clearable="filter.layout?.clearable"
+        @update:model-value="(val) => handleFilterUpdate(filter.key, val)"
+      />
 
-        <UiComboboxField
-          v-else
-          :model-value="internalFilters[filter.key]"
-          :label="filter.label"
-          :items="filter.options || []"
-          :multiple="filter.layout?.multiple"
-          :clearable="filter.layout?.clearable"
-          @update:model-value="(val) => handleFilterUpdate(filter.key, val)"
-        />
-      </template>
+      <UiComboboxField
+        v-else
+        :model-value="internalFilters[filter.key]"
+        :label="filter.label"
+        :items="filter.options || []"
+        :multiple="filter.layout?.multiple"
+        :clearable="filter.layout?.clearable"
+        @update:model-value="(val) => handleFilterUpdate(filter.key, val)"
+      />
+    </template>
 
-      <template v-else-if="filter.type === 'boolean'">
-        <UiSwitchLock
-          :model-value="internalFilters[filter.key]"
-          :label="filter.label"
-          @update:model-value="(val) => handleFilterUpdate(filter.key, val)"
-          @switch="(val) => handleFilterUpdate(filter.key, val)"
-        />
-      </template>
+    <template v-else-if="filter.type === 'boolean'">
+      <UiSwitchLock
+        :model-value="internalFilters[filter.key]"
+        :label="filter.label"
+        @update:model-value="(val) => handleFilterUpdate(filter.key, val)"
+        @switch="(val) => handleFilterUpdate(filter.key, val)"
+      />
+    </template>
 
-      <template v-else-if="filter.type === 'date'">
-        <UiDateField
-          :model-value="internalFilters[filter.key]"
-          :label="filter.label"
-          :clearable="filter.layout?.clearable"
-          :multiple="filter.layout?.multiple ? 'range' : 'single'"
-          @save="(val) => handleFilterUpdate(filter.key, val)"
-          @update:model-value="(val: any) => handleFilterUpdate(filter.key, val)"
-        />
-      </template>
-    </v-col>
-
-    <v-spacer />
-
-    <v-col cols="12">
-      <slot name="actions" />
-    </v-col>
-  </v-row>
+    <template v-else-if="filter.type === 'date'">
+      <UiDateField
+        :model-value="internalFilters[filter.key]"
+        :label="filter.label"
+        :clearable="filter.layout?.clearable"
+        :multiple="filter.layout?.multiple ? 'range' : 'single'"
+        @save="(val) => handleFilterUpdate(filter.key, val)"
+        @update:model-value="(val: any) => handleFilterUpdate(filter.key, val)"
+      />
+    </template>
+  </div>
 </template>
