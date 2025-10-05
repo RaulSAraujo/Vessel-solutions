@@ -1,8 +1,18 @@
 <script lang="ts" setup>
-defineEmits(["openFilter", "openCreation"]);
+// componentes
+import Actions from "./Actions.vue";
+import type { Datum } from "~/types/client";
+
+const emit = defineEmits([
+  "openFilter",
+  "openCreation",
+  "openUpdate",
+  "openDelete",
+]);
 
 const store = useClientStore();
-const { page, itemsPerPage, items, totalItems, loading } = storeToRefs(store);
+const { page, itemsPerPage, items, totalItems, loading, selectedClient } =
+  storeToRefs(store);
 
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
@@ -16,6 +26,16 @@ const headers = [
   { title: "Criado em", key: "created_at" },
   { title: "Atualizado em", key: "updated_at" },
 ];
+
+function handleOpenUpdate(client: Datum) {
+  selectedClient.value = client;
+  emit("openUpdate");
+}
+
+function handleOpenDelete(client: Datum) {
+  selectedClient.value = client;
+  emit("openDelete");
+}
 </script>
 
 <template>
@@ -60,8 +80,11 @@ const headers = [
       />
     </template>
 
-    <template #item.actions>
-      <v-icon icon="mdi-dots-vertical" small class="mr-2" />
+    <template #item.actions="{ item }">
+      <Actions
+        @edit="handleOpenUpdate(item)"
+        @delete="handleOpenDelete(item)"
+      />
     </template>
 
     <template #item.name="{ item }">

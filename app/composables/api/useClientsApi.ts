@@ -45,10 +45,9 @@ export function useClientsApi() {
         }
     };
 
-    const updateClient = async (id: string, clientData: Partial<Datum>) => {
+    const updateClient = async (id: string, clientData: FormClient) => {
         try {
-
-            const res = await $fetch<Client>(`/api/clients/${id}`, {
+            const res = await $fetch<Datum>(`/api/clients/${id}`, {
                 method: 'PUT',
                 body: clientData,
             });
@@ -62,7 +61,6 @@ export function useClientsApi() {
 
     const deleteClient = async (id: string) => {
         try {
-
             await $fetch(`/api/clients/${id}`, {
                 method: 'DELETE',
             });

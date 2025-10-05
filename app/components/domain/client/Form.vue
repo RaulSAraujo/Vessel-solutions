@@ -1,10 +1,11 @@
 <script setup lang="ts">
+import ViaCep from "./ViaCep.vue";
 import { clientSchema } from "~/schemas/client";
-import type { FetchError } from "ofetch";
+
 import type { Datum } from "~/types/client";
 import type { MaskInputOptions } from "maska";
 
-defineProps<{
+const props = defineProps<{
   client?: Datum | null;
   loading: boolean;
 }>();
@@ -32,31 +33,14 @@ const onSubmit = handleSubmit((values) => {
   emit("submit", values);
 });
 
-const loadingViaCep = ref(false);
-const cepError = ref<string | null>(null);
-
-async function getViaCep() {
-  try {
-    cepError.value = null;
-    loadingViaCep.value = true;
-
-    if (!zip_code.value || zip_code.value.length < 8) return;
-
-    const res = await $fetch("/api/via-cep", {
-      query: {
-        cep: zip_code.value,
-      },
-    });
-
-    city.value = res.localidade;
-    address.value = res.logradouro;
-  } catch (error) {
-    const err = error as FetchError;
-    console.error("API handler error:", err);
-    cepError.value = "Erro ao buscar CEP. Tente novamente.";
-  } finally {
-    loadingViaCep.value = false;
-  }
+if (props.client) {
+  name.value = props.client.name;
+  city.value = props.client.city;
+  phone.value = props.client.phone;
+  email.value = props.client.email;
+  address.value = props.client.address;
+  document.value = props.client.document;
+  zip_code.value = props.client.zip_code;
 }
 </script>
 
@@ -104,15 +88,11 @@ async function getViaCep() {
       </v-col>
 
       <v-col cols="12">
-        <UiTextField
+        <ViaCep
           v-model="zip_code"
-          v-maska="'#####-###'"
-          label="CEP"
-          prepend-inner-icon="mdi-map-marker"
-          :loading="loadingViaCep"
-          :error-messages="errors.zip_code || cepError"
-          @focus="cepError = null"
-          @blur="getViaCep"
+          :error-messages="errors.zip_code"
+          @update-city="city = $event"
+          @update-address="address = $event"
         />
       </v-col>
 

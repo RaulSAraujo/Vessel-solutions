@@ -6,6 +6,8 @@ definePageMeta({
 
 const filterDrawer = ref(false);
 const dialogCreation = ref(false);
+const dialogUpdate = ref(false);
+const dialogDelete = ref(false);
 </script>
 
 <template>
@@ -19,9 +21,15 @@ const dialogCreation = ref(false);
 
     <ClientTable
       @open-creation="dialogCreation = true"
+      @open-update="dialogUpdate = true"
       @open-filter="filterDrawer = true"
+      @open-delete="dialogDelete = true"
     />
 
     <ClientCreation v-model="dialogCreation" @close="dialogCreation = false" />
+
+    <ClientUpdate v-model="dialogUpdate" @close="dialogUpdate = false" />
+
+    <ClientDelete v-model="dialogDelete" @close="dialogDelete = false" />
   </v-container>
 </template>

@@ -16,7 +16,6 @@ async function creation(events: FormClient) {
   const res = await api.createClient(events);
 
   if (!res) {
-    $toast().error("Não foi possível criar o cliente.");
     loading.value = false;
     return;
   }
@@ -33,7 +32,7 @@ async function creation(events: FormClient) {
   <v-dialog width="300">
     <v-card title="Novo Cliente" rounded="xl">
       <v-card-text>
-        <Form :client="null" :loading="loading" @submit="creation" />
+        <Form :loading="loading" @submit="creation" />
       </v-card-text>
     </v-card>
   </v-dialog>

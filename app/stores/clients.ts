@@ -16,6 +16,9 @@ export const useClientStore = defineStore('client', () => {
     // Filtros
     const activeFilters = ref<EmittedFilters>({});
 
+    // Update
+    const selectedClient = ref<Datum | null>(null);
+
     async function fetchClients(props?: VDataTableServerOptions) {
         loading.value = true;
 
@@ -46,14 +49,28 @@ export const useClientStore = defineStore('client', () => {
         totalItems.value += 1;
     }
 
+    function updateItem(item: Datum) {
+        const index = items.value.findIndex((i) => i.id === item.id);
+        items.value[index] = item;
+    }
+
+    function deleteItem(item: Datum) {
+        const index = items.value.findIndex((i) => i.id === item.id);
+        items.value.splice(index, 1);
+        totalItems.value -= 1;
+    }
+
     return {
         page,
         items,
         loading,
         addItem,
+        updateItem,
+        deleteItem,
         totalItems,
         fetchClients,
         itemsPerPage,
         activeFilters,
+        selectedClient,
     }
 })

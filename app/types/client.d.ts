@@ -8,7 +8,8 @@ export type Datum = {
     name: string;
     phone: string;
     email: string;
-    tax_id: string;
+    document: string;
+    zip_code: string;
     address: string;
     city: string;
     created_at: Date;
