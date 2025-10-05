@@ -1,6 +1,6 @@
 import type { FetchError } from 'ofetch'
 import type { EmittedFilters } from "~/types/filter";
-import type { Clients, Datum } from '~/types/client';
+import type { Clients, Datum, FormClient } from '~/types/client';
 import type { VDataTableServerOptions } from '~/types/data-table';
 
 export function useClientsApi() {
@@ -31,7 +31,7 @@ export function useClientsApi() {
         }
     };
 
-    const createClient = async (clientData: Partial<Datum>) => {
+    const createClient = async (clientData: FormClient) => {
         try {
             const res = await $fetch<Datum>('/api/clients', {
                 method: 'POST',

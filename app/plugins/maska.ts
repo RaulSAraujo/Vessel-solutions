@@ -37,5 +37,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     // Exemplo de uso na máscara: "BBB" para 3 caracteres minúsculos, "B+" para qualquer quantidade.
     tokens['B'] = { pattern: /[\s\S]/, transform: (char) => char.toLowerCase(), repeated: true }
 
+
     nuxtApp.vueApp.directive('maska', vMaska)
 })

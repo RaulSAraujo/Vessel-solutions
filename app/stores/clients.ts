@@ -40,13 +40,20 @@ export const useClientStore = defineStore('client', () => {
         loading.value = false;
     }
 
+    function addItem(item: Datum) {
+        items.value.pop();
+        items.value.splice(0, 0, item);
+        totalItems.value += 1;
+    }
+
     return {
         page,
         items,
         loading,
+        addItem,
         totalItems,
         fetchClients,
         itemsPerPage,
-        activeFilters
+        activeFilters,
     }
 })

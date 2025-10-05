@@ -4,7 +4,8 @@ definePageMeta({
   layout: "default",
 });
 
-const drawer = ref(false);
+const filterDrawer = ref(false);
+const dialogCreation = ref(false);
 </script>
 
 <template>
@@ -14,8 +15,13 @@ const drawer = ref(false);
       <span class="text-h5">Gerenciamento de Clientes</span>
     </div>
 
-    <ClientFilter v-model="drawer" />
+    <ClientFilter v-model="filterDrawer" />
 
-    <ClientTable @open-creation="drawer = true" @open-filter="drawer = true" />
+    <ClientTable
+      @open-creation="dialogCreation = true"
+      @open-filter="filterDrawer = true"
+    />
+
+    <ClientCreation v-model="dialogCreation" @close="dialogCreation = false" />
   </v-container>
 </template>
