@@ -261,6 +261,39 @@ export type Database = {
         }
         Relationships: []
       }
+      suppliers: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+          phone: string | null
+          email: string | null
+          observation: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          phone?: string | null
+          email?: string | null
+          observation?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+          phone?: string | null
+          email?: string | null
+          observation?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       purchase_list_items: {
         Row: {
           batch_unit: string | null

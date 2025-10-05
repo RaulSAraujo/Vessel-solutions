@@ -6,18 +6,17 @@ const menus = [
       {
         title: "Clientes",
         to: "/client",
+        icon: "mdi-account-group",
       },
       {
         title: "Ingredientes",
         to: "/ingredient",
+        icon: "mdi-food-apple",
       },
       {
-        title: "Drinks",
-        to: "/#2",
-      },
-      {
-        title: "Eventos",
-        to: "/#3",
+        title: "Fornecedores",
+        to: "/supplier",
+        icon: "mdi-truck-delivery-outline",
       },
     ],
   },
@@ -31,7 +30,12 @@ const menus = [
     </template>
 
     <v-list color="primary" rounded="lg">
-      <v-list-item v-for="(item, i) in menu.items" :key="i" :to="item.to">
+      <v-list-item
+        v-for="(item, i) in menu.items"
+        :key="i"
+        :to="item.to"
+        :prepend-icon="item.icon"
+      >
         <v-list-item-title>{{ item.title }}</v-list-item-title>
       </v-list-item>
     </v-list>
