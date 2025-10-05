@@ -4,7 +4,7 @@ import type { FilterDefinition } from "~/types/filter";
 const store = useClientStore();
 const { activeFilters } = storeToRefs(store);
 
-const eventFilters = ref<FilterDefinition[]>([
+const filterDefinitions = ref<FilterDefinition[]>([
   {
     key: "name",
     label: "Nome do Cliente",
@@ -48,7 +48,7 @@ const eventFilters = ref<FilterDefinition[]>([
   <v-navigation-drawer temporary location="right" width="280" class="pa-2">
     <UiFilter
       v-model="activeFilters"
-      :event-filters="eventFilters"
+      :filter-definitions="filterDefinitions"
       @clear="store.fetchClients"
       @search="store.fetchClients"
     />

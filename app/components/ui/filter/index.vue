@@ -9,7 +9,7 @@ const props = defineProps({
     type: Object as PropType<Record<string, any>>,
     required: true,
   },
-  eventFilters: {
+  filterDefinitions: {
     type: Array as PropType<FilterDefinition[]>,
     required: true,
   },
@@ -36,7 +36,7 @@ const resetFilters = () => {
   <div class="d-flex flex-column py-2" style="width: 100%; height: 100%">
     <Fields
       v-model="internalValue"
-      :filters="eventFilters"
+      :filters="filterDefinitions"
       @search="emit('search', internalValue)"
     />
 
