@@ -17,6 +17,7 @@
     "@vee-validate/yup": "^4.15.1",
     "dayjs": "^1.11.18",
     "dayjs-nuxt": "2.1.11",
+    "dayjs-plugin-utc": "^0.1.2",
     "eslint": "^9.0.0",
     "maska": "^3.2.0",
     "nuxt": "^4.1.2",

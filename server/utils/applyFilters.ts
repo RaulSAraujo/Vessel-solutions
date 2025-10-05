@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import type { PostgrestFilterBuilder } from "@supabase/postgrest-js";
+
+dayjs.extend(utc)
+dayjs.extend(customParseFormat);
+dayjs.locale('pt-br')
 
 // Mapeamento de operadores string para métodos do Supabase
 const SUPABASE_OPERATORS: { [key: string]: string } = {
@@ -38,6 +45,15 @@ export function applySupabaseFilters<Q extends PostgrestFilterBuilder<any, any, 
                 const supabaseMethod = SUPABASE_OPERATORS[op];
                 let processedValue = value;
 
+                if (op === 'eq' && typeof value === "string") {
+                    const dateValue = processDate(value);
+                    if (dateValue) {
+                        (currentQuery as any).gte(field, dateValue.start);
+                        (currentQuery as any).lte(field, dateValue.end);
+                        continue;
+                    }
+                }
+
                 // Adiciona curingas '%' para operadores 'like' e 'ilike'
                 if (op === 'like' || op === 'ilike') {
                     // Garante que o valor é uma string antes de adicionar os curingas
@@ -51,9 +67,6 @@ export function applySupabaseFilters<Q extends PostgrestFilterBuilder<any, any, 
                     }
                 }
 
-                // Aplica o filtro dinamicamente.
-                // O 'as any' é necessário aqui porque o TypeScript não consegue inferir
-                // qual método específico (eq, ilike, etc.) será chamado dinamicamente.
                 (currentQuery as any)[supabaseMethod](field, processedValue);
             } else {
                 console.warn(`[applySupabaseFilters] Invalid operator or value for field '${field}': op='${op}', value='${value}'`);
@@ -62,4 +75,39 @@ export function applySupabaseFilters<Q extends PostgrestFilterBuilder<any, any, 
     }
 
     return currentQuery;
+}
+
+/**
+ * Processa e formata valores de data usando Day.js.
+ *
+ * @param value O valor a ser processado (string ou Date).
+ * @returns Uma string no formato ISO 8601 ou null se o valor não for uma data válida.
+ */
+function processDate(value: any): { start: string; end: string } | null {
+    if (typeof value === "string") {
+        if (value.includes(',')) {
+            const [startDate, endDate] = value.split(",").map((date) => date.trim());
+
+            // Processa as duas datas no formato DD/MM/YYYY
+            const parsedStartDate = dayjs(startDate, "DD/MM/YYYY", true).utc();
+            const parsedEndDate = dayjs(endDate, "DD/MM/YYYY", true).utc();
+
+            if (parsedStartDate.isValid() && parsedEndDate.isValid()) {
+                const startOfDay = parsedStartDate.startOf("day").toISOString();
+                const endOfDay = parsedEndDate.endOf("day").toISOString();
+
+                return { start: startOfDay, end: endOfDay };
+            }
+        } else {
+            const parsedDate = dayjs(value, "DD/MM/YYYY", true).utc();
+
+            if (parsedDate.isValid()) {
+                const startOfDay = parsedDate.startOf("day").toISOString(); // 00:00:00
+                const endOfDay = parsedDate.endOf("day").toISOString();     // 23:59:59
+
+                return { start: startOfDay, end: endOfDay };
+            }
+        }
+    }
+    return null; // Retorna null se não for uma data válida
 }
