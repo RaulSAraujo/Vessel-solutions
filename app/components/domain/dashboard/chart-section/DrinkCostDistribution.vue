@@ -20,13 +20,13 @@ async function loadDrinkCostDistributionChart() {
   try {
     isLoading.value = true;
 
-    const res = await $fetch<DonutDataItem[]>(
-      "/api/reports/drink-cost-distribution"
-    );
+    // const res = await $fetch<DonutDataItem[]>(
+    //   "/api/reports/drink-cost-distribution"
+    // );
 
-    if (res.length > 0) {
-      drinkCostChartData.value = res;
-    }
+    // if (res.length > 0) {
+    //   drinkCostChartData.value = res;
+    // }
   } catch (e) {
     console.error("Erro capturado em loadDrinkCostDistributionChart:", e);
   } finally {
