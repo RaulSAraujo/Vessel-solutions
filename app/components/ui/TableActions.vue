@@ -28,6 +28,8 @@ defineEmits(["edit", "delete"]);
           <v-icon size="small" start icon="mdi-delete" />
         </template>
       </v-list-item>
+
+      <slot name="items" />
     </v-list>
   </v-menu>
 </template>

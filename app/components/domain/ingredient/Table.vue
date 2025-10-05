@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // componentes
-import type { Datum } from "~/types/client";
+import type { Datum } from "~/types/ingredient";
 
 const emit = defineEmits([
   "openFilter",
@@ -9,30 +9,24 @@ const emit = defineEmits([
   "openDelete",
 ]);
 
-const store = useClientStore();
-const { page, itemsPerPage, items, totalItems, loading, selectedClient } =
+const store = useIngredientStore();
+const { page, itemsPerPage, items, totalItems, loading, selectedIngredient } =
   storeToRefs(store);
 
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
-  { title: "Nome", key: "name", maxWidth: 150 },
-  { title: "E-mail", key: "email", maxWidth: 150 },
-  { title: "Documento", key: "document", minWidth: 160 },
-  { title: "Telefone", key: "phone", minWidth: 140 },
-  { title: "Cep", key: "zip_code", minWidth: 130 },
-  { title: "Cidade", key: "city", minWidth: 130 },
-  { title: "Endereço", key: "address", maxWidth: 150 },
+  { title: "Nome", key: "name" },
   { title: "Criado em", key: "created_at" },
   { title: "Atualizado em", key: "updated_at" },
 ];
 
-function handleOpenUpdate(client: Datum) {
-  selectedClient.value = client;
+function handleOpenUpdate(ingredient: Datum) {
+  selectedIngredient.value = ingredient;
   emit("openUpdate");
 }
 
-function handleOpenDelete(client: Datum) {
-  selectedClient.value = client;
+function handleOpenDelete(ingredient: Datum) {
+  selectedIngredient.value = ingredient;
   emit("openDelete");
 }
 </script>
@@ -41,14 +35,14 @@ function handleOpenDelete(client: Datum) {
   <UiTable
     v-model:page="page"
     v-model:items-per-page="itemsPerPage"
-    title="Lista de clientes"
+    title="Lista de ingredientes"
     :items="items"
     item-value="id"
     :headers="headers"
     :loading="loading"
     :total-items="totalItems"
     class="rounded-b-lg rounded-t-xl"
-    @update:options="store.fetchClients"
+    @update:options="store.fetchIngredients"
   >
     <template #buttons>
       <v-btn
@@ -66,7 +60,7 @@ function handleOpenDelete(client: Datum) {
         variant="text"
         icon="mdi-refresh"
         density="comfortable"
-        @click="store.fetchClients"
+        @click="store.fetchIngredients"
       />
 
       <v-btn
@@ -84,18 +78,6 @@ function handleOpenDelete(client: Datum) {
         @edit="handleOpenUpdate(item)"
         @delete="handleOpenDelete(item)"
       />
-    </template>
-
-    <template #item.name="{ item }">
-      <UiTextWithTooltip :text="item.name" />
-    </template>
-
-    <template #item.email="{ item }">
-      <UiTextWithTooltip :text="item.email" />
-    </template>
-
-    <template #item.address="{ item }">
-      <UiTextWithTooltip :text="item.address" />
     </template>
 
     <template #item.created_at="{ item }">

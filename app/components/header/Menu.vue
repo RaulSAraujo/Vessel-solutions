@@ -9,7 +9,7 @@ const menus = [
       },
       {
         title: "Ingredientes",
-        to: "/#1",
+        to: "/ingredient",
       },
       {
         title: "Drinks",
