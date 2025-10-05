@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{
-  text: string;
+  text: string | undefined;
 }>();
 
 const textSpan = ref<HTMLElement | null>(null);
