@@ -6,9 +6,10 @@ export type Ingredients = {
 export type Datum = {
     id: string;
     name: string;
+    user_id: string;
+    unit_id: string;
     created_at: Date;
     updated_at: Date;
-    user_id: string;
 }
 
 export type Page = {
@@ -19,5 +20,6 @@ export type Page = {
 }
 
 export type FormIngredients = {
-    name: string
+    name: string;
+    unit_id: string;
 }

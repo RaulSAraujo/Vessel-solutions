@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useIngredientApi } from "~/composables/api/useIngredientApi";
 import { ingredientSchema } from "~/schemas/ingredient";
 
 import type { Datum } from "~/types/ingredient";
@@ -15,6 +16,7 @@ const { handleSubmit, errors } = useForm({
 });
 
 const { value: name } = useField<string>("name");
+const { value: unit_id } = useField<string>("unit_id");
 
 const onSubmit = handleSubmit((values) => {
   emit("submit", values);
@@ -22,7 +24,10 @@ const onSubmit = handleSubmit((values) => {
 
 if (props.ingredient) {
   name.value = props.ingredient.name;
+  unit_id.value = props.ingredient.unit_id;
 }
+
+const units = await useIngredientApi().getUnits();
 </script>
 
 <template>
@@ -34,6 +39,18 @@ if (props.ingredient) {
           v-maska="'Ax'"
           label="Nome do ingrediente"
           prepend-inner-icon="mdi-food-apple"
+          :error-messages="errors.name"
+        />
+      </v-col>
+
+      <v-col cols="12">
+        <UiSelectField
+          v-model="unit_id"
+          :items="units || []"
+          item-value="id"
+          item-title="name"
+          label="Unidade"
+          prepend-inner-icon="mdi-ruler"
           :error-messages="errors.name"
         />
       </v-col>

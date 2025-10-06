@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { FilterOption } from "~/types/filter";
-
 const props = defineProps({
   /**
    * O valor selecionado do select (para v-model).
@@ -21,7 +19,7 @@ const props = defineProps({
    * Array de itens para o select.
    */
   items: {
-    type: Array as PropType<FilterOption[]>,
+    type: Array as PropType<any[]>, // eslint-disable-line @typescript-eslint/no-explicit-any
     required: true,
   },
   /**

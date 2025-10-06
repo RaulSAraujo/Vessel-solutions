@@ -16,6 +16,7 @@ const { page, itemsPerPage, items, totalItems, loading, selectedIngredient } =
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
   { title: "Nome", key: "name" },
+  { title: "Medida", key: "unit_id" },
   { title: "Criado em", key: "created_at" },
   { title: "Atualizado em", key: "updated_at" },
 ];
@@ -78,6 +79,10 @@ function handleOpenDelete(ingredient: Datum) {
         @edit="handleOpenUpdate(item)"
         @delete="handleOpenDelete(item)"
       />
+    </template>
+
+    <template #item.unit_id="{ item }">
+      {{ item.units?.name }}
     </template>
 
     <template #item.created_at="{ item }">
