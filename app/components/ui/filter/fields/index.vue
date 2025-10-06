@@ -71,6 +71,8 @@ const transformModelValueToInternal = (
       newInternalValues[filterDef.key] = [];
     } else if (filterDef.type === "boolean") {
       newInternalValues[filterDef.key] = undefined; // Ou false, dependendo do comportamento desejado
+    } else if (filterDef.type === "currency") {
+      newInternalValues[filterDef.key] = [0, 1000];
     } else {
       newInternalValues[filterDef.key] = null;
     }
@@ -210,6 +212,45 @@ watch(
         @save="(val) => handleFilterUpdate(filter.key, val)"
         @update:model-value="(val: any) => handleFilterUpdate(filter.key, val)"
       />
+    </template>
+
+    <template v-else-if="filter.type === 'currency'">
+      <v-card
+        rounded="lg"
+        height="40"
+        class="px-1 opacity-60"
+        variant="outlined"
+        density="compact"
+        style="
+          position: relative;
+          overflow: visible;
+          display: flex;
+          align-items: center;
+        "
+      >
+        <span
+          class="text-caption bg-surface"
+          style="position: absolute; top: -10px; left: 20px; padding: 0 4px"
+        >
+          {{ filter.label }}
+        </span>
+
+        <v-range-slider
+          v-model="internalFilters[filter.key]"
+          :min="0"
+          :step="1"
+          :max="1000"
+          track-size="2"
+          color="primary"
+          thumb-size="10"
+          density="compact"
+          :thumb-label="true"
+          :no-keyboard="true"
+          :hide-details="true"
+          class="opacity-100"
+          @update:model-value="(val: any) => handleFilterUpdate(filter.key, val)"
+        />
+      </v-card>
     </template>
   </div>
 </template>

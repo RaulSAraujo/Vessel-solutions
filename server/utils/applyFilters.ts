@@ -22,6 +22,7 @@ const SUPABASE_OPERATORS: { [key: string]: string } = {
     in: "in",     // is in a list (value should be an array)
     cs: "cs",     // contains (for arrays/jsonb)
     cd: "cd",     // contained by (for arrays/jsonb)
+    between: "between", // value should be an array with two elements
 };
 
 /**
@@ -44,6 +45,12 @@ export function applySupabaseFilters<Q extends PostgrestFilterBuilder<any, any, 
             if (op && value !== undefined && SUPABASE_OPERATORS[op]) {
                 const supabaseMethod = SUPABASE_OPERATORS[op];
                 let processedValue = value;
+
+                if (op === 'between' && Array.isArray(value)) {
+                    (currentQuery as any).gte(field, value[0]);
+                    (currentQuery as any).lte(field, value[1]);
+                    continue;
+                }
 
                 if (op === 'eq' && typeof value === "string") {
                     const dateValue = processDate(value);

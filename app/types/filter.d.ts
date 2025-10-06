@@ -7,14 +7,14 @@ export type FilterOption = {
 export type FilterDefinition = {
     key: string;
     label: string;
-    type: 'string' | 'number' | 'array' | 'boolean' | 'date';
+    type: 'string' | 'number' | 'array' | 'boolean' | 'date' | 'currency';
     op: Operators;
     options?: FilterOption[];
     layout?: layoutFilter;
     defaultValue?: any;
 }
 
-export type Operators = "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "ilike" | "is" | "in" | "cs" | "cd";
+export type Operators = "eq" | "neq" | "gt" | "gte" | "lt" | "lte" | "like" | "ilike" | "is" | "in" | "cs" | "cd" | "between";
 
 export type layoutFilter = {
     min?: number;
