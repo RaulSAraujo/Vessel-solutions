@@ -9,9 +9,9 @@ const menus = [
         icon: "mdi-account-group",
       },
       {
-        title: "Ingredientes",
-        to: "/ingredient",
-        icon: "mdi-food-variant",
+        title: "Cotações",
+        to: "/quotation",
+        icon: "mdi-handshake",
       },
       {
         title: "Fornecedores",
@@ -19,9 +19,9 @@ const menus = [
         icon: "mdi-truck-delivery",
       },
       {
-        title: "Cotações",
-        to: "/quotation",
-        icon: "mdi-handshake",
+        title: "Ingredientes",
+        to: "/ingredient",
+        icon: "mdi-food-variant",
       },
     ],
   },

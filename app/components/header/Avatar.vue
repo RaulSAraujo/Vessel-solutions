@@ -19,6 +19,7 @@ const logout = async () => {
           size="large"
           :image="LogoVessel"
           :class="theme.current.value.dark ? 'logo-vessel-dark' : ''"
+          class="opacity-80"
         />
       </v-btn>
     </template>
@@ -49,6 +50,6 @@ const logout = async () => {
 
 <style scoped>
 .logo-vessel-dark {
-  filter: invert(90%) grayscale(100%);
+  filter: invert(87%) grayscale(100%);
 }
 </style>
