@@ -13,26 +13,26 @@ const dialogDelete = ref(false);
 <template>
   <v-container fluid>
     <div class="d-flex flex-row align-center mb-4 text-primary">
-      <v-icon size="28" class="mr-2" icon="mdi-truck-delivery-outline" />
-      <span class="text-h5">Fornecedores</span>
+      <v-icon size="28" class="mr-2" icon="mdi-food-apple" />
+      <span class="text-h5">Cotações</span>
     </div>
 
-    <SupplierFilter v-model="filterDrawer" />
+    <QuotationFilter v-model="filterDrawer" />
 
-    <SupplierTable
+    <QuotationTable
       @open-creation="dialogCreation = true"
       @open-update="dialogUpdate = true"
       @open-filter="filterDrawer = true"
       @open-delete="dialogDelete = true"
     />
 
-    <SupplierCreation
+    <QuotationCreation
       v-model="dialogCreation"
       @close="dialogCreation = false"
     />
 
-    <SupplierUpdate v-model="dialogUpdate" @close="dialogUpdate = false" />
+    <QuotationUpdate v-model="dialogUpdate" @close="dialogUpdate = false" />
 
-    <SupplierDelete v-model="dialogDelete" @close="dialogDelete = false" />
+    <QuotationDelete v-model="dialogDelete" @close="dialogDelete = false" />
   </v-container>
 </template>

@@ -239,25 +239,54 @@ export type Database = {
       }
       ingredients: {
         Row: {
-          created_at: string | null
           id: string
           name: string
-          updated_at: string | null
+          unit_id: string
           user_id: string | null
+          updated_at: string | null
+          created_at: string | null
         }
         Insert: {
-          created_at?: string | null
           id?: string
           name: string
-          updated_at?: string | null
+          unit_id: string
           user_id?: string | null
+          updated_at?: string | null
+          created_at?: string | null
         }
         Update: {
-          created_at?: string | null
           id?: string
           name?: string
-          updated_at?: string | null
+          unit_id?: string
           user_id?: string | null
+          updated_at?: string | null
+          created_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ingredients_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      units: {
+        Row: {
+          id: string
+          name: string
+          abbreviation: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          abbreviation: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          abbreviation?: string
         }
         Relationships: []
       }
@@ -293,6 +322,54 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      quotations: {
+        Row: {
+          id: string
+          supplier_id: string
+          ingredient_id: string
+          purchase_price: number
+          quotation_date: string | null
+          user_id: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          supplier_id: string
+          ingredient_id: string
+          purchase_price: number
+          quotation_date?: string | null
+          user_id?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          supplier_id?: string
+          ingredient_id?: string
+          purchase_price?: number
+          quotation_date?: string | null
+          user_id?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotations_ingredient_id_fkey"
+            columns: ["ingredient_id"]
+            isOneToOne: false
+            referencedRelation: "ingredients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotations_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       purchase_list_items: {
         Row: {

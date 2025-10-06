@@ -18,13 +18,18 @@ const menus = [
         to: "/supplier",
         icon: "mdi-truck-delivery-outline",
       },
+      {
+        title: "Cotações",
+        to: "/quotation",
+        icon: "mdi-currency-usd",
+      },
     ],
   },
 ];
 </script>
 
 <template>
-  <v-menu v-for="(menu, index) in menus" :key="index" offset="13">
+  <v-menu v-for="(menu, index) in menus" :key="index" offset="13" scrim>
     <template #activator="{ props }">
       <v-btn v-bind="props"> {{ menu.title }} </v-btn>
     </template>
