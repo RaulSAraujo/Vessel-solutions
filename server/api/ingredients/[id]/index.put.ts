@@ -22,7 +22,11 @@ export default defineEventHandler(async (event) => {
             .from('ingredients')
             .update(updatedFields)
             .eq('id', ingredientId)
-            .select();
+            .select(`
+                *,
+                units (name,abbreviation)
+            `);
+
 
 
         if (error) {

@@ -13,7 +13,10 @@ export default defineEventHandler(async (event) => {
                 ...body,
                 user_id: user.id,
             })
-            .select();
+            .select(`
+                *,
+                units (name,abbreviation)
+            `);
 
         if (error) {
             throw createError({
