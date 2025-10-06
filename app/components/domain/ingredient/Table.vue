@@ -16,7 +16,7 @@ const { page, itemsPerPage, items, totalItems, loading, selectedIngredient } =
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
   { title: "Nome", key: "name" },
-  { title: "Medida", key: "unit_id" },
+  { title: "Unidade medida", key: "unit_id" },
   { title: "Criado em", key: "created_at" },
   { title: "Atualizado em", key: "updated_at" },
 ];
