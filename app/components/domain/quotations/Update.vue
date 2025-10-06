@@ -1,24 +1,24 @@
 <script lang="ts" setup>
-import { useSupplierApi } from "~/composables/api/useSupplierApi";
-import type { FormSupplier } from "~/types/supplier";
+import { useQuotationsApi } from "~/composables/api/useQuotationsApi";
+import type { FormQuotations } from "~/types/quotation";
 // components
 import Form from "./Form.vue";
 
 const emit = defineEmits(["close"]);
 
-const api = useSupplierApi();
+const api = useQuotationsApi();
 
-const store = useSupplierStore();
-const { selectedSupplier } = storeToRefs(store);
+const store = useQuotationStore();
+const { selectedQuotation } = storeToRefs(store);
 
 const loading = ref(false);
 
-async function update(events: FormSupplier) {
-  if (!selectedSupplier.value) return;
+async function update(events: FormQuotations) {
+  if (!selectedQuotation.value) return;
 
   loading.value = true;
 
-  const res = await api.updateSupplier(selectedSupplier.value?.id, events);
+  const res = await api.updateQuotation(selectedQuotation.value?.id, events);
 
   if (!res) {
     loading.value = false;
@@ -33,16 +33,16 @@ async function update(events: FormSupplier) {
 }
 
 function reset() {
-  selectedSupplier.value = null;
+  selectedQuotation.value = null;
 }
 </script>
 
 <template>
   <v-dialog width="300" @after-leave="reset">
-    <v-card title="Atualizar fornecedor" rounded="xl">
+    <v-card title="Atualizar cotação" rounded="xl">
       <v-card-text>
         <Form
-          :supplier="selectedSupplier"
+          :quotation="selectedQuotation"
           :loading="loading"
           @submit="update"
         />

@@ -3,7 +3,8 @@ import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from '~/types/data-table';
 import type { Ingredients, Datum, FormIngredients } from "~/types/ingredient";
 
-export function useIngredientApi() {
+
+export function useIngredientsApi() {
     const getIngredients = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {
         try {
             const res = await $fetch<Ingredients>('/api/ingredients', {

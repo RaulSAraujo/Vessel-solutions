@@ -3,7 +3,7 @@ import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from '~/types/data-table';
 import type { Quotations, Datum, FormQuotations, Supplier, Ingredient } from "~/types/quotation";
 
-export function useQuotationApi() {
+export function useQuotationsApi() {
     const getQuotations = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {
         try {
             const res = await $fetch<Quotations>('/api/quotations', {

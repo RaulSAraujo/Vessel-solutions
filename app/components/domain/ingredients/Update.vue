@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { useIngredientApi } from "~/composables/api/useIngredientApi";
+import { useIngredientsApi } from "~/composables/api/useIngredientsApi";
 import type { FormIngredients } from "~/types/ingredient";
 // components
 import Form from "./Form.vue";
 
 const emit = defineEmits(["close"]);
 
-const api = useIngredientApi();
+const api = useIngredientsApi();
 
 const store = useIngredientStore();
 const { selectedIngredient } = storeToRefs(store);

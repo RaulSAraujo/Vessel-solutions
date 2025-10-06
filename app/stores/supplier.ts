@@ -1,4 +1,4 @@
-import { useSupplierApi } from '~/composables/api/useSupplierApi';
+import { useSuppliersApi } from '~/composables/api/useSuppliersApi';
 
 import type { Datum } from "~/types/supplier";
 import type { EmittedFilters } from "~/types/filter";
@@ -31,7 +31,7 @@ export const useSupplierStore = defineStore('supplier', () => {
             };
         }
 
-        const res = await useSupplierApi().getSuppliers(props, activeFilters.value);
+        const res = await useSuppliersApi().getSuppliers(props, activeFilters.value);
 
         if (res) {
             items.value = res.data;

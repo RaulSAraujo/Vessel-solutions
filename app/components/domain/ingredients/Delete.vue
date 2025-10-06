@@ -1,28 +1,28 @@
 <script lang="ts" setup>
-import { useSupplierApi } from "~/composables/api/useSupplierApi";
+import { useIngredientsApi } from "~/composables/api/useIngredientsApi";
 
 const emit = defineEmits(["close"]);
 
-const api = useSupplierApi();
+const api = useIngredientsApi();
 
-const store = useSupplierStore();
-const { selectedSupplier } = storeToRefs(store);
+const store = useIngredientStore();
+const { selectedIngredient } = storeToRefs(store);
 
 const loading = ref(false);
 
-async function deleteSupplier() {
-  if (!selectedSupplier.value) return;
+async function deleteIngredient() {
+  if (!selectedIngredient.value) return;
 
   loading.value = true;
 
-  const res = await api.deleteSupplier(selectedSupplier.value?.id);
+  const res = await api.deleteIngredient(selectedIngredient.value?.id);
 
   if (!res) {
     loading.value = false;
     return;
   }
 
-  store.deleteItem(selectedSupplier.value);
+  store.deleteItem(selectedIngredient.value);
 
   emit("close");
 
@@ -41,7 +41,7 @@ async function deleteSupplier() {
       <v-card-actions>
         <v-spacer />
         <v-btn color="grey" text @click="$emit('close')"> Cancelar </v-btn>
-        <v-btn color="error" text @click="deleteSupplier"> Confirmar </v-btn>
+        <v-btn color="error" text @click="deleteIngredient"> Confirmar </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

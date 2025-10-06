@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { useQuotationApi } from "~/composables/api/useQuotationApi";
+import { useQuotationsApi } from "~/composables/api/useQuotationsApi";
 
 const emit = defineEmits(["close"]);
 
-const api = useQuotationApi();
+const api = useQuotationsApi();
 
 const store = useQuotationStore();
 const { selectedQuotation } = storeToRefs(store);

@@ -1,4 +1,4 @@
-import { useQuotationApi } from '~/composables/api/useQuotationApi';
+import { useQuotationsApi } from '~/composables/api/useQuotationsApi';
 
 import type { Datum } from "~/types/quotation";
 import type { EmittedFilters } from "~/types/filter";
@@ -31,7 +31,7 @@ export const useQuotationStore = defineStore('quotation', () => {
             };
         }
 
-        const res = await useQuotationApi().getQuotations(props, activeFilters.value);
+        const res = await useQuotationsApi().getQuotations(props, activeFilters.value);
 
         if (res) {
             items.value = res.data;

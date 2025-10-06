@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useQuotationApi } from "~/composables/api/useQuotationApi";
+import { useQuotationsApi } from "~/composables/api/useQuotationsApi";
 import { quotationSchema } from "~/schemas/quotation";
 
 import type { Datum } from "~/types/quotation";
@@ -20,8 +20,8 @@ const { value: ingredient_id } = useField<string>("ingredient_id");
 const { value: purchase_price } = useField<number>("purchase_price");
 const { value: quotation_date } = useField<string | null>("quotation_date");
 
-const suppliers = await useQuotationApi().getSuppliers();
-const ingredients = await useQuotationApi().getIngredients();
+const suppliers = await useQuotationsApi().getSuppliers();
+const ingredients = await useQuotationsApi().getIngredients();
 
 const onSubmit = handleSubmit((values) => {
   emit("submit", values);

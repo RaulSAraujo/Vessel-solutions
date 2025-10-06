@@ -1,26 +1,26 @@
 <script lang="ts" setup>
-import { useQuotationApi } from "~/composables/api/useQuotationApi";
-import type { FormQuotations } from "~/types/quotation";
+import { useSuppliersApi } from "~/composables/api/useSuppliersApi";
+import type { FormSupplier } from "~/types/supplier";
 // components
 import Form from "./Form.vue";
 
 const emit = defineEmits(["close"]);
 
-const api = useQuotationApi();
+const api = useSuppliersApi();
 
 const loading = ref(false);
 
-async function creation(events: FormQuotations) {
+async function creation(events: FormSupplier) {
   loading.value = true;
 
-  const res = await api.createQuotation(events);
+  const res = await api.createSupplier(events);
 
   if (!res) {
     loading.value = false;
     return;
   }
 
-  useQuotationStore().addItem(res);
+  useSupplierStore().addItem(res);
 
   emit("close");
 
@@ -30,7 +30,7 @@ async function creation(events: FormQuotations) {
 
 <template>
   <v-dialog width="300">
-    <v-card title="Nova cotação" rounded="xl">
+    <v-card title="Novo fornecedor" rounded="xl">
       <v-card-text>
         <Form :loading="loading" @submit="creation" />
       </v-card-text>

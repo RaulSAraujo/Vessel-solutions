@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useIngredientApi } from "~/composables/api/useIngredientApi";
+import { useIngredientsApi } from "~/composables/api/useIngredientsApi";
 import { ingredientSchema } from "~/schemas/ingredient";
 
 import type { Datum } from "~/types/ingredient";
@@ -27,7 +27,7 @@ if (props.ingredient) {
   unit_id.value = props.ingredient.unit_id;
 }
 
-const units = await useIngredientApi().getUnits();
+const units = await useIngredientsApi().getUnits();
 </script>
 
 <template>

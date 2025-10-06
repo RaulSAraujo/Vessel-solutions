@@ -1,28 +1,93 @@
 <script lang="ts" setup>
 const menus = [
   {
-    title: "Cadastro",
+    title: "Eventos",
+    items: [
+      {
+        title: "Gerenciar Eventos",
+        to: "/events",
+        icon: "mdi-calendar-check",
+      },
+      {
+        title: "Propostas e Orçamentos",
+        to: "/proposals",
+        icon: "mdi-file-document-edit",
+      },
+    ],
+  },
+  {
+    title: "Cadastros",
     items: [
       {
         title: "Clientes",
-        to: "/client",
+        to: "/clients",
         icon: "mdi-account-group",
       },
       {
-        title: "Cotações",
-        to: "/quotation",
-        icon: "mdi-handshake",
-      },
-      {
         title: "Fornecedores",
-        to: "/supplier",
+        to: "/suppliers",
         icon: "mdi-truck-delivery",
       },
       {
         title: "Ingredientes",
-        to: "/ingredient",
+        to: "/ingredients",
         icon: "mdi-food-variant",
       },
+      {
+        title: "Drinks e Receitas",
+        to: "/drinks",
+        icon: "mdi-glass-cocktail",
+      },
+    ],
+  },
+  {
+    title: "Compras",
+    items: [
+      {
+        title: "Cotações",
+        to: "/quotations",
+        icon: "mdi-handshake",
+      },
+      {
+        title: "Lista de Compras",
+        to: "/purchase-list",
+        icon: "mdi-cart",
+      },
+    ],
+  },
+  {
+    title: "Relatórios",
+    items: [
+      {
+        title: "Lucratividade de Eventos",
+        to: "/reports/profitability",
+        icon: "mdi-chart-line",
+      },
+      {
+        title: "Consumo de Ingredientes",
+        to: "/reports/ingredient-consumption",
+        icon: "mdi-chart-pie",
+      },
+      {
+        title: "Histórico de Cotações",
+        to: "/reports/quotation-history",
+        icon: "mdi-history",
+      },
+    ],
+  },
+  {
+    title: "Configurações",
+    items: [
+      {
+        title: "Meu Perfil",
+        to: "/profile",
+        icon: "mdi-account-circle",
+      },
+      // {
+      //   title: "Gestão de Usuários", // Opcional, se houver gerenciamento de usuários
+      //   to: "/admin/users",
+      //   icon: "mdi-account-multiple",
+      // },
     ],
   },
 ];

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { useIngredientApi } from '~/composables/api/useIngredientApi';
+import { useIngredientsApi } from '~/composables/api/useIngredientsApi';
 
 import type { Datum } from "~/types/ingredient";
 import type { EmittedFilters } from "~/types/filter";
@@ -32,7 +32,7 @@ export const useIngredientStore = defineStore('ingredient', () => {
             };
         }
 
-        const res = await useIngredientApi().getIngredients(props, activeFilters.value);
+        const res = await useIngredientsApi().getIngredients(props, activeFilters.value);
 
         if (res) {
             items.value = res.data;

@@ -3,7 +3,7 @@ import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from '~/types/data-table';
 import type { Supplier, Datum, FormSupplier } from "~/types/supplier";
 
-export function useSupplierApi() {
+export function useSuppliersApi() {
     const getSuppliers = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {
         try {
             const res = await $fetch<Supplier>('/api/suppliers', {
