@@ -15,7 +15,11 @@ const logout = async () => {
   <v-menu location="bottom end" offset="15">
     <template #activator="{ props }">
       <v-btn icon v-bind="props" class="mr-5">
-        <v-avatar size="large" :image="LogoVessel" />
+        <v-avatar
+          size="large"
+          :image="LogoVessel"
+          :class="theme.current.value.dark ? 'logo-vessel-dark' : ''"
+        />
       </v-btn>
     </template>
 
@@ -42,3 +46,9 @@ const logout = async () => {
     </v-card>
   </v-menu>
 </template>
+
+<style scoped>
+.logo-vessel-dark {
+  filter: invert(90%) grayscale(100%);
+}
+</style>
