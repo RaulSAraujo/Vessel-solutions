@@ -1,7 +1,7 @@
 import type { FetchError } from 'ofetch'
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from '~/types/data-table';
-import type { Quotations, Datum, FormQuotations, Supplier, Ingredient } from "~/types/quotation";
+import type { Quotations, Datum, FormQuotations, Supplier, Ingredient } from "~/types/quotations";
 
 export function useQuotationsApi() {
     const getQuotations = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {

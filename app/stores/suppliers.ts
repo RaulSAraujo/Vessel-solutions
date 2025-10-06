@@ -1,6 +1,6 @@
 import { useSuppliersApi } from '~/composables/api/useSuppliersApi';
 
-import type { Datum } from "~/types/supplier";
+import type { Datum } from "~/types/suppliers";
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from "~/types/data-table";
 

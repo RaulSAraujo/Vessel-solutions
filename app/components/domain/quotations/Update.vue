@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useQuotationsApi } from "~/composables/api/useQuotationsApi";
-import type { FormQuotations } from "~/types/quotation";
+import type { FormQuotations } from "~/types/quotations";
 // components
 import Form from "./Form.vue";
 

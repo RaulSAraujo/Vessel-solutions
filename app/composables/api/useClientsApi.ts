@@ -1,6 +1,6 @@
 import type { FetchError } from 'ofetch'
 import type { EmittedFilters } from "~/types/filter";
-import type { Clients, Datum, FormClient } from '~/types/client';
+import type { Clients, Datum, FormClient } from '~/types/clients';
 import type { VDataTableServerOptions } from '~/types/data-table';
 
 export function useClientsApi() {

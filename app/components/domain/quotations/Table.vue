@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // componentes
-import type { Datum } from "~/types/quotation";
+import type { Datum } from "~/types/quotations";
 
 const emit = defineEmits([
   "openFilter",

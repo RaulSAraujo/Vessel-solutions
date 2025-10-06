@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useSuppliersApi } from "~/composables/api/useSuppliersApi";
-import type { FormSupplier } from "~/types/supplier";
+import type { FormSupplier } from "~/types/suppliers";
 // components
 import Form from "./Form.vue";
 

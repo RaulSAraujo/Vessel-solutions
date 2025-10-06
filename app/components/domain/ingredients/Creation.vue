@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useIngredientsApi } from "~/composables/api/useIngredientsApi";
-import type { FormIngredients } from "~/types/ingredient";
+import type { FormIngredients } from "~/types/ingredients";
 // components
 import Form from "./Form.vue";
 

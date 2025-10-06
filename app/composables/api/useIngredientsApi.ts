@@ -1,7 +1,7 @@
 import type { FetchError } from 'ofetch'
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from '~/types/data-table';
-import type { Ingredients, Datum, FormIngredients } from "~/types/ingredient";
+import type { Ingredients, Datum, FormIngredients } from "~/types/ingredients";
 
 
 export function useIngredientsApi() {

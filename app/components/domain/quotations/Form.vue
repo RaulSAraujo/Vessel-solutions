@@ -2,7 +2,7 @@
 import { useQuotationsApi } from "~/composables/api/useQuotationsApi";
 import { quotationSchema } from "~/schemas/quotation";
 
-import type { Datum } from "~/types/quotation";
+import type { Datum } from "~/types/quotations";
 
 const props = defineProps<{
   quotation?: Datum | null;

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useClientsApi } from "~/composables/api/useClientsApi";
-import type { FormClient } from "~/types/client";
+import type { FormClient } from "~/types/clients";
 // components
 import Form from "./Form.vue";
 

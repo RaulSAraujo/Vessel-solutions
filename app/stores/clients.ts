@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { useClientsApi } from '~/composables/api/useClientsApi';
 
-import type { Datum } from "~/types/client";
+import type { Datum } from "~/types/clients";
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from "~/types/data-table";
 

@@ -2,7 +2,7 @@
 import { useIngredientsApi } from "~/composables/api/useIngredientsApi";
 import { ingredientSchema } from "~/schemas/ingredient";
 
-import type { Datum } from "~/types/ingredient";
+import type { Datum } from "~/types/ingredients";
 
 const props = defineProps<{
   ingredient?: Datum | null;

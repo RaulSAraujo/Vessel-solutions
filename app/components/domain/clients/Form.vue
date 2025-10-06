@@ -2,7 +2,7 @@
 import ViaCep from "./ViaCep.vue";
 import { clientSchema } from "~/schemas/client";
 
-import type { Datum } from "~/types/client";
+import type { Datum } from "~/types/clients";
 import type { MaskInputOptions } from "maska";
 
 const props = defineProps<{

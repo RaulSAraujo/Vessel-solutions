@@ -2,7 +2,7 @@
 import type { MaskInputOptions } from "maska";
 import { supplierSchema } from "~/schemas/supplier";
 
-import type { Datum } from "~/types/supplier";
+import type { Datum } from "~/types/suppliers";
 
 const props = defineProps<{
   supplier?: Datum | null;

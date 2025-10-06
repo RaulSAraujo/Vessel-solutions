@@ -1,6 +1,6 @@
 import { useQuotationsApi } from '~/composables/api/useQuotationsApi';
 
-import type { Datum } from "~/types/quotation";
+import type { Datum } from "~/types/quotations";
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from "~/types/data-table";
 

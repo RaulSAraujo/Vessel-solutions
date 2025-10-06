@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { useIngredientsApi } from '~/composables/api/useIngredientsApi';
 
-import type { Datum } from "~/types/ingredient";
+import type { Datum } from "~/types/ingredients";
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from "~/types/data-table";
 

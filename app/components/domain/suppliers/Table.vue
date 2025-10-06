@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // componentes
-import type { Datum } from "~/types/supplier";
+import type { Datum } from "~/types/suppliers";
 
 const emit = defineEmits([
   "openFilter",
