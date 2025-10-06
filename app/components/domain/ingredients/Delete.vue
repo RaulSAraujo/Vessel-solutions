@@ -5,7 +5,7 @@ const emit = defineEmits(["close"]);
 
 const api = useIngredientsApi();
 
-const store = useIngredientStore();
+const store = useIngredientsStore();
 const { selectedIngredient } = storeToRefs(store);
 
 const loading = ref(false);

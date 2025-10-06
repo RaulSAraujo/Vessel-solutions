@@ -20,7 +20,7 @@ async function creation(events: FormIngredients) {
     return;
   }
 
-  useIngredientStore().addItem(res);
+  useIngredientsStore().addItem(res);
 
   emit("close");
 

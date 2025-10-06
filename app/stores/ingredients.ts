@@ -5,7 +5,7 @@ import type { Datum } from "~/types/ingredient";
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from "~/types/data-table";
 
-export const useIngredientStore = defineStore('ingredient', () => {
+export const useIngredientsStore = defineStore('ingredients', () => {
     // Tabela
     const page = ref(1);
     const totalItems = ref(0)

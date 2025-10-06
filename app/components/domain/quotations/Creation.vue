@@ -20,7 +20,7 @@ async function creation(events: FormQuotations) {
     return;
   }
 
-  useQuotationStore().addItem(res);
+  useQuotationsStore().addItem(res);
 
   emit("close");
 

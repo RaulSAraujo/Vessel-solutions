@@ -2,7 +2,7 @@
 import { useIngredientsApi } from "~/composables/api/useIngredientsApi";
 import type { FilterDefinition } from "~/types/filter";
 
-const store = useIngredientStore();
+const store = useIngredientsStore();
 const { activeFilters } = storeToRefs(store);
 
 const units = await useIngredientsApi().getUnits();

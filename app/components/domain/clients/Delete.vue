@@ -5,7 +5,7 @@ const emit = defineEmits(["close"]);
 
 const api = useClientsApi();
 
-const store = useClientStore();
+const store = useClientsStore();
 const { selectedClient } = storeToRefs(store);
 
 const loading = ref(false);
@@ -22,7 +22,7 @@ async function deleteClient() {
     return;
   }
 
-  useClientStore().deleteItem(selectedClient.value);
+  useClientsStore().deleteItem(selectedClient.value);
 
   emit("close");
 

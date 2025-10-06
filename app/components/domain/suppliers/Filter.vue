@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { FilterDefinition } from "~/types/filter";
 
-const store = useSupplierStore();
+const store = useSuppliersStore();
 const { activeFilters } = storeToRefs(store);
 
 const filterDefinitions = ref<FilterDefinition[]>([

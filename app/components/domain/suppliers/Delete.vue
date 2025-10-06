@@ -5,7 +5,7 @@ const emit = defineEmits(["close"]);
 
 const api = useSuppliersApi();
 
-const store = useSupplierStore();
+const store = useSuppliersStore();
 const { selectedSupplier } = storeToRefs(store);
 
 const loading = ref(false);

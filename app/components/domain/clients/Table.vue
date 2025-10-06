@@ -9,7 +9,7 @@ const emit = defineEmits([
   "openDelete",
 ]);
 
-const store = useClientStore();
+const store = useClientsStore();
 const { page, itemsPerPage, items, totalItems, loading, selectedClient } =
   storeToRefs(store);
 

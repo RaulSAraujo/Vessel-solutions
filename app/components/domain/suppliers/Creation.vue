@@ -20,7 +20,7 @@ async function creation(events: FormSupplier) {
     return;
   }
 
-  useSupplierStore().addItem(res);
+  useSuppliersStore().addItem(res);
 
   emit("close");
 

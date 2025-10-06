@@ -8,7 +8,7 @@ const emit = defineEmits(["close"]);
 
 const api = useClientsApi();
 
-const store = useClientStore();
+const store = useClientsStore();
 const { selectedClient } = storeToRefs(store);
 
 const loading = ref(false);
@@ -25,7 +25,7 @@ async function update(events: FormClient) {
     return;
   }
 
-  useClientStore().updateItem(res);
+  useClientsStore().updateItem(res);
 
   loading.value = false;
 

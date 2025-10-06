@@ -20,7 +20,7 @@ async function creation(events: FormClient) {
     return;
   }
 
-  useClientStore().addItem(res);
+  useClientsStore().addItem(res);
 
   emit("close");
 

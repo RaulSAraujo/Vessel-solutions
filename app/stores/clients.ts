@@ -5,7 +5,7 @@ import type { Datum } from "~/types/client";
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from "~/types/data-table";
 
-export const useClientStore = defineStore('client', () => {
+export const useClientsStore = defineStore('clients', () => {
     // Tabela
     const page = ref(1);
     const totalItems = ref(0)

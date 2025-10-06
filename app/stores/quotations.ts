@@ -4,7 +4,7 @@ import type { Datum } from "~/types/quotation";
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from "~/types/data-table";
 
-export const useQuotationStore = defineStore('quotation', () => {
+export const useQuotationsStore = defineStore('quotations', () => {
     // Tabela
     const page = ref(1);
     const totalItems = ref(0)

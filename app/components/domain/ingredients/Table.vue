@@ -9,7 +9,7 @@ const emit = defineEmits([
   "openDelete",
 ]);
 
-const store = useIngredientStore();
+const store = useIngredientsStore();
 const { page, itemsPerPage, items, totalItems, loading, selectedIngredient } =
   storeToRefs(store);
 

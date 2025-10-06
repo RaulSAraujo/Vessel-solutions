@@ -9,7 +9,7 @@ const emit = defineEmits([
   "openDelete",
 ]);
 
-const store = useQuotationStore();
+const store = useQuotationsStore();
 const { page, itemsPerPage, items, totalItems, loading, selectedQuotation } =
   storeToRefs(store);
 

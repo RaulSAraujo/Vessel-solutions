@@ -3,7 +3,7 @@ import { useIngredientsApi } from "~/composables/api/useIngredientsApi";
 import { useQuotationsApi } from "~/composables/api/useQuotationsApi";
 import type { FilterDefinition } from "~/types/filter";
 
-const store = useQuotationStore();
+const store = useQuotationsStore();
 const { activeFilters } = storeToRefs(store);
 
 const units = await useIngredientsApi().getUnits();

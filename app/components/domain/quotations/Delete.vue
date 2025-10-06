@@ -5,7 +5,7 @@ const emit = defineEmits(["close"]);
 
 const api = useQuotationsApi();
 
-const store = useQuotationStore();
+const store = useQuotationsStore();
 const { selectedQuotation } = storeToRefs(store);
 
 const loading = ref(false);
