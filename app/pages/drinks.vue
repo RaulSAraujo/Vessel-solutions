@@ -17,19 +17,19 @@ const dialogDelete = ref(false);
       <span class="text-h5">Drinks</span>
     </div>
 
-    <ClientsFilter v-model="filterDrawer" />
+    <DrinksFilter v-model="filterDrawer" />
 
-    <ClientsTable
+    <DrinksTable
       @open-creation="dialogCreation = true"
       @open-update="dialogUpdate = true"
       @open-filter="filterDrawer = true"
       @open-delete="dialogDelete = true"
     />
 
-    <ClientsCreation v-model="dialogCreation" @close="dialogCreation = false" />
+    <DrinksCreation v-model="dialogCreation" @close="dialogCreation = false" />
 
-    <ClientsUpdate v-model="dialogUpdate" @close="dialogUpdate = false" />
+    <DrinksUpdate v-model="dialogUpdate" @close="dialogUpdate = false" />
 
-    <ClientsDelete v-model="dialogDelete" @close="dialogDelete = false" />
+    <DrinksDelete v-model="dialogDelete" @close="dialogDelete = false" />
   </v-container>
 </template>

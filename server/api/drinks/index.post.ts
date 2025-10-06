@@ -8,11 +8,11 @@ export default defineEventHandler(async (event) => {
     const { client, user } = await getSupabaseClientAndUser(event);
     const body = await readBody<TablesInsert<"drinks">>(event);
 
-    if (!body.name || !body.type) {
+    if (!body.name) {
       throw createError({
         statusCode: 400,
         statusMessage: "Bad Request",
-        message: "Drink name and type are required.",
+        message: "Drink name are required.",
       });
     }
 
@@ -21,7 +21,6 @@ export default defineEventHandler(async (event) => {
       .from("drinks")
       .insert({
         ...body,
-        calculated_unit_cost: 0, // Default initial value
         user_id: user.id,
       })
       .select();

@@ -55,33 +55,72 @@ export type Database = {
       }
       drinks: {
         Row: {
-          calculated_unit_cost: number | null
-          created_at: string | null
           id: string
           name: string
-          type: string
-          updated_at: string | null
+          is_alcoholic: boolean
           user_id: string | null
+          updated_at: string | null
+          created_at: string | null
         }
         Insert: {
-          calculated_unit_cost?: number | null
-          created_at?: string | null
           id?: string
           name: string
-          type: string
-          updated_at?: string | null
+          is_alcoholic: boolean
           user_id?: string | null
+          updated_at?: string | null
+          created_at?: string | null
         }
         Update: {
-          calculated_unit_cost?: number | null
-          created_at?: string | null
           id?: string
           name?: string
-          type?: string
-          updated_at?: string | null
+          is_alcoholic?: boolean
           user_id?: string | null
+          updated_at?: string | null
+          created_at?: string | null
         }
         Relationships: []
+      }
+      drinks_ingredients: {
+        Row: {
+          id: string
+          drink_id: string
+          ingredient_id: boolean
+          quantity: number
+          updated_at: string | null
+          created_at: string | null
+        }
+        Insert: {
+          id?: string
+          drink_id: string
+          ingredient_id: boolean
+          quantity: number
+          updated_at?: string | null
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          drink_id?: string
+          ingredient_id?: boolean
+          quantity?: number
+          updated_at?: string | null
+          created_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drink_ingredients_drink_id_fkey"
+            columns: ["drink_id"]
+            isOneToOne: false
+            referencedRelation: "drinks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "drink_ingredients_ingredient_id_fkey"
+            columns: ["ingredient_id"]
+            isOneToOne: false
+            referencedRelation: "ingredients"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       event_additional_costs: {
         Row: {

@@ -16,12 +16,9 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        // Note: calculated_unit_cost is updated via recipe endpoints, not directly here.
-        const { calculated_unit_cost, ...updateBody } = body; // Exclude calculated_unit_cost from direct update
-
         const { data, error } = await client
             .from('drinks')
-            .update(updateBody)
+            .update(body)
             .eq('id', drinkId)
             .select();
 
