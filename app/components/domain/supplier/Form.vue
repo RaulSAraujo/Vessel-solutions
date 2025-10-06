@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { MaskInputOptions } from "maska";
 import { supplierSchema } from "~/schemas/supplier";
 
 import type { Datum } from "~/types/supplier";
@@ -18,6 +19,11 @@ const { value: name } = useField<string>("name");
 const { value: phone } = useField<string | null>("phone");
 const { value: email } = useField<string | null>("email");
 const { value: observation } = useField<string | null>("observation");
+
+const options = reactive<MaskInputOptions>({
+  mask: ["(##) ####-####", "(##) #####-####"],
+  eager: true,
+});
 
 const onSubmit = handleSubmit((values) => {
   emit("submit", values);
@@ -57,10 +63,9 @@ if (props.supplier) {
       <v-col cols="12">
         <UiTextField
           v-model="phone"
-          v-maska="'(##) #####-####'"
+          v-maska="options"
           label="Telefone"
           prepend-inner-icon="mdi-phone"
-          placeholder="(XX) XXXXX-XXXX"
           :error-messages="errors.phone"
         />
       </v-col>

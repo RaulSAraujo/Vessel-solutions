@@ -22,7 +22,11 @@ export default defineEventHandler(async (event) => {
             .from('quotations')
             .update(updatedFields)
             .eq('id', quotationId)
-            .select();
+            .select(`
+                *,
+                ingredients (name, units (name, abbreviation)),
+                suppliers (name, phone, email, observation)
+            `);
 
 
         if (error) {

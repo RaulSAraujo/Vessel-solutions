@@ -1,3 +1,6 @@
+export type { Datum as Supplier } from '~/types/supplier'
+export type { Datum as Ingredient } from '~/types/ingredient'
+
 export type Quotations = {
     data: Datum[];
     page: Page;

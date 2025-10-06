@@ -11,17 +11,17 @@ const menus = [
       {
         title: "Ingredientes",
         to: "/ingredient",
-        icon: "mdi-food-apple",
+        icon: "mdi-food-variant",
       },
       {
         title: "Fornecedores",
         to: "/supplier",
-        icon: "mdi-truck-delivery-outline",
+        icon: "mdi-truck-delivery",
       },
       {
         title: "Cotações",
         to: "/quotation",
-        icon: "mdi-currency-usd",
+        icon: "mdi-handshake",
       },
     ],
   },

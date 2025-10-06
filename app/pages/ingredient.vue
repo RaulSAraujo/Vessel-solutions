@@ -13,7 +13,7 @@ const dialogDelete = ref(false);
 <template>
   <v-container fluid>
     <div class="d-flex flex-row align-center mb-4 text-primary">
-      <v-icon size="28" class="mr-2" icon="mdi-food-apple" />
+      <v-icon size="28" class="mr-2" icon="mdi-food-variant" />
       <span class="text-h5">Ingredientes</span>
     </div>
 

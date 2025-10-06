@@ -16,7 +16,7 @@ const { page, itemsPerPage, items, totalItems, loading, selectedIngredient } =
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
   { title: "Nome", key: "name" },
-  { title: "Unidade medida", key: "unit_id" },
+  { title: "Unidade medida", key: "units.name" },
   { title: "Criado em", key: "created_at" },
   { title: "Atualizado em", key: "updated_at" },
 ];
@@ -81,8 +81,8 @@ function handleOpenDelete(ingredient: Datum) {
       />
     </template>
 
-    <template #item.unit_id="{ item }">
-      {{ item.units?.name }}
+    <template #item.units.name="{ item }">
+      {{ item.units.name }} ({{ item.units.abbreviation }})
     </template>
 
     <template #item.created_at="{ item }">

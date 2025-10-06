@@ -1,24 +1,24 @@
-import { serverSupabaseClient } from "#supabase/server";
+import { getSupabaseClientAndUser } from '~~/server/utils/supabase';
 import type { FetchError } from "ofetch"
 import type { Tables } from '~~/server/types/database';
 
-export default defineCachedEventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
     try {
-        const client = await serverSupabaseClient(event);
+        const { client } = await getSupabaseClientAndUser(event);
 
         const { data, error } = await client
-            .from('units')
+            .from('suppliers')
             .select('*')
 
         if (error) {
             throw createError({
                 statusCode: 500,
-                statusMessage: 'Failed to fetch units',
+                statusMessage: 'Failed to fetch Supplier',
                 message: error.message,
             });
         }
 
-        return data as Tables<'units'>[];
+        return data as Tables<'suppliers'>[];
     } catch (error: unknown) {
         const err = error as FetchError;
 
@@ -28,7 +28,4 @@ export default defineCachedEventHandler(async (event) => {
             message: err.message,
         });
     }
-}, {
-    maxAge: 300,
-    swr: true
 });

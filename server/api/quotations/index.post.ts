@@ -13,7 +13,11 @@ export default defineEventHandler(async (event) => {
                 ...body,
                 user_id: user.id,
             })
-            .select();
+            .select(`
+                *,
+                ingredients (name, units (name, abbreviation)),
+                suppliers (name, phone, email, observation)
+            `);
 
         if (error) {
             throw createError({

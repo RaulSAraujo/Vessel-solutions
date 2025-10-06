@@ -29,6 +29,11 @@ const options = reactive<MaskInputOptions>({
   eager: true,
 });
 
+const optionsPhone = reactive<MaskInputOptions>({
+  mask: ["(##) ####-####", "(##) #####-####"],
+  eager: true,
+});
+
 const onSubmit = handleSubmit((values) => {
   emit("submit", values);
 });
@@ -69,10 +74,9 @@ if (props.client) {
       <v-col cols="12">
         <UiTextField
           v-model="phone"
-          v-maska="'(##) #####-####'"
+          v-maska="optionsPhone"
           label="Telefone"
           prepend-inner-icon="mdi-phone"
-          placeholder="(XX) XXXXX-XXXX"
           :error-messages="errors.phone"
         />
       </v-col>

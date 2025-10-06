@@ -30,7 +30,7 @@ async function creation(events: FormQuotations) {
 
 <template>
   <v-dialog width="300">
-    <v-card title="Novo ingrediente" rounded="xl">
+    <v-card title="Nova cotação" rounded="xl">
       <v-card-text>
         <Form :loading="loading" @submit="creation" />
       </v-card-text>
