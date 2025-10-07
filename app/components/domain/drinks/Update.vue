@@ -18,14 +18,25 @@ async function update(events: FormDrink) {
 
   loading.value = true;
 
-  const res = await api.updateDrink(selectedDrink.value?.id, events);
+  const drink = await api.updateDrink(selectedDrink.value?.id, events);
 
-  if (!res) {
+  if (!drink?.id) {
     loading.value = false;
     return;
   }
 
-  store.updateItem(res);
+  const drinkIngredients = await api.updateDrinkIngredients(
+    events.drink_ingredients
+  );
+
+  if (!drinkIngredients) {
+    loading.value = false;
+    return;
+  }
+
+  const item = { ...drink, drink_ingredients: events.drink_ingredients };
+
+  store.updateItem(item);
 
   loading.value = false;
 

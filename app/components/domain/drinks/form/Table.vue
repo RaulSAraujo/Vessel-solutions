@@ -1,11 +1,16 @@
 <script lang="ts" setup>
+import { useDrinksApi } from "~/composables/api/useDrinksApi";
 import type { DrinkIngredients } from "~/types/drinks";
 
 defineProps<{
-  ingredients: DrinkIngredients[];
+  drinkIngredients: DrinkIngredients[];
 }>();
 
-defineEmits(["delete"]);
+const emit = defineEmits(["delete"]);
+
+const api = useDrinksApi();
+
+const loading = ref(false);
 
 const headers = [
   { title: "Ações", key: "actions", maxWidth: 60 },
@@ -13,21 +18,39 @@ const headers = [
   { title: "Quantidade", key: "quantity" },
   { title: "Uni.", key: "ingredients.units.abbreviation" },
 ];
+
+async function deleteIngredient(drinkIngredient: DrinkIngredients) {
+  if (drinkIngredient.id) {
+    loading.value = true;
+
+    const res = await api.deleteDrinkIngredient(drinkIngredient.id);
+
+    if (!res) {
+      loading.value = false;
+      return;
+    }
+
+    loading.value = false;
+  }
+
+  emit("delete", drinkIngredient);
+}
 </script>
 
 <template>
   <v-data-table
     :headers="headers"
-    :items="ingredients"
+    :items="drinkIngredients"
     :disable-sort="true"
     :hide-default-footer="true"
   >
     <template #item.actions="{ item }">
-      <v-icon
+      <v-btn
         color="red"
         size="small"
+        variant="plain"
         icon="mdi-delete"
-        @click="$emit('delete', item)"
+        @click="deleteIngredient(item)"
       />
     </template>
 

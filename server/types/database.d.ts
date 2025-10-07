@@ -500,7 +500,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      bulk_update_ingredients: {
+        Args: {
+          updates: Json;
+        };
+        Returns: Tables["drink_ingredients"][];
+      };
     }
     Enums: {
       [_ in never]: never

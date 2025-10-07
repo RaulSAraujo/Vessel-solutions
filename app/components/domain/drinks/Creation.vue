@@ -13,14 +13,26 @@ const loading = ref(false);
 async function creation(events: FormDrink) {
   loading.value = true;
 
-  const res = await api.createDrink(events);
+  const drink = await api.createDrink(events);
 
-  if (!res) {
+  if (!drink?.id) {
     loading.value = false;
     return;
   }
 
-  useDrinksStore().addItem(res);
+  const drinkIngredients = await api.createDrinkIngredients(
+    drink.id,
+    events.drink_ingredients
+  );
+
+  if (!drinkIngredients) {
+    loading.value = false;
+    return;
+  }
+
+  const item = { ...drink, drink_ingredients: events.drink_ingredients };
+
+  useDrinksStore().addItem(item);
 
   emit("close");
 

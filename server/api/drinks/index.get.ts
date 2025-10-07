@@ -17,6 +17,7 @@ export default defineEventHandler(async (event) => {
             .select(`
                 *,
                 drink_ingredients (
+                    id,
                     quantity,
                     ingredients (
                         name,

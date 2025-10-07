@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { drinkSchema } from "~/schemas/drink";
 
-import type {
-  Datum,
-  FormDrink,
-  DrinkIngredients,
-  IngredientWithRelations,
-} from "~/types/drinks";
+import type { Datum, FormDrink, DrinkIngredients } from "~/types/drinks";
+import type { DatumWithRelations as IngredientWithRelations } from "~/types/ingredients";
 
 // components
 import Table from "./Table.vue";
@@ -19,7 +15,7 @@ const props = defineProps<{
 
 const emit = defineEmits(["submit"]);
 
-const ingredients = ref<DrinkIngredients[]>([]);
+const drinkIngredients = ref<DrinkIngredients[]>([]);
 const selectedIngredient = ref<string | IngredientWithRelations | null>(null);
 
 const { handleSubmit, errors } = useForm<FormDrink>({
@@ -32,13 +28,13 @@ const { value: type } = useField<string>("type");
 const onSubmit = handleSubmit((values) => {
   emit("submit", {
     ...values,
-    drink_ingredients: ingredients.value,
+    drink_ingredients: drinkIngredients.value,
   });
 });
 
 watch(selectedIngredient, async () => {
   if (selectedIngredient.value && typeof selectedIngredient.value == "object") {
-    ingredients.value.push({
+    drinkIngredients.value.push({
       quantity: 1,
       ingredients: selectedIngredient.value,
     });
@@ -51,7 +47,7 @@ onMounted(async () => {
   if (props.drink) {
     name.value = props.drink.name;
     type.value = props.drink.type;
-    ingredients.value = props.drink.drink_ingredients;
+    drinkIngredients.value = props.drink.drink_ingredients;
   }
 });
 </script>
@@ -85,8 +81,8 @@ onMounted(async () => {
 
       <v-col cols="12">
         <Table
-          :ingredients="ingredients"
-          @delete="ingredients.splice($event, 1)"
+          :drink-ingredients="drinkIngredients"
+          @delete="drinkIngredients.splice($event, 1)"
         />
       </v-col>
 

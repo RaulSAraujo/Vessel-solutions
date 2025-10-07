@@ -1,4 +1,4 @@
-export type { DatumWithRelations as IngredientWithRelations } from '~/types/ingredients'
+import type { DatumWithRelations as IngredientWithRelations } from '~/types/ingredients'
 
 export type Drinks = {
     data: Datum[];
@@ -16,6 +16,7 @@ export type Datum = {
 }
 
 export type DrinkIngredients = {
+    id?: string
     quantity: number
     ingredients: IngredientWithRelations
 }
