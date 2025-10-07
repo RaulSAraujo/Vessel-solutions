@@ -34,7 +34,7 @@ const menus = [
         icon: "mdi-food-variant",
       },
       {
-        title: "Drinks e Receitas",
+        title: "Drinks/Receitas",
         to: "/drinks",
         icon: "mdi-glass-cocktail",
       },

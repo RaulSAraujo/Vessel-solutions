@@ -122,91 +122,41 @@ export type Database = {
           },
         ]
       }
-      event_additional_costs: {
+      event_drinks: {
         Row: {
-          created_at: string | null
-          description: string
-          event_id: string
           id: string
-          quantity: number
-          total_cost: number | null
-          unit: string | null
-          unit_cost: number
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          description: string
-          event_id: string
-          id?: string
-          quantity: number
-          total_cost?: number | null
-          unit?: string | null
-          unit_cost: number
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          description?: string
-          event_id?: string
-          id?: string
-          quantity?: number
-          total_cost?: number | null
-          unit?: string | null
-          unit_cost?: number
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "event_additional_costs_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      event_served_drinks: {
-        Row: {
-          created_at: string | null
           drink_id: string
           event_id: string
-          id: string
-          served_quantity: number
-          total_cost_at_event: number | null
-          unit_cost_at_event: number | null
+          estimated_quantity: number
           updated_at: string | null
+          created_at: string | null
         }
         Insert: {
-          created_at?: string | null
+          id?: string
           drink_id: string
           event_id: string
-          id?: string
-          served_quantity: number
-          total_cost_at_event?: number | null
-          unit_cost_at_event?: number | null
+          estimated_quantity: number
           updated_at?: string | null
+          created_at?: string | null
         }
         Update: {
-          created_at?: string | null
+          id?: string
           drink_id?: string
           event_id?: string
-          id?: string
-          served_quantity?: number
-          total_cost_at_event?: number | null
-          unit_cost_at_event?: number | null
+          estimated_quantity?: number
           updated_at?: string | null
+          created_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "event_served_drinks_drink_id_fkey"
+            foreignKeyName: "event_drinks_drink_id_fkey"
             columns: ["drink_id"]
             isOneToOne: false
             referencedRelation: "drinks"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "event_served_drinks_event_id_fkey"
+            foreignKeyName: "event_drinks_event_id_fkey"
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
@@ -216,57 +166,55 @@ export type Database = {
       }
       events: {
         Row: {
-          client_id: string
-          created_at: string | null
-          distance_km: number | null
-          duration_hours: number
-          estimated_total_drinks: number | null
-          event_date: string
-          gross_profit: number | null
           id: string
+          client_id: string
           location: string
-          num_guests: number
-          profit_margin_percentage: number
-          public_rating: number | null
-          total_investment: number | null
-          updated_at: string | null
+          start_time: Date
+          end_time: Date
+          guest_count: number
+          distance: number
+          audience_profile: string
+          status: string | null
           user_id: string | null
+          updated_at: string | null
+          created_at: string | null
         }
         Insert: {
-          client_id: string
-          created_at?: string | null
-          distance_km?: number | null
-          duration_hours: number
-          estimated_total_drinks?: number | null
-          event_date: string
-          gross_profit?: number | null
           id?: string
+          client_id: string
           location: string
-          num_guests: number
-          profit_margin_percentage?: number
-          public_rating?: number | null
-          total_investment?: number | null
-          updated_at?: string | null
+          start_time: Date
+          end_time: Date
+          guest_count: number
+          distance: number
+          audience_profile: string
+          status: string | null
           user_id?: string | null
+          updated_at?: string | null
+          created_at?: string | null
         }
         Update: {
-          client_id?: string
-          created_at?: string | null
-          distance_km?: number | null
-          duration_hours?: number
-          estimated_total_drinks?: number | null
-          event_date?: string
-          gross_profit?: number | null
           id?: string
+          client_id?: string
           location?: string
-          num_guests?: number
-          profit_margin_percentage?: number
-          public_rating?: number | null
-          total_investment?: number | null
-          updated_at?: string | null
+          start_time?: Date
+          end_time?: Date
+          guest_count?: number
+          distance?: number
+          audience_profile?: string
+          status?: string | null
           user_id?: string | null
+          updated_at?: string | null
+          created_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "events_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "events_client_id_fkey"
             columns: ["client_id"]

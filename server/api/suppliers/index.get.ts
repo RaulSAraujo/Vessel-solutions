@@ -1,4 +1,3 @@
-import { getSupabaseClientAndUser } from '~~/server/utils/supabase';
 import type { FetchError } from "ofetch";
 import type { Tables } from '~~/server/types/database';
 

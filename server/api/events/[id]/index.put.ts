@@ -1,5 +1,3 @@
-import { getSupabaseClientAndUser } from '~~/server/utils/supabase';
-
 import type { FetchError } from "ofetch";
 import type { Tables, TablesInsert } from "~~/server/types/database";
 
@@ -18,47 +16,14 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        // --- Lógica de Negócio no Nitro: Recalcular estimated_total_drinks se campos relevantes mudarem ---
-        const updatedFields = { ...body };
-        if (
-            (body.num_guests !== undefined && body.duration_hours !== undefined && body.public_rating !== undefined) ||
-            (body.num_guests !== undefined || body.duration_hours !== undefined || body.public_rating !== undefined)
-        ) {
-            // Fetch current event data to get missing values for calculation
-            const { data: currentEvent, error: fetchError } = await client
-                .from('events')
-                .select('num_guests, duration_hours, public_rating')
-                .eq('id', eventId)
-                .single();
-
-            if (fetchError) {
-                throw createError({
-                    statusCode: 500,
-                    statusMessage: 'Failed to fetch current event data for recalculation',
-                    message: fetchError.message,
-                });
-            }
-
-            const num_guests = body.num_guests ?? currentEvent.num_guests;
-            const duration_hours = body.duration_hours ?? currentEvent.duration_hours;
-            const public_rating = body.public_rating || currentEvent.public_rating || 0;
-
-            const estimated_total_drinks = num_guests * duration_hours * public_rating;
-
-            if (isNaN(estimated_total_drinks)) {
-                throw createError({
-                    statusCode: 400,
-                    statusMessage: 'Bad Request',
-                    message: 'Invalid numeric values for event calculation.',
-                });
-            }
-
-            updatedFields.estimated_total_drinks = estimated_total_drinks;
-        }
+        const estimated_total_drinks = await recalculateDrinkCost(body.audience_profile, body.start_time, body.end_time, body.guest_count);
 
         const { data, error } = await client
             .from('events')
-            .update(updatedFields)
+            .update({
+                ...body,
+                estimated_total_drinks
+            })
             .eq('id', eventId)
             .select();
 

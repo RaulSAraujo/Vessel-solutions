@@ -1,5 +1,3 @@
-import { getSupabaseClientAndUser } from "~~/server/utils/supabase";
-
 import type { FetchError } from "ofetch";
 import type { Tables, TablesInsert } from "~~/server/types/database";
 
@@ -12,11 +10,12 @@ export default defineEventHandler(async (event) => {
         // Basic validation
         if (
             !body.client_id ||
-            !body.event_date ||
             !body.location ||
-            !body.num_guests ||
-            !body.duration_hours ||
-            !body.public_rating
+            !body.start_time ||
+            !body.end_time ||
+            !body.guest_count ||
+            !body.distance ||
+            !body.audience_profile
         ) {
             throw createError({
                 statusCode: 400,
@@ -25,9 +24,8 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        // --- Lógica de Negócio no Nitro: Calcular estimated_total_drinks ---
-        const estimated_total_drinks =
-            body.num_guests * body.duration_hours * body.public_rating;
+        const estimated_total_drinks = await recalculateDrinkCost(body.audience_profile, body.start_time, body.end_time, body.guest_count);
+
         if (isNaN(estimated_total_drinks)) {
             throw createError({
                 statusCode: 400,

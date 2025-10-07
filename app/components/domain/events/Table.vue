@@ -1,0 +1,98 @@
+<script lang="ts" setup>
+// componentes
+import type { Datum } from "~/types/events";
+
+const emit = defineEmits([
+  "openFilter",
+  "openCreation",
+  "openUpdate",
+  "openDelete",
+]);
+
+const store = useEventsStore();
+const { page, itemsPerPage, items, totalItems, loading, selectedEvent } =
+  storeToRefs(store);
+
+const headers = [
+  { title: "Ações", key: "actions", sortable: false },
+  { title: "Nome", key: "name" },
+  { title: "Telefone", key: "phone" },
+  { title: "E-mail", key: "email" },
+  { title: "Observação", key: "observation", minWidth: 100 },
+  { title: "Criado em", key: "created_at" },
+  { title: "Atualizado em", key: "updated_at" },
+];
+
+function handleOpenUpdate(supplier: Datum) {
+  selectedEvent.value = supplier;
+  emit("openUpdate");
+}
+
+function handleOpenDelete(supplier: Datum) {
+  selectedEvent.value = supplier;
+  emit("openDelete");
+}
+</script>
+
+<template>
+  <UiTable
+    v-model:page="page"
+    v-model:items-per-page="itemsPerPage"
+    title="Lista de eventos"
+    :items="items"
+    item-value="id"
+    :headers="headers"
+    :loading="loading"
+    :total-items="totalItems"
+    class="rounded-b-lg rounded-t-xl"
+    @update:options="store.fetchEvents"
+  >
+    <template #buttons>
+      <v-btn
+        rounded="xl"
+        color="grey"
+        variant="text"
+        density="comfortable"
+        icon="mdi-filter-variant"
+        @click="$emit('openFilter')"
+      />
+
+      <v-btn
+        rounded="xl"
+        color="grey"
+        variant="text"
+        icon="mdi-refresh"
+        density="comfortable"
+        @click="store.fetchEvents"
+      />
+
+      <v-btn
+        rounded="xl"
+        color="grey"
+        icon="mdi-plus"
+        variant="text"
+        density="comfortable"
+        @click="$emit('openCreation')"
+      />
+    </template>
+
+    <template #item.actions="{ item }">
+      <UiTableActions
+        @edit="handleOpenUpdate(item)"
+        @delete="handleOpenDelete(item)"
+      />
+    </template>
+
+    <template #item.observation="{ item }">
+      <UiTextWithTooltip :text="item.observation" />
+    </template>
+
+    <template #item.created_at="{ item }">
+      {{ formatDate(item.created_at) }}
+    </template>
+
+    <template #item.updated_at="{ item }">
+      {{ formatDate(item.updated_at) }}
+    </template>
+  </UiTable>
+</template>
