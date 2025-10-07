@@ -50,6 +50,7 @@ async function deleteIngredient(drinkIngredient: DrinkIngredients) {
         size="small"
         variant="plain"
         icon="mdi-delete"
+        :loading="loading"
         @click="deleteIngredient(item)"
       />
     </template>

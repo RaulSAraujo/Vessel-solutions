@@ -82,7 +82,7 @@ onMounted(async () => {
       <v-col cols="12">
         <Table
           :drink-ingredients="drinkIngredients"
-          @delete="drinkIngredients.splice($event, 1)"
+          @delete="drinkIngredients.splice(drinkIngredients.indexOf($event), 1)"
         />
       </v-col>
 

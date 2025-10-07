@@ -30,7 +30,7 @@ async function creation(events: FormDrink) {
     return;
   }
 
-  const item = { ...drink, drink_ingredients: events.drink_ingredients };
+  const item = { ...drink, drink_ingredients: drinkIngredients };
 
   useDrinksStore().addItem(item);
 

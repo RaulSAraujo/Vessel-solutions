@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useDrinksApi } from "~/composables/api/useDrinksApi";
-import type { FormDrink } from "~/types/drinks";
+import type { FormDrink, Datum } from "~/types/drinks";
 // components
 import Form from "./form/index.vue";
 
@@ -25,16 +25,31 @@ async function update(events: FormDrink) {
     return;
   }
 
-  const drinkIngredients = await api.updateDrinkIngredients(
-    events.drink_ingredients
-  );
+  const item = { ...drink, drink_ingredients: [] } as Datum;
 
-  if (!drinkIngredients) {
-    loading.value = false;
-    return;
+  const update = events.drink_ingredients.filter((e) => e.id);
+  if (update.length > 0) {
+    const drinkIngredients = await api.updateDrinkIngredients(update);
+
+    if (!drinkIngredients) {
+      loading.value = false;
+      return;
+    }
+
+    item.drink_ingredients.push(...update);
   }
 
-  const item = { ...drink, drink_ingredients: events.drink_ingredients };
+  const create = events.drink_ingredients.filter((e) => !e.id);
+  if (create.length > 0) {
+    const drinkIngredients = await api.createDrinkIngredients(drink.id, create);
+
+    if (!drinkIngredients) {
+      loading.value = false;
+      return;
+    }
+
+    item.drink_ingredients.push(...drinkIngredients);
+  }
 
   store.updateItem(item);
 

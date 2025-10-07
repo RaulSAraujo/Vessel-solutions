@@ -36,7 +36,17 @@ export default defineEventHandler(async (event) => {
         const { data, error: ingredientsError } = await client
             .from("drink_ingredients")
             .insert(ingredientsToInsert)
-            .select();
+            .select(`
+                id,
+                quantity,
+                ingredients (
+                    name,
+                    units (
+                        name,
+                        abbreviation
+                    )
+                )
+            `);
 
         if (ingredientsError) {
             throw createError({
@@ -46,7 +56,7 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        return data as Tables<"drink_ingredients">[];
+        return data;
     } catch (error: unknown) {
         const err = error as FetchError;
 
