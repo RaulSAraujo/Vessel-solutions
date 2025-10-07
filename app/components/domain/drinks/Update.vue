@@ -2,7 +2,7 @@
 import { useDrinksApi } from "~/composables/api/useDrinksApi";
 import type { FormDrink } from "~/types/drinks";
 // components
-import Form from "./Form.vue";
+import Form from "./form/index.vue";
 
 const emit = defineEmits(["close"]);
 
@@ -38,8 +38,8 @@ function reset() {
 </script>
 
 <template>
-  <v-dialog width="300" @after-leave="reset">
-    <v-card title="Atualizar drink" rounded="xl">
+  <v-dialog width="450" @after-leave="reset">
+    <v-card title="Atualizar receita" rounded="xl">
       <v-card-text>
         <Form :drink="selectedDrink" :loading="loading" @submit="update" />
       </v-card-text>

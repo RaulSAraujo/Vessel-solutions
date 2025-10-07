@@ -8,7 +8,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     // A: Corresponde a uma única letra e a transforma em maiúscula.
     // Exemplo de uso na máscara: "AAA" para 3 letras maiúsculas.
-    tokens['A'] = { pattern: /[a-zA-Z]/, transform: (char) => char.toUpperCase() }
+    tokens['A'] = { pattern: /[\s\S]/, transform: (char) => char.toUpperCase() }
 
     // N: Corresponde a um único dígito (0-9).
     // A propriedade `repeated: true` indica que este token pode ser usado com quantificadores

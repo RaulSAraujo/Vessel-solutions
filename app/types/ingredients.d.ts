@@ -23,3 +23,10 @@ export type FormIngredients = {
     name: string;
     unit_id: string;
 }
+
+export type DatumWithRelations = Datum & {
+    units: {
+        name: string;
+        abbreviation: string
+    }
+}

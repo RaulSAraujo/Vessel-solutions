@@ -1,3 +1,5 @@
+export type { DatumWithRelations as IngredientWithRelations } from '~/types/ingredients'
+
 export type Drinks = {
     data: Datum[];
     page: Page;
@@ -6,10 +8,16 @@ export type Drinks = {
 export type Datum = {
     id: string;
     name: string
-    is_alcoholic: boolean
+    type: string
     created_at: Date;
     updated_at: Date;
     user_id: string;
+    drink_ingredients: DrinkIngredients[]
+}
+
+export type DrinkIngredients = {
+    quantity: number
+    ingredients: IngredientWithRelations
 }
 
 export type Page = {
@@ -22,5 +30,6 @@ export type Page = {
 export type FormDrink = {
     id?: string
     name?: string
-    is_alcoholic?: boolean
+    type?: string
+    drink_ingredients: DrinkIngredients[]
 }

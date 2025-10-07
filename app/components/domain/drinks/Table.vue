@@ -15,7 +15,7 @@ const { page, itemsPerPage, items, totalItems, loading, selectedDrink } =
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
   { title: "Nome", key: "name" },
-  { title: "Alcoólico", key: "is_alcoholic" },
+  { title: "Tipo", key: "type" },
   { title: "Criado em", key: "created_at" },
   { title: "Atualizado em", key: "updated_at" },
 ];
@@ -35,7 +35,7 @@ function handleOpenDelete(drink: Datum) {
   <UiTable
     v-model:page="page"
     v-model:items-per-page="itemsPerPage"
-    title="Lista de ingredientes"
+    title="Lista de bebidas"
     :items="items"
     item-value="id"
     :headers="headers"
@@ -78,10 +78,6 @@ function handleOpenDelete(drink: Datum) {
         @edit="handleOpenUpdate(item)"
         @delete="handleOpenDelete(item)"
       />
-    </template>
-
-    <template #item.is_alcoholic="{ item }">
-      <UiCheckIcon v-model="item.is_alcoholic" readonly />
     </template>
 
     <template #item.created_at="{ item }">

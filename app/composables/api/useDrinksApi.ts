@@ -41,7 +41,7 @@ export function useDrinksApi() {
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.message || 'Failed to create drink.');
+            $toast().error(err.data.message || err.message || 'Failed to create drink.');
         }
     };
 

@@ -23,6 +23,7 @@ export default defineNuxtConfig({
     'nuxt-charts',
     '@pinia/nuxt',
     '@nuxt/eslint',
+    '@vueuse/nuxt',
     '@nuxtjs/supabase',
     '@vee-validate/nuxt',
     'vuetify-nuxt-module',

@@ -57,7 +57,7 @@ export type Database = {
         Row: {
           id: string
           name: string
-          is_alcoholic: boolean
+          type: boolean
           user_id: string | null
           updated_at: string | null
           created_at: string | null
@@ -65,7 +65,7 @@ export type Database = {
         Insert: {
           id?: string
           name: string
-          is_alcoholic: boolean
+          type: boolean
           user_id?: string | null
           updated_at?: string | null
           created_at?: string | null
@@ -73,18 +73,18 @@ export type Database = {
         Update: {
           id?: string
           name?: string
-          is_alcoholic?: boolean
+          type?: boolean
           user_id?: string | null
           updated_at?: string | null
           created_at?: string | null
         }
         Relationships: []
       }
-      drinks_ingredients: {
+      drink_ingredients: {
         Row: {
           id: string
           drink_id: string
-          ingredient_id: boolean
+          ingredient_id: string
           quantity: number
           updated_at: string | null
           created_at: string | null
@@ -92,7 +92,7 @@ export type Database = {
         Insert: {
           id?: string
           drink_id: string
-          ingredient_id: boolean
+          ingredient_id: string
           quantity: number
           updated_at?: string | null
           created_at?: string | null
@@ -100,7 +100,7 @@ export type Database = {
         Update: {
           id?: string
           drink_id?: string
-          ingredient_id?: boolean
+          ingredient_id?: string
           quantity?: number
           updated_at?: string | null
           created_at?: string | null

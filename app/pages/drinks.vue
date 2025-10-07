@@ -14,7 +14,7 @@ const dialogDelete = ref(false);
   <v-container fluid>
     <div class="d-flex flex-row align-center mb-4 text-primary">
       <v-icon size="28" class="mr-2" icon="mdi-account-group" />
-      <span class="text-h5">Drinks</span>
+      <span class="text-h5">Bebidas</span>
     </div>
 
     <DrinksFilter v-model="filterDrawer" />
