@@ -44,7 +44,10 @@ export const useClientsStore = defineStore('clients', () => {
     }
 
     function addItem(item: Datum) {
-        items.value.pop();
+        if (items.value.length > itemsPerPage.value) {
+            items.value.pop();
+        }
+
         items.value.splice(0, 0, item);
         totalItems.value += 1;
     }

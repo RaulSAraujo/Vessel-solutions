@@ -16,42 +16,83 @@ export type Database = {
     Tables: {
       clients: {
         Row: {
-          address: string | null
-          city: string | null
-          created_at: string | null
-          email: string | null
           id: string
           name: string
+          email: string | null
           phone: string | null
-          tax_id: string | null
-          updated_at: string | null
+          phone_optional: string | null
           user_id: string | null
+          updated_at: string | null
+          created_at: string | null
         }
         Insert: {
-          address?: string | null
-          city?: string | null
-          created_at?: string | null
-          email?: string | null
           id?: string
           name: string
-          phone?: string | null
-          tax_id?: string | null
-          updated_at?: string | null
+          email?: string | null
+          phone: string
+          phone_optional?: string | null
           user_id?: string | null
+          updated_at?: string | null
+          created_at?: string | null
         }
         Update: {
-          address?: string | null
-          city?: string | null
-          created_at?: string | null
-          email?: string | null
           id?: string
           name?: string
+          email?: string | null
           phone?: string | null
-          tax_id?: string | null
-          updated_at?: string | null
+          phone_optional?: string | null
           user_id?: string | null
+          updated_at?: string | null
+          created_at?: string | null
         }
         Relationships: []
+      }
+      client_addresses: {
+        Row: {
+          zip_code: string
+          city: string
+          state: string
+          neighborhood: string
+          street: string
+          number: string
+          client_id: string
+          additional_info: string | null
+          updated_at: string | null
+          created_at: string | null
+        }
+        Insert: {
+          zip_code: string
+          city: string
+          state: string
+          neighborhood: string
+          street: string
+          number: string
+          client_id?: string
+          additional_info?: string | null
+          updated_at?: string | null
+          created_at?: string | null
+        }
+        Update: {
+          zip_code?: string
+          city?: string
+          state?: string
+          neighborhood?: string
+          street?: string
+          number?: string
+          client_id?: string
+          additional_info?: string | null
+          updated_at?: string | null
+          created_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_addresses_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       drinks: {
         Row: {
@@ -169,8 +210,8 @@ export type Database = {
           id: string
           client_id: string
           location: string
-          start_time: Date
-          end_time: Date
+          start_time: string
+          end_time: string
           guest_count: number
           distance: number
           audience_profile: string
@@ -208,13 +249,6 @@ export type Database = {
           created_at?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "events_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "events_client_id_fkey"
             columns: ["client_id"]
@@ -506,6 +540,26 @@ export type Database = {
         };
         Returns: Tables["drink_ingredients"][];
       };
+      insertion_client_and_address: {
+        Args: {
+          p_name: string;
+          p_email: string;
+          p_phone: string;
+          p_phone_optional?: string | null;
+          p_user_id: string;
+          p_zip_code: string;
+          p_city: string;
+          p_state: string;
+          p_neighborhood: string;
+          p_street: string;
+          p_number: string;
+          p_additional_info?: string | null;
+        };
+        Returns: {
+          client: Tables["clients"];
+          address: Tables["client_addresses"];
+        };
+      }
     }
     Enums: {
       [_ in never]: never

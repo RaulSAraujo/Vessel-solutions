@@ -5,7 +5,7 @@ import type { Tables, TablesInsert } from "~~/server/types/database";
 
 export default defineEventHandler(async (event) => {
   try {
-    const { client } = await getSupabaseClientAndUser(event);
+    const { client, user } = await getSupabaseClientAndUser(event);
 
     const body = await readBody<TablesInsert<"clients">>(event);
 
@@ -17,7 +17,10 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const { data, error } = await client.from("clients").insert(body).select(); // Return the inserted record
+    const { data, error } = await client.from("clients").insert({
+      ...body,
+      user_id: user.id,
+    }).select(); // Return the inserted record
 
     if (error) {
       throw createError({

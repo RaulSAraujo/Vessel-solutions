@@ -19,9 +19,12 @@ const headers = [
   { title: "E-mail", key: "email", maxWidth: 150 },
   { title: "Documento", key: "document", minWidth: 160 },
   { title: "Telefone", key: "phone", minWidth: 140 },
-  { title: "Cep", key: "zip_code", minWidth: 130 },
-  { title: "Cidade", key: "city", minWidth: 130 },
-  { title: "Endereço", key: "address", maxWidth: 150 },
+  { title: "Cep", key: "client_addresses.zip_code", minWidth: 130 },
+  { title: "Cidade", key: "client_addresses.city", minWidth: 130 },
+  { title: "UF", key: "client_addresses.state", minWidth: 50 },
+  { title: "Bairro", key: "client_addresses.neighborhood", maxWidth: 150 },
+  { title: "Rua", key: "client_addresses.street", maxWidth: 150 },
+  { title: "Nº", key: "client_addresses.number", maxWidth: 60 },
   { title: "Criado em", key: "created_at" },
   { title: "Atualizado em", key: "updated_at" },
 ];
@@ -94,8 +97,12 @@ function handleOpenDelete(client: Datum) {
       <UiTextWithTooltip :text="item.email" />
     </template>
 
-    <template #item.address="{ item }">
-      <UiTextWithTooltip :text="item.address" />
+    <template #item.client_addresses.street="{ item }">
+      <UiTextWithTooltip :text="item.client_addresses.street" />
+    </template>
+
+    <template #item.client_addresses.neighborhood="{ item }">
+      <UiTextWithTooltip :text="item.client_addresses.neighborhood" />
     </template>
 
     <template #item.created_at="{ item }">

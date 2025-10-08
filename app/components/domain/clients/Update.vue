@@ -31,18 +31,14 @@ async function update(events: FormClient) {
 
   emit("close");
 }
-
-function reset() {
-  selectedClient.value = null;
-}
 </script>
 
 <template>
-  <v-dialog width="300" @after-leave="reset">
+  <v-bottom-sheet content-class="rounded-t-xl">
     <v-card title="Atualizar Cliente" rounded="xl">
       <v-card-text>
         <Form :client="selectedClient" :loading="loading" @submit="update" />
       </v-card-text>
     </v-card>
-  </v-dialog>
+  </v-bottom-sheet>
 </template>

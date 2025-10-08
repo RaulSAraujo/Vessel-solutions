@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useClientsApi } from "~/composables/api/useClientsApi";
-import type { FormClient } from "~/types/clients";
+import type { FormClient, FormClientAddresses } from "~/types/clients";
 // components
 import Form from "./Form.vue";
 
@@ -10,10 +10,10 @@ const api = useClientsApi();
 
 const loading = ref(false);
 
-async function creation(events: FormClient) {
+async function creation(events: FormClient & FormClientAddresses) {
   loading.value = true;
 
-  const res = await api.createClient(events);
+  const res = await api.createClientAndAddress(events);
 
   if (!res) {
     loading.value = false;
@@ -22,18 +22,18 @@ async function creation(events: FormClient) {
 
   useClientsStore().addItem(res);
 
-  emit("close");
-
   loading.value = false;
+
+  emit("close");
 }
 </script>
 
 <template>
-  <v-dialog width="300">
-    <v-card title="Novo Cliente" rounded="xl">
+  <v-bottom-sheet content-class="rounded-t-xl">
+    <v-card title="Novo Cliente" rounded="t-xl">
       <v-card-text>
         <Form :loading="loading" @submit="creation" />
       </v-card-text>
     </v-card>
-  </v-dialog>
+  </v-bottom-sheet>
 </template>

@@ -1,4 +1,5 @@
 import type { FetchError } from "ofetch";
+import type { ViaCep } from '~~/server/types/via-cep'
 
 export default defineEventHandler(async (event) => {
     try {
@@ -24,7 +25,7 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        return data;
+        return data as ViaCep;
     } catch (error: unknown) {
         const err = error as FetchError;
 

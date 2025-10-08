@@ -34,18 +34,35 @@ export const clientSchema = yup.object().shape({
             return cpfRegex.test(value) || cnpjRegex.test(value);
         }),
 
-    address: yup.string()
-        .required('O endereço é obrigatório.')
-        .min(5, 'O endereço deve ter pelo menos 5 caracteres.')
-        .max(200, 'O endereço não pode exceder 200 caracteres.'),
+    zip_code: yup.string()
+        .matches(cepRegex, 'Formato de CEP inválido. Use XXXXX-XXX.')
+        .nullable(),
 
     city: yup.string()
         .required('A cidade é obrigatória.')
         .min(2, 'A cidade deve ter pelo menos 2 caracteres.')
         .max(100, 'A cidade não pode exceder 100 caracteres.'),
 
-    zip_code: yup.string()
-        .matches(cepRegex, 'Formato de CEP inválido. Use XXXXX-XXX.')
-        .nullable(),
+    state: yup.string()
+        .required('O estado é obrigatório.')
+        .max(2, 'O estado não pode exceder 2 caracteres.'),
 
+    neighborhood: yup.string()
+        .required('O bairro é obrigatório.')
+        .min(2, 'O bairro deve ter pelo menos 2 caracteres.')
+        .max(100, 'O bairro não pode exceder 100 caracteres.'),
+
+    street: yup.string()
+        .required('O bairro é obrigatório.')
+        .min(2, 'O bairro deve ter pelo menos 2 caracteres.')
+        .max(100, 'O bairro não pode exceder 100 caracteres.'),
+
+    number: yup.string()
+        .required('O bairro é obrigatório.')
+        .min(1, 'O bairro deve ter pelo menos 1 caracteres.')
+        .max(6, 'O bairro não pode exceder 6 caracteres.'),
+
+    additional_info: yup.string()
+        .max(200, 'O complemento não pode exceder 200 caracteres.')
+        .nullable(),
 });

@@ -1,7 +1,7 @@
 import type { FetchError } from 'ofetch'
 import type { EmittedFilters } from "~/types/filter";
-import type { Clients, Datum, FormClient } from '~/types/clients';
 import type { VDataTableServerOptions } from '~/types/data-table';
+import type { Clients, Datum, FormClient, FormClientAddresses, ClientAddresses } from '~/types/clients';
 
 export function useClientsApi() {
     const getClients = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {
@@ -72,11 +72,41 @@ export function useClientsApi() {
         }
     };
 
+    const createClientAddresses = async (clientId: string, addressData: FormClientAddresses) => {
+        try {
+            const res = await $fetch<ClientAddresses>(`/api/clients/${clientId}/addresses`, {
+                method: 'POST',
+                body: addressData,
+            });
+
+            return res;
+        } catch (error: unknown) {
+            const err = error as FetchError;
+            $toast().error(err.message || `Failed to create address for client with ID ${clientId}.`);
+        }
+    };
+
+    const createClientAndAddress = async (clientData: FormClient & FormClientAddresses) => {
+        try {
+            const res = await $fetch<Datum>('/api/client-address', {
+                method: 'POST',
+                body: clientData,
+            });
+
+            return res;
+        } catch (error: unknown) {
+            const err = error as FetchError;
+            $toast().error(err.message || 'Failed to create client.');
+        }
+    };
+
     return {
         getClients,
         getClientById,
         createClient,
         updateClient,
         deleteClient,
+        createClientAddresses,
+        createClientAndAddress
     };
 }

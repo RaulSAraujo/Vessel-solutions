@@ -12,7 +12,13 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update:modelValue", "updateCity", "updateAddress"]);
+const emit = defineEmits([
+  "update:modelValue",
+  "updateCity",
+  "updateState",
+  "updateNeighborhood",
+  "updateStreet",
+]);
 
 const loadingViaCep = ref(false);
 const cepError = ref<string | null>(null);
@@ -36,7 +42,9 @@ async function getViaCep() {
     });
 
     emit("updateCity", res.localidade);
-    emit("updateAddress", res.logradouro);
+    emit("updateState", res.uf);
+    emit("updateNeighborhood", res.bairro);
+    emit("updateStreet", res.logradouro);
   } catch (error) {
     const err = error as FetchError;
     console.error("API handler error:", err);

@@ -1,38 +1,60 @@
-export type Clients = {
+export interface Clients {
     data: Datum[];
     page: Page;
 }
 
-export type Datum = {
+export interface Datum {
     id: string;
     name: string;
     phone: string;
     email: string;
-    document: string;
-    zip_code: string;
-    address: string;
-    city: string;
-    created_at: Date;
-    updated_at: Date;
     user_id: string;
+    document: string;
+    created_at: string;
+    updated_at: string;
+    phone_optional: string | null
+    client_addresses: ClientAddresses;
 }
 
-export type Page = {
+export interface ClientAddresses {
+    city: string;
+    state: string;
+    number: string;
+    street: string;
+    zip_code: string;
+    client_id: string;
+    created_at: string;
+    updated_at: string;
+    neighborhood: string;
+    additional_info: string;
+}
+
+export interface Page {
     page: number;
     itemsPerPage: number;
     totalRows: number;
     totalPages: number;
 }
 
+
 export type FormClient = {
-    address?: string | null
-    city?: string | null
-    created_at?: string | null
-    email?: string | null
     id?: string
     name: string
+    email?: string | null
     phone?: string | null
-    tax_id?: string | null
-    updated_at?: string | null
+    phone_optional?: string | null
+    document?: string | null
     user_id?: string | null
+    updated_at?: string | null
+    created_at?: string | null
+}
+
+export interface FormClientAddresses {
+    city: string;
+    state: string;
+    number: string;
+    street: string;
+    zip_code: string;
+    neighborhood: string;
+    additional_info?: string;
 }
