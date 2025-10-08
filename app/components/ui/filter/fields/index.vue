@@ -152,6 +152,7 @@ watch(
   <div v-for="filter in filters" :key="filter.key" class="mb-3">
     <template v-if="filter.type === 'string'">
       <UiTextField
+        v-maska="filter.layout?.mask"
         :model-value="internalFilters[filter.key]"
         :label="filter.label"
         :clearable="filter.layout?.clearable"

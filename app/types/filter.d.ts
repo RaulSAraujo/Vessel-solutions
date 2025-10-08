@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { MaskInputOptions } from "maska";
 export type FilterOption = {
     value: any;
     text: string;
@@ -20,6 +21,7 @@ export type layoutFilter = {
     min?: number;
     max?: number;
     step?: number;
+    mask?: string | MaskInputOptions;
     combobox?: boolean;
     clearable?: boolean;
     multiple?: boolean;
