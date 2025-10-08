@@ -50,6 +50,7 @@ export type FormClient = {
 }
 
 export interface FormClientAddresses {
+    client_id?: string;
     city: string;
     state: string;
     number: string;

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useClientsApi } from "~/composables/api/useClientsApi";
-import type { FormClient } from "~/types/clients";
+import type { FormClient, FormClientAddresses } from "~/types/clients";
 // components
 import Form from "./Form.vue";
 
@@ -13,12 +13,15 @@ const { selectedClient } = storeToRefs(store);
 
 const loading = ref(false);
 
-async function update(events: FormClient) {
+async function update(events: FormClient & FormClientAddresses) {
   if (!selectedClient.value) return;
 
   loading.value = true;
 
-  const res = await api.updateClient(selectedClient.value?.id, events);
+  const res = await api.updateClientAndAddress(
+    selectedClient.value?.id,
+    events
+  );
 
   if (!res) {
     loading.value = false;

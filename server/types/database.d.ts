@@ -559,6 +559,26 @@ export type Database = {
           client: Tables["clients"];
           address: Tables["client_addresses"];
         };
+      };
+      update_client_and_address: {
+        Args: {
+          p_client_id: string;
+          p_name: string;
+          p_email: string;
+          p_phone: string;
+          p_phone_optional?: string | null;
+          p_zip_code: string;
+          p_city: string;
+          p_state: string;
+          p_neighborhood: string;
+          p_street: string;
+          p_number: string;
+          p_additional_info?: string | null;
+        };
+        Returns: {
+          client: Tables["clients"];
+          address: Tables["client_addresses"];
+        };
       }
     }
     Enums: {

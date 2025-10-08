@@ -86,6 +86,20 @@ export function useClientsApi() {
         }
     };
 
+    const updateClientAddresses = async (clientId: string, addressData: FormClientAddresses) => {
+        try {
+            const res = await $fetch<ClientAddresses>(`/api/clients/${clientId}/addresses`, {
+                method: 'PUT',
+                body: addressData,
+            });
+
+            return res;
+        } catch (error: unknown) {
+            const err = error as FetchError;
+            $toast().error(err.message || `Failed to create address for client with ID ${clientId}.`);
+        }
+    };
+
     const createClientAndAddress = async (clientData: FormClient & FormClientAddresses) => {
         try {
             const res = await $fetch<Datum>('/api/client-address', {
@@ -100,6 +114,21 @@ export function useClientsApi() {
         }
     };
 
+    const updateClientAndAddress = async (clientId: string, clientData: FormClient & FormClientAddresses) => {
+        try {
+            const res = await $fetch<Datum>(`/api/client-address/${clientId}`, {
+                method: 'PUT',
+                body: clientData,
+            });
+
+            return res;
+        } catch (error: unknown) {
+            const err = error as FetchError;
+            $toast().error(err.message || 'Failed to create client.');
+        }
+    };
+
+
     return {
         getClients,
         getClientById,
@@ -107,6 +136,8 @@ export function useClientsApi() {
         updateClient,
         deleteClient,
         createClientAddresses,
-        createClientAndAddress
+        updateClientAddresses,
+        createClientAndAddress,
+        updateClientAndAddress
     };
 }
