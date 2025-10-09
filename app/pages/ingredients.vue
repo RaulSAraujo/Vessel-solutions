@@ -9,6 +9,7 @@ const filterDrawer = ref(false);
 const dialogCreation = ref(false);
 const dialogUpdate = ref(false);
 const dialogDelete = ref(false);
+const dialogQuotation = ref(false);
 
 const { data: units, status } = useGetUnits({ lazy: true });
 </script>
@@ -27,10 +28,13 @@ const { data: units, status } = useGetUnits({ lazy: true });
     />
 
     <IngredientsTable
+      v-if="status === 'success'"
+      :units="units"
       @open-creation="dialogCreation = true"
       @open-update="dialogUpdate = true"
       @open-filter="filterDrawer = true"
       @open-delete="dialogDelete = true"
+      @open-quotation="dialogQuotation = true"
     />
 
     <IngredientsCreation
@@ -46,6 +50,8 @@ const { data: units, status } = useGetUnits({ lazy: true });
       :units="units"
       @close="dialogUpdate = false"
     />
+
+    <IngredientsSelectQuotation v-model="dialogQuotation" />
 
     <IngredientsDelete v-model="dialogDelete" @close="dialogDelete = false" />
   </v-container>

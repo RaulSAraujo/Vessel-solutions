@@ -4,7 +4,7 @@ import type { Datum as Supplier } from "~/types/suppliers";
 import type { Datum as Ingredient } from "~/types/ingredients";
 
 const props = defineProps<{
-  units: { id: string; name: string }[];
+  units: Units[];
   suppliers: Supplier[];
   ingredients: Ingredient[];
 }>();

@@ -7,7 +7,7 @@ type Options = {
 export const useGetUnits = (options: Options) => {
     const { server = true, immediate = true, lazy = false } = options
 
-    const { data, status, error, refresh, execute } = useFetch<{ id: string, name: string }[]>('/api/units', {
+    const { data, status, error, refresh, execute } = useFetch<Units[]>('/api/units', {
         lazy,
         server,
         immediate,
@@ -20,6 +20,6 @@ export const useGetUnits = (options: Options) => {
         execute,
         error: readonly(error),
         status: readonly(status),
-        data: data as unknown as Ref<{ id: string, name: string }[]>,
+        data: data as unknown as Ref<Units[]>,
     }
 }

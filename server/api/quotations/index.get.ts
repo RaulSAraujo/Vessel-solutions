@@ -16,9 +16,9 @@ export default defineEventHandler(async (event) => {
             .from("quotations")
             .select(`
                 *,
-                ingredients!inner (name, units!inner (name, abbreviation)),
-                suppliers!inner (name, phone, email, observation),
-                units!inner (name, abbreviation)
+                units!inner (name, abbreviation),
+                ingredients:ingredients!ingredient_id(name),
+                suppliers!inner (name, phone, email, observation)
                 `,
                 { count: "exact" }
             );

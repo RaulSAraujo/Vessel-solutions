@@ -6,7 +6,7 @@ import type { Datum } from "~/types/ingredients";
 const props = defineProps<{
   ingredient?: Datum | null;
   loading: boolean;
-  units: { id: string; name: string }[];
+  units: Units[];
 }>();
 
 const emit = defineEmits(["submit"]);
@@ -55,7 +55,7 @@ if (props.ingredient) {
           item-title="name"
           label="Unidade"
           prepend-inner-icon="mdi-ruler"
-          :error-messages="errors.name"
+          :error-messages="errors.unitId"
         />
       </v-col>
 
@@ -80,11 +80,14 @@ if (props.ingredient) {
       </v-col>
 
       <v-col cols="12">
-        <UiTextField
+        <UiNumberField
           v-model="wastagePercentage"
-          v-maska="'##'"
+          :min="0"
+          :max="100"
+          control-variant="stacked"
           label="Percentual de desperdício"
           prepend-inner-icon="mdi-percent"
+          dirty
           :error-messages="errors.wastage_percentage"
         />
       </v-col>

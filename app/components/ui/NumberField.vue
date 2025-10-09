@@ -62,7 +62,7 @@ defineProps({
    * Variante dos controles de incremento/decremento ('stacked' ou 'split').
    */
   controlVariant: {
-    type: String as PropType<"stacked" | "split">,
+    type: String as PropType<"split" | "default" | "hidden" | "stacked">,
     default: "split",
   },
   /**

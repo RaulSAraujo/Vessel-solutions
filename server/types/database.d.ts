@@ -300,6 +300,7 @@ export type Database = {
           unit_weight_g: number | null
           updated_at: string | null
           user_id: string | null
+          current_quotation_id: string | null
           wastage_percentage: number
         }
         Insert: {
@@ -311,6 +312,7 @@ export type Database = {
           unit_weight_g?: number | null
           updated_at?: string | null
           user_id?: string | null
+          current_quotation_id?: string | null
           wastage_percentage?: number
         }
         Update: {
@@ -322,6 +324,7 @@ export type Database = {
           unit_weight_g?: number | null
           updated_at?: string | null
           user_id?: string | null
+          current_quotation_id?: string | null
           wastage_percentage?: number
         }
         Relationships: [

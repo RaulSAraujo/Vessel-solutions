@@ -8,9 +8,15 @@ export const ingredientSchema = yup.object({
         .string()
         .required('A unidade é obrigatória'),
     unit_volume_ml: yup
-        .number(),
+        .number()
+        .nullable()
+        .optional(),
     unit_weight_g: yup
-        .number(),
+        .number()
+        .nullable()
+        .optional(),
     wastage_percentage: yup
         .number()
+        .nonNullable()
+        .optional()
 });

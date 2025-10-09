@@ -5,7 +5,7 @@ import type { FormIngredients } from "~/types/ingredients";
 import Form from "./Form.vue";
 
 defineProps<{
-  units: { id: string; name: string }[];
+  units: Units[];
 }>();
 
 const emit = defineEmits(["close"]);

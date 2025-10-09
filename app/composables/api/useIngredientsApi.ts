@@ -1,4 +1,5 @@
 import type { FetchError } from 'ofetch'
+import type { Quotations } from '~/types/quotations'
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from '~/types/data-table';
 import type { Ingredients, Datum, FormIngredients } from "~/types/ingredients";
@@ -42,7 +43,7 @@ export function useIngredientsApi() {
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.message || 'Failed to create ingredient.');
+            $toast().error(err.data.message || 'Failed to create ingredient.');
         }
     };
 
@@ -73,11 +74,51 @@ export function useIngredientsApi() {
         }
     };
 
+    const getQuotationByIngredientId = async (props?: VDataTableServerOptions, ingredientId?: string) => {
+        try {
+            const res = await $fetch<Quotations>(`/api/quotations`, {
+                query: {
+                    page: props?.page,
+                    itemsPerPage: props?.itemsPerPage,
+                    filters: {
+                        'ingredient_id': {
+                            op: 'eq',
+                            value: ingredientId
+                        }
+                    }
+                }
+            });
+
+            return res;
+        } catch (error: unknown) {
+            const err = error as FetchError;
+            $toast().error(err.message || `Failed to fetch quotation with ID ${ingredientId}.`);
+        }
+    };
+
+    const setQuotationForIngredient = async (id: string, quotationId: string) => {
+        try {
+            const res = await $fetch<Datum>(`/api/ingredients/${id}`, {
+                method: 'PUT',
+                body: {
+                    current_quotation_id: quotationId
+                },
+            });
+
+            return res;
+        } catch (error: unknown) {
+            const err = error as FetchError;
+            $toast().error(err.message || `Failed to update ingredient with ID ${id}.`);
+        }
+    };
+
     return {
         getIngredients,
         getIngredientById,
         createIngredient,
         updateIngredient,
-        deleteIngredient
+        deleteIngredient,
+        getQuotationByIngredientId,
+        setQuotationForIngredient
     }
 }

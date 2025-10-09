@@ -7,7 +7,7 @@ import type { Datum as Ingredient } from "~/types/ingredients";
 import Form from "./Form.vue";
 
 defineProps<{
-  units: { id: string; name: string }[];
+  units: Units[];
   suppliers: Supplier[];
   ingredients: Ingredient[];
 }>();

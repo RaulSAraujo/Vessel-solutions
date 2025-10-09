@@ -3,17 +3,36 @@ export type Quotations = {
     page: Page;
 }
 
-export type Datum = {
+export interface Datum {
     id: string;
-    supplier_id: string
-    ingredient_id: string
-    purchase_price: number
-    purchase_quantity: number
-    purchase_unit_id: number
-    quotation_date: string | null
+    ingredient_id: string;
+    supplier_id: string;
+    user_id: string;
+    purchase_unit_id: number;
+    purchase_price: number;
+    purchase_quantity: number;
+    quotation_date: string;
     created_at: Date;
     updated_at: Date;
-    user_id: string;
+    ingredients: Ingredients;
+    suppliers: Suppliers;
+    units: Units;
+}
+
+export interface Ingredients {
+    name: string;
+}
+
+export interface Suppliers {
+    name: string;
+    email: null;
+    phone: string;
+    observation: string;
+}
+
+export interface Units {
+    name: string;
+    abbreviation: string;
 }
 
 export type Page = {

@@ -3,16 +3,30 @@ export type Ingredients = {
     page: Page;
 }
 
-export type Datum = {
+export interface Datum {
     id: string;
-    name: string;
     user_id: string;
-    unit_id: string;
-    unit_volume_ml: number | null
-    unit_weight_g: number | null
-    wastage_percentage: number
-    created_at: Date;
-    updated_at: Date;
+    unit_id: number;
+    name: string;
+    unit_weight_g: null;
+    unit_volume_ml: null;
+    wastage_percentage: number;
+    created_at: string;
+    updated_at: string;
+    current_quotation_id: null | string;
+    quotations: Quotations | null;
+    units: Units;
+}
+
+export interface Quotations {
+    purchase_price: number;
+    purchase_unit_id: number;
+    purchase_quantity: number;
+}
+
+export interface Units {
+    name: string;
+    abbreviation: string;
 }
 
 export type Page = {
@@ -25,11 +39,4 @@ export type Page = {
 export type FormIngredients = {
     name: string;
     unit_id: string;
-}
-
-export type DatumWithRelations = Datum & {
-    units: {
-        name: string;
-        abbreviation: string
-    }
 }

@@ -2,7 +2,7 @@
 import { drinkSchema } from "~/schemas/drink";
 
 import type { Datum, FormDrink, DrinkIngredients } from "~/types/drinks";
-import type { DatumWithRelations as IngredientWithRelations } from "~/types/ingredients";
+import type { Datum as IngredientWithRelations } from "~/types/ingredients";
 
 // components
 import Table from "./Table.vue";

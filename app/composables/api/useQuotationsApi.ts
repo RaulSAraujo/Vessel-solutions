@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import type { FetchError } from 'ofetch'
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from '~/types/data-table';
@@ -33,9 +34,14 @@ export function useQuotationsApi() {
 
     const createQuotation = async (data: FormQuotations) => {
         try {
+            const newData = { ...data };
+            if (newData.quotation_date) {
+                newData.quotation_date = dayjs(newData.quotation_date, 'DD/MM/YYYY').format('YYYY-MM-DD');
+            }
+
             const res = await $fetch<Datum>('/api/quotations', {
                 method: 'POST',
-                body: data,
+                body: newData,
             });
 
             return res;
@@ -47,9 +53,12 @@ export function useQuotationsApi() {
 
     const updateQuotation = async (id: string, data: FormQuotations) => {
         try {
+            const newData = { ...data };
+            newData.quotation_date = dayjs(newData.quotation_date, 'DD/MM/YYYY').format('YYYY-MM-DD');
+
             const res = await $fetch<Datum>(`/api/quotations/${id}`, {
                 method: 'PUT',
-                body: data,
+                body: newData,
             });
 
             return res;

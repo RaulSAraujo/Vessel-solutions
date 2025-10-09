@@ -8,7 +8,7 @@ import type { Datum as Ingredient } from "~/types/ingredients";
 const props = defineProps<{
   quotation?: Datum | null;
   loading: boolean;
-  units: { id: string; name: string }[];
+  units: Units[];
   suppliers: Supplier[];
   ingredients: Ingredient[];
 }>();

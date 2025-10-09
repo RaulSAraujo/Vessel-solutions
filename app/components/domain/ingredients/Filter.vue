@@ -2,7 +2,7 @@
 import type { FilterDefinition } from "~/types/filter";
 
 const props = defineProps<{
-  units: { id: string; name: string }[];
+  units: Units[];
 }>();
 
 const store = useIngredientsStore();
