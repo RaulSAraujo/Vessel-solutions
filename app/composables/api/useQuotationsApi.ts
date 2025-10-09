@@ -77,7 +77,13 @@ export function useQuotationsApi() {
             return true;
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.message || `Failed to delete Quotation with ID ${id}.`);
+            if (err.data.message.includes('foreign key')) {
+                $toast().error('Não é possível excluir uma cotação que esteja vinculada a um ingrediente.');
+
+                return;
+            }
+
+            $toast().error(err.data.message || `Failed to delete Quotation with ID ${id}.`);
         }
     };
 

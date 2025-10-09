@@ -38,10 +38,23 @@ const headers = [
 ];
 
 watch(
-  () => selectedIngredient.value,
+  () => internalValue.value,
   (value) => {
+    if (!value) {
+      items.value = [];
+      selected.value = [];
+      totalItems.value = 0;
+    }
+  }
+);
+
+watch(
+  () => items.value,
+  (value) => {
+    if (value.length < 0) return;
+
     const current = items.value.find(
-      (item) => item.id === value?.current_quotation_id
+      (item) => item.id === selectedIngredient.value?.current_quotation_id
     );
 
     selected.value = current ? [current] : [];
@@ -87,7 +100,26 @@ async function setQuotationIngredient() {
 
   loading.value = false;
 
-  store.fetchIngredients();
+  internalValue.value = false;
+}
+
+async function removeQuotation() {
+  if (!selectedIngredient.value) return;
+
+  loading.value = true;
+
+  const res = await api.removeQuotationForIngredient(
+    selectedIngredient.value.id
+  );
+
+  if (!res) {
+    loading.value = false;
+    return;
+  }
+
+  store.updateItem(res);
+
+  loading.value = false;
 
   internalValue.value = false;
 }
@@ -98,7 +130,17 @@ async function setQuotationIngredient() {
     <v-card title="Selecione uma cotação" rounded="xl">
       <template #append>
         <v-btn
-          width="200"
+          class="mr-4"
+          color="error"
+          variant="plain"
+          density="compact"
+          icon="mdi-link-off"
+          :loading="loadingSubmit"
+          @click="removeQuotation"
+        />
+
+        <v-btn
+          width="180"
           rounded="lg"
           color="primary"
           :loading="loadingSubmit"

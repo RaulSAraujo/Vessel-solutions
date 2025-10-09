@@ -10,7 +10,7 @@ const { selectedQuotation } = storeToRefs(store);
 
 const loading = ref(false);
 
-async function deleteIngredient() {
+async function deleteQuotation() {
   if (!selectedQuotation.value) return;
 
   loading.value = true;
@@ -41,7 +41,7 @@ async function deleteIngredient() {
       <v-card-actions>
         <v-spacer />
         <v-btn color="grey" text @click="$emit('close')"> Cancelar </v-btn>
-        <v-btn color="error" text @click="deleteIngredient"> Confirmar </v-btn>
+        <v-btn color="error" text @click="deleteQuotation"> Confirmar </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

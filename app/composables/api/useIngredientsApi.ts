@@ -116,6 +116,19 @@ export function useIngredientsApi() {
         }
     };
 
+    const removeQuotationForIngredient = async (id: string) => {
+        try {
+            const res = await $fetch<Datum>(`/api/ingredients/${id}/remove-quotation`, {
+                method: 'PUT',
+            });
+
+            return res;
+        } catch (error: unknown) {
+            const err = error as FetchError;
+            $toast().error(err.message || `Failed to update ingredient with ID ${id}.`);
+        }
+    };
+
     return {
         getIngredients,
         getIngredientById,
@@ -123,6 +136,7 @@ export function useIngredientsApi() {
         updateIngredient,
         deleteIngredient,
         getQuotationByIngredientId,
-        setQuotationForIngredient
+        setQuotationForIngredient,
+        removeQuotationForIngredient
     }
 }
