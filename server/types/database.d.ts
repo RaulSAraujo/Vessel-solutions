@@ -302,6 +302,7 @@ export type Database = {
           user_id: string | null
           current_quotation_id: string | null
           wastage_percentage: number
+          real_cost_per_base_unit: number
         }
         Insert: {
           unit_volume_ml?: number | null
@@ -314,6 +315,7 @@ export type Database = {
           user_id?: string | null
           current_quotation_id?: string | null
           wastage_percentage?: number
+          real_cost_per_base_unit?: number
         }
         Update: {
           unit_volume_ml?: number | null
@@ -326,6 +328,7 @@ export type Database = {
           user_id?: string | null
           current_quotation_id?: string | null
           wastage_percentage?: number
+          real_cost_per_base_unit?: number
         }
         Relationships: [
           {

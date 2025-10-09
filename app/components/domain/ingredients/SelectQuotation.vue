@@ -21,7 +21,7 @@ const totalItems = ref(0);
 const loading = ref(false);
 const items = ref<Datum[]>([]);
 const loadingSubmit = ref(false);
-const selected = ref<string[]>([]);
+const selected = ref<Datum[]>([]);
 
 const internalValue = computed({
   get: () => props.modelValue,
@@ -40,9 +40,11 @@ const headers = [
 watch(
   () => selectedIngredient.value,
   (value) => {
-    selected.value = value?.current_quotation_id
-      ? [value?.current_quotation_id]
-      : [];
+    const current = items.value.find(
+      (item) => item.id === value?.current_quotation_id
+    );
+
+    selected.value = current ? [current] : [];
   }
 );
 
@@ -72,7 +74,7 @@ async function setQuotationIngredient() {
   loading.value = true;
 
   const res = await api.setQuotationForIngredient(
-    selectedIngredient.value.id,
+    selectedIngredient.value,
     selected.value[0]
   );
 
@@ -114,6 +116,7 @@ async function setQuotationIngredient() {
           item-value="id"
           :headers="headers"
           :show-select="true"
+          :return-object="true"
           select-strategy="single"
           :items-length="totalItems"
           @update:options="fetchItems"

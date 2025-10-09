@@ -1,7 +1,7 @@
 import type { FetchError } from 'ofetch'
-import type { Quotations } from '~/types/quotations'
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from '~/types/data-table';
+import type { Quotations, Datum as Quotation } from '~/types/quotations'
 import type { Ingredients, Datum, FormIngredients } from "~/types/ingredients";
 
 
@@ -47,11 +47,14 @@ export function useIngredientsApi() {
         }
     };
 
-    const updateIngredient = async (id: string, data: FormIngredients) => {
+    const updateIngredient = async (id: string, data: FormIngredients, currentQuotationId?: string | null) => {
         try {
             const res = await $fetch<Datum>(`/api/ingredients/${id}`, {
                 method: 'PUT',
-                body: data,
+                body: {
+                    ...data,
+                    current_quotation_id: currentQuotationId
+                },
             });
 
             return res;
@@ -96,19 +99,20 @@ export function useIngredientsApi() {
         }
     };
 
-    const setQuotationForIngredient = async (id: string, quotationId: string) => {
+    const setQuotationForIngredient = async (ingredient: Datum, quotation: Quotation,) => {
         try {
-            const res = await $fetch<Datum>(`/api/ingredients/${id}`, {
+            const res = await $fetch<Datum>(`/api/ingredients/${ingredient.id}/set-quotation`, {
                 method: 'PUT',
                 body: {
-                    current_quotation_id: quotationId
+                    quotation,
+                    ingredient
                 },
             });
 
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.message || `Failed to update ingredient with ID ${id}.`);
+            $toast().error(err.message || `Failed to update ingredient with ID ${ingredient.id}.`);
         }
     };
 

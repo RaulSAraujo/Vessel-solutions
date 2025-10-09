@@ -8,11 +8,12 @@ export interface Datum {
     user_id: string;
     unit_id: number;
     name: string;
-    unit_weight_g: null;
-    unit_volume_ml: null;
+    unit_weight_g: number | null;
+    unit_volume_ml: number | null;
     wastage_percentage: number;
     created_at: string;
     updated_at: string;
+    real_cost_per_base_unit: number;
     current_quotation_id: null | string;
     quotations: Quotations | null;
     units: Units;
@@ -39,4 +40,7 @@ export type Page = {
 export type FormIngredients = {
     name: string;
     unit_id: string;
+    wastage_percentage?: number;
+    unit_weight_g?: number | null;
+    unit_volume_ml?: number | null;
 }

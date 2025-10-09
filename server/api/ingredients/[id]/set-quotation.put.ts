@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     try {
         const { client } = await getSupabaseClientAndUser(event);
         const ingredientId = event.context.params?.id;
-        const body = await readBody<TablesUpdate<'ingredients'>>(event);
+        const body = await readBody<{ ingredient: TablesUpdate<'ingredients'>, quotation: TablesUpdate<'quotations'> }>(event);
 
         if (!ingredientId) {
             throw createError({
@@ -17,13 +17,14 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        const realCostPerBaseUnit = await updateRealCostPerBaseUnit(event, body)
-
-        const updatedFields: TablesUpdate<'ingredients'> = { ...body, real_cost_per_base_unit: realCostPerBaseUnit || undefined };
+        const realCostPerBaseUnit = await updateRealCostPerBaseUnit(event, body.ingredient, body.quotation)
 
         const { data, error } = await client
             .from('ingredients')
-            .update(updatedFields)
+            .update({
+                current_quotation_id: body.quotation?.id,
+                real_cost_per_base_unit: realCostPerBaseUnit
+            })
             .eq('id', ingredientId)
             .select(`
                 *,
@@ -58,43 +59,40 @@ export default defineEventHandler(async (event) => {
     }
 });
 
-async function updateRealCostPerBaseUnit(event: H3Event, body: TablesUpdate<'ingredients'>): Promise<number> {
-    if (!body.current_quotation_id) {
+async function updateRealCostPerBaseUnit(
+    event: H3Event,
+    ingredient: TablesUpdate<'ingredients'>,
+    quotation: TablesUpdate<'quotations'>
+): Promise<number> {
+    if (!quotation) {
         return 0; // Retorna 0 se não houver cotação
     }
 
     const { client } = await getSupabaseClientAndUser(event);
 
     // Busca todas as unidades do banco de dados
-    const { data: quotation, error: quotationError } = await client
-        .from('quotations')
-        .select('*')
-        .eq('id', body.current_quotation_id)
-        .single();
-
-    // Busca todas as unidades do banco de dados
     const { data: allUnits, error: unitsError } = await client
         .from('units')
         .select('*');
 
-    if (!quotation || !allUnits) {
+    if (unitsError || !allUnits) {
         throw createError({
             statusCode: 500,
             statusMessage: 'Failed to fetch units',
-            message: unitsError?.message || quotationError?.message || 'No units data found',
+            message: unitsError?.message || 'No units data found',
         });
     }
 
     // Extrai os valores necessários da cotação e do ingrediente
-    const purchasePrice = quotation.purchase_price
-    const purchaseQuantity = quotation.purchase_quantity;
-    const purchaseUnitId = quotation.purchase_unit_id;
-    const ingredientBaseUnitId = body.unit_id || 0;
-    const wastagePercentage = body.wastage_percentage || 0;
+    const purchasePrice = quotation.purchase_price || 0;
+    const purchaseQuantity = quotation.purchase_quantity || 0;
+    const purchaseUnitId = quotation.purchase_unit_id || 0;
+    const ingredientBaseUnitId = ingredient.unit_id || 0;
+    const wastagePercentage = ingredient.wastage_percentage || 0;
 
     const ingredientDetails: IngredientDetails = {
-        unit_weight_g: body.unit_weight_g || 0,
-        unit_volume_ml: body.unit_volume_ml || 0,
+        unit_weight_g: ingredient.unit_weight_g || 0,
+        unit_volume_ml: ingredient.unit_volume_ml || 0,
     };
 
     // Converte a quantidade de compra para a unidade base do ingrediente

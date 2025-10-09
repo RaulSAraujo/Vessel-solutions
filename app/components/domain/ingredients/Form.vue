@@ -16,7 +16,7 @@ const { handleSubmit, errors } = useForm({
 });
 
 const { value: name } = useField<string>("name");
-const { value: unitId } = useField<string>("unit_id");
+const { value: unitId } = useField<number>("unit_id");
 const { value: unitVolumeMl } = useField<number | null>("unit_volume_ml");
 const { value: unitWeightG } = useField<number | null>("unit_weight_g");
 const { value: wastagePercentage } = useField<number>("wastage_percentage");

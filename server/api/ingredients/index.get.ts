@@ -16,11 +16,8 @@ export default defineEventHandler(async (event) => {
             .from("ingredients")
             .select(`
                 *,
-                quotations:quotations!current_quotation_id (purchase_price,purchase_quantity,purchase_unit_id),
                 units (name,abbreviation)
-                `,
-                { count: "exact" }
-            );
+            `, { count: "exact" });
 
         if (query.filters && typeof query.filters === "string") {
             try {

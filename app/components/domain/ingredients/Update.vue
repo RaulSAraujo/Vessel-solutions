@@ -22,7 +22,11 @@ async function update(events: FormIngredients) {
 
   loading.value = true;
 
-  const res = await api.updateIngredient(selectedIngredient.value?.id, events);
+  const res = await api.updateIngredient(
+    selectedIngredient.value?.id,
+    events,
+    selectedIngredient.value.current_quotation_id || null
+  );
 
   if (!res) {
     loading.value = false;
