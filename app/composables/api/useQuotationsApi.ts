@@ -64,7 +64,7 @@ export function useQuotationsApi() {
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.message || `Failed to update Quotation with ID ${id}.`);
+            $toast().error(err.data.message || `Failed to update Quotation with ID ${id}.`);
         }
     };
 

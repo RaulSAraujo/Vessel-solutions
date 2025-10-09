@@ -106,6 +106,20 @@ function handleOpenQuotation(ingredient: Datum) {
       {{ item.units.name }} ({{ item.units.abbreviation }})
     </template>
 
+    <template #item.real_cost_per_base_unit="{ item }">
+      <span
+        v-if="
+          item.real_cost_per_base_unit &&
+          typeof item.real_cost_per_base_unit == 'number'
+        "
+      >
+        R$
+        {{
+          (item.real_cost_per_base_unit as number).toFixed(4).replace(".", ",")
+        }}
+      </span>
+    </template>
+
     <template #item.created_at="{ item }">
       {{ formatDate(item.created_at) }}
     </template>

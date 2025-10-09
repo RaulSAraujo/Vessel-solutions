@@ -24,8 +24,8 @@ export default defineEventHandler(async (event) => {
             .eq('id', quotationId)
             .select(`
                 *,
-                ingredients (name),
                 units (name,abbreviation),
+                ingredients:ingredients!ingredient_id(name),
                 suppliers (name, phone, email, observation)
             `);
 

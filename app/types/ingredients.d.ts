@@ -13,7 +13,7 @@ export interface Datum {
     wastage_percentage: number;
     created_at: string;
     updated_at: string;
-    real_cost_per_base_unit: number;
+    real_cost_per_base_unit: number | null;
     current_quotation_id: null | string;
     quotations: Quotations | null;
     units: Units;
