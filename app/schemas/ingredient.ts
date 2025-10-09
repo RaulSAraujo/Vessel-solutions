@@ -4,4 +4,13 @@ export const ingredientSchema = yup.object({
     name: yup
         .string()
         .required('O nome é obrigatório'),
+    unit_id: yup
+        .string()
+        .required('A unidade é obrigatória'),
+    unit_volume_ml: yup
+        .number(),
+    unit_weight_g: yup
+        .number(),
+    wastage_percentage: yup
+        .number()
 });

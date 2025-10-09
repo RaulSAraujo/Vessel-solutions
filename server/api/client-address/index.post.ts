@@ -9,11 +9,11 @@ export default defineEventHandler(async (event) => {
 
         const body = await readBody<TablesInsert<"clients"> & TablesInsert<"client_addresses">>(event);
 
-        if (!body.name || !body.email) {
+        if (!body.name || !body.email || !body.phone) {
             throw createError({
                 statusCode: 400,
                 statusMessage: "Bad Request",
-                message: "Client name and email are required.",
+                message: "Client name and email and phone are required.",
             });
         }
 

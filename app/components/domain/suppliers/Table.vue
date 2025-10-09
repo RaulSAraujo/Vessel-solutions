@@ -18,7 +18,7 @@ const headers = [
   { title: "Nome", key: "name" },
   { title: "Telefone", key: "phone" },
   { title: "E-mail", key: "email" },
-  { title: "Observação", key: "observation", minWidth: 100 },
+  { title: "Observação", key: "observation", maxWidth: 150 },
   { title: "Criado em", key: "created_at" },
   { title: "Atualizado em", key: "updated_at" },
 ];

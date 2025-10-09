@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import { useGetUnits } from "~/composables/api/useGetUnits";
+
 definePageMeta({
   middleware: ["auth"],
-  layout: "default",
 });
 
 const filterDrawer = ref(false);
 const dialogCreation = ref(false);
 const dialogUpdate = ref(false);
 const dialogDelete = ref(false);
+
+const { data: units, status } = useGetUnits({ lazy: true });
 </script>
 
 <template>
@@ -17,7 +20,11 @@ const dialogDelete = ref(false);
       <span class="text-h5">Ingredientes</span>
     </div>
 
-    <IngredientsFilter v-model="filterDrawer" />
+    <IngredientsFilter
+      v-if="status === 'success'"
+      v-model="filterDrawer"
+      :units="units"
+    />
 
     <IngredientsTable
       @open-creation="dialogCreation = true"
@@ -27,11 +34,18 @@ const dialogDelete = ref(false);
     />
 
     <IngredientsCreation
+      v-if="status === 'success'"
       v-model="dialogCreation"
+      :units="units"
       @close="dialogCreation = false"
     />
 
-    <IngredientsUpdate v-model="dialogUpdate" @close="dialogUpdate = false" />
+    <IngredientsUpdate
+      v-if="status === 'success'"
+      v-model="dialogUpdate"
+      :units="units"
+      @close="dialogUpdate = false"
+    />
 
     <IngredientsDelete v-model="dialogDelete" @close="dialogDelete = false" />
   </v-container>

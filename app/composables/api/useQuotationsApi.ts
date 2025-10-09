@@ -1,7 +1,7 @@
 import type { FetchError } from 'ofetch'
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from '~/types/data-table';
-import type { Quotations, Datum, FormQuotations, Supplier, Ingredient } from "~/types/quotations";
+import type { Quotations, Datum, FormQuotations } from "~/types/quotations";
 
 export function useQuotationsApi() {
     const getQuotations = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {
@@ -72,35 +72,11 @@ export function useQuotationsApi() {
         }
     };
 
-    const getSuppliers = async () => {
-        try {
-            const res = await $fetch<Supplier[]>('/api/quotations/suppliers');
-
-            return res;
-        } catch (error: unknown) {
-            const err = error as FetchError;
-            $toast().error(err.message || 'Failed to fetch suppliers.');
-        }
-    };
-
-    const getIngredients = async () => {
-        try {
-            const res = await $fetch<Ingredient[]>('/api/quotations/ingredients');
-
-            return res;
-        } catch (error: unknown) {
-            const err = error as FetchError;
-            $toast().error(err.message || 'Failed to fetch ingredients.');
-        }
-    };
-
     return {
         getQuotations,
         getQuotationById,
         createQuotation,
         updateQuotation,
-        deleteQuotation,
-        getSuppliers,
-        getIngredients
+        deleteQuotation
     }
 }

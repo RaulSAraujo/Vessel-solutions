@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useIngredientsApi } from "~/composables/api/useIngredientsApi";
 import { ingredientSchema } from "~/schemas/ingredient";
 
 import type { Datum } from "~/types/ingredients";
@@ -7,6 +6,7 @@ import type { Datum } from "~/types/ingredients";
 const props = defineProps<{
   ingredient?: Datum | null;
   loading: boolean;
+  units: { id: string; name: string }[];
 }>();
 
 const emit = defineEmits(["submit"]);
@@ -16,7 +16,10 @@ const { handleSubmit, errors } = useForm({
 });
 
 const { value: name } = useField<string>("name");
-const { value: unit_id } = useField<string>("unit_id");
+const { value: unitId } = useField<string>("unit_id");
+const { value: unitVolumeMl } = useField<number | null>("unit_volume_ml");
+const { value: unitWeightG } = useField<number | null>("unit_weight_g");
+const { value: wastagePercentage } = useField<number>("wastage_percentage");
 
 const onSubmit = handleSubmit((values) => {
   emit("submit", values);
@@ -24,10 +27,11 @@ const onSubmit = handleSubmit((values) => {
 
 if (props.ingredient) {
   name.value = props.ingredient.name;
-  unit_id.value = props.ingredient.unit_id;
+  unitId.value = props.ingredient.unit_id;
+  unitVolumeMl.value = props.ingredient.unit_volume_ml;
+  unitWeightG.value = props.ingredient.unit_weight_g;
+  wastagePercentage.value = props.ingredient.wastage_percentage;
 }
-
-const units = await useIngredientsApi().getUnits();
 </script>
 
 <template>
@@ -45,13 +49,43 @@ const units = await useIngredientsApi().getUnits();
 
       <v-col cols="12">
         <UiSelectField
-          v-model="unit_id"
+          v-model="unitId"
           :items="units || []"
           item-value="id"
           item-title="name"
           label="Unidade"
           prepend-inner-icon="mdi-ruler"
           :error-messages="errors.name"
+        />
+      </v-col>
+
+      <v-col cols="12">
+        <UiTextField
+          v-model="unitVolumeMl"
+          v-maska="'###'"
+          label="Volume da unidade (ml)"
+          prepend-inner-icon="mdi-beaker"
+          :error-messages="errors.unitVolumeMl"
+        />
+      </v-col>
+
+      <v-col cols="12">
+        <UiTextField
+          v-model="unitWeightG"
+          v-maska="'###'"
+          label="Peso da unidade (g)"
+          prepend-inner-icon="mdi-weight"
+          :error-messages="errors.unitWeightG"
+        />
+      </v-col>
+
+      <v-col cols="12">
+        <UiTextField
+          v-model="wastagePercentage"
+          v-maska="'##'"
+          label="Percentual de desperdício"
+          prepend-inner-icon="mdi-percent"
+          :error-messages="errors.wastage_percentage"
         />
       </v-col>
 

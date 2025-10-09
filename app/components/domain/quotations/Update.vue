@@ -1,8 +1,16 @@
 <script lang="ts" setup>
 import { useQuotationsApi } from "~/composables/api/useQuotationsApi";
 import type { FormQuotations } from "~/types/quotations";
+import type { Datum as Supplier } from "~/types/suppliers";
+import type { Datum as Ingredient } from "~/types/ingredients";
 // components
 import Form from "./Form.vue";
+
+defineProps<{
+  units: { id: string; name: string }[];
+  suppliers: Supplier[];
+  ingredients: Ingredient[];
+}>();
 
 const emit = defineEmits(["close"]);
 
@@ -42,6 +50,9 @@ function reset() {
     <v-card title="Atualizar cotação" rounded="xl">
       <v-card-text>
         <Form
+          :units="units"
+          :suppliers="suppliers"
+          :ingredients="ingredients"
           :quotation="selectedQuotation"
           :loading="loading"
           @submit="update"

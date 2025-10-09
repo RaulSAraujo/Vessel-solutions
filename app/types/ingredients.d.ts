@@ -8,6 +8,9 @@ export type Datum = {
     name: string;
     user_id: string;
     unit_id: string;
+    unit_volume_ml: number | null
+    unit_weight_g: number | null
+    wastage_percentage: number
     created_at: Date;
     updated_at: Date;
 }

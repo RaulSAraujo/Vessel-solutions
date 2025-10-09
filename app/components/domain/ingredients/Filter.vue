@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { useIngredientsApi } from "~/composables/api/useIngredientsApi";
 import type { FilterDefinition } from "~/types/filter";
+
+const props = defineProps<{
+  units: { id: string; name: string }[];
+}>();
 
 const store = useIngredientsStore();
 const { activeFilters } = storeToRefs(store);
-
-const units = await useIngredientsApi().getUnits();
 
 const filterDefinitions = ref<FilterDefinition[]>([
   {
@@ -22,7 +23,7 @@ const filterDefinitions = ref<FilterDefinition[]>([
     label: "Unidade",
     type: "array",
     op: "eq",
-    options: units?.map((u) => ({ text: u.name, value: u.id })),
+    options: props.units?.map((u) => ({ text: u.name, value: u.id })),
     layout: {
       clearable: true,
     },

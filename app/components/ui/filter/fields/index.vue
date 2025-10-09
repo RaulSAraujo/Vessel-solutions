@@ -10,7 +10,7 @@ import type {
 const props = defineProps({
   filters: {
     type: Array as PropType<FilterDefinition[]>,
-    required: true,
+    default: () => [],
   },
   modelValue: {
     type: Object as PropType<EmittedFilters>,

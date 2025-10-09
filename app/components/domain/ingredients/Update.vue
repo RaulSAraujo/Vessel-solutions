@@ -4,6 +4,10 @@ import type { FormIngredients } from "~/types/ingredients";
 // components
 import Form from "./Form.vue";
 
+defineProps<{
+  units: { id: string; name: string }[];
+}>();
+
 const emit = defineEmits(["close"]);
 
 const api = useIngredientsApi();
@@ -42,6 +46,7 @@ function reset() {
     <v-card title="Atualizar ingrediente" rounded="xl">
       <v-card-text>
         <Form
+          :units="units"
           :ingredient="selectedIngredient"
           :loading="loading"
           @submit="update"

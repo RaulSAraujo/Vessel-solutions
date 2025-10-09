@@ -1,8 +1,16 @@
 <script lang="ts" setup>
 import { useQuotationsApi } from "~/composables/api/useQuotationsApi";
 import type { FormQuotations } from "~/types/quotations";
+import type { Datum as Supplier } from "~/types/suppliers";
+import type { Datum as Ingredient } from "~/types/ingredients";
 // components
 import Form from "./Form.vue";
+
+defineProps<{
+  units: { id: string; name: string }[];
+  suppliers: Supplier[];
+  ingredients: Ingredient[];
+}>();
 
 const emit = defineEmits(["close"]);
 
@@ -32,7 +40,13 @@ async function creation(events: FormQuotations) {
   <v-dialog width="300">
     <v-card title="Nova cotação" rounded="xl">
       <v-card-text>
-        <Form :loading="loading" @submit="creation" />
+        <Form
+          :units="units"
+          :suppliers="suppliers"
+          :ingredients="ingredients"
+          :loading="loading"
+          @submit="creation"
+        />
       </v-card-text>
     </v-card>
   </v-dialog>

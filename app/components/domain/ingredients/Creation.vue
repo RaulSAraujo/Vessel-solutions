@@ -4,6 +4,10 @@ import type { FormIngredients } from "~/types/ingredients";
 // components
 import Form from "./Form.vue";
 
+defineProps<{
+  units: { id: string; name: string }[];
+}>();
+
 const emit = defineEmits(["close"]);
 
 const api = useIngredientsApi();
@@ -32,7 +36,7 @@ async function creation(events: FormIngredients) {
   <v-dialog width="300">
     <v-card title="Novo ingrediente" rounded="xl">
       <v-card-text>
-        <Form :loading="loading" @submit="creation" />
+        <Form :units="units" :loading="loading" @submit="creation" />
       </v-card-text>
     </v-card>
   </v-dialog>

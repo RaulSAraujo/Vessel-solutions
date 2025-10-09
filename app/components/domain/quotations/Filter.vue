@@ -1,14 +1,16 @@
 <script lang="ts" setup>
-import { useIngredientsApi } from "~/composables/api/useIngredientsApi";
-import { useQuotationsApi } from "~/composables/api/useQuotationsApi";
 import type { FilterDefinition } from "~/types/filter";
+import type { Datum as Supplier } from "~/types/suppliers";
+import type { Datum as Ingredient } from "~/types/ingredients";
+
+const props = defineProps<{
+  units: { id: string; name: string }[];
+  suppliers: Supplier[];
+  ingredients: Ingredient[];
+}>();
 
 const store = useQuotationsStore();
 const { activeFilters } = storeToRefs(store);
-
-const units = await useIngredientsApi().getUnits();
-const suppliers = await useQuotationsApi().getSuppliers();
-const ingredients = await useQuotationsApi().getIngredients();
 
 const filterDefinitions = ref<FilterDefinition[]>([
   {
@@ -16,7 +18,7 @@ const filterDefinitions = ref<FilterDefinition[]>([
     label: "Fornecedores",
     type: "array",
     op: "eq",
-    options: suppliers?.map((u) => ({ text: u.name, value: u.name })),
+    options: props.suppliers?.map((u) => ({ text: u.name, value: u.name })),
     layout: {
       clearable: true,
       combobox: true,
@@ -27,18 +29,18 @@ const filterDefinitions = ref<FilterDefinition[]>([
     label: "Ingredientes",
     type: "array",
     op: "eq",
-    options: ingredients?.map((u) => ({ text: u.name, value: u.name })),
+    options: props.ingredients?.map((u) => ({ text: u.name, value: u.name })),
     layout: {
       clearable: true,
       combobox: true,
     },
   },
   {
-    key: "ingredients.units.name",
+    key: "units.name",
     label: "Unidade",
     type: "array",
     op: "eq",
-    options: units?.map((u) => ({ text: u.name, value: u.name })),
+    options: props.units?.map((u) => ({ text: u.name, value: u.name })),
     layout: {
       clearable: true,
     },

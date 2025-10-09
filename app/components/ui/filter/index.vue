@@ -7,11 +7,11 @@ import type { FilterDefinition } from "~/types/filter";
 const props = defineProps({
   modelValue: {
     type: Object as PropType<Record<string, any>>,
-    required: true,
+    default: () => ({}),
   },
   filterDefinitions: {
     type: Array as PropType<FilterDefinition[]>,
-    required: true,
+    default: () => [],
   },
 });
 
@@ -34,11 +34,13 @@ const resetFilters = () => {
 
 <template>
   <div class="d-flex flex-column py-2" style="width: 100%; height: 100%">
-    <Fields
-      v-model="internalValue"
-      :filters="filterDefinitions"
-      @search="emit('search', internalValue)"
-    />
+    <ClientOnly>
+      <Fields
+        v-model="internalValue"
+        :filters="filterDefinitions"
+        @search="emit('search', internalValue)"
+      />
+    </ClientOnly>
 
     <v-spacer />
 

@@ -17,7 +17,8 @@ export default defineEventHandler(async (event) => {
             .select(`
                 *,
                 ingredients!inner (name, units!inner (name, abbreviation)),
-                suppliers!inner (name, phone, email, observation)
+                suppliers!inner (name, phone, email, observation),
+                units!inner (name, abbreviation)
                 `,
                 { count: "exact" }
             );

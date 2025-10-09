@@ -1,6 +1,3 @@
-export type { Datum as Supplier } from '~/types/suppliers'
-export type { Datum as Ingredient } from '~/types/ingredients'
-
 export type Quotations = {
     data: Datum[];
     page: Page;
@@ -11,6 +8,8 @@ export type Datum = {
     supplier_id: string
     ingredient_id: string
     purchase_price: number
+    purchase_quantity: number
+    purchase_unit_id: number
     quotation_date: string | null
     created_at: Date;
     updated_at: Date;
@@ -28,5 +27,7 @@ export type FormQuotations = {
     supplier_id: string
     ingredient_id: string
     purchase_price: number
+    purchase_quantity: number
+    purchase_unit_id: number
     quotation_date?: string | null
 }

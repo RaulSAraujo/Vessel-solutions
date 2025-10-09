@@ -73,21 +73,11 @@ export function useIngredientsApi() {
         }
     };
 
-    const getUnits = async () => {
-        try {
-            return await $fetch<{ id: string, name: string }[]>('/api/units');
-        } catch (error: unknown) {
-            const err = error as FetchError;
-            $toast().error(err.message || 'Failed to fetch units.');
-        }
-    }
-
     return {
         getIngredients,
         getIngredientById,
         createIngredient,
         updateIngredient,
-        deleteIngredient,
-        getUnits
+        deleteIngredient
     }
 }

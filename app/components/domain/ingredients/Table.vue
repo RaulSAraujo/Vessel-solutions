@@ -16,7 +16,10 @@ const { page, itemsPerPage, items, totalItems, loading, selectedIngredient } =
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
   { title: "Nome", key: "name" },
-  { title: "Unidade medida", key: "units.name" },
+  { title: "Unid.", key: "units.name" },
+  { title: "Peso (g)", key: "unit_weight_g" },
+  { title: "Vol. (ml)", key: "unit_volume_ml" },
+  { title: "% Desperdício", key: "wastage_percentage" },
   { title: "Criado em", key: "created_at" },
   { title: "Atualizado em", key: "updated_at" },
 ];
