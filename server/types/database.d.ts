@@ -97,64 +97,53 @@ export type Database = {
         }
         Relationships: []
       }
-      drink_costs: {
+      drink_categories: {
         Row: {
-          calculated_at: string | null
           created_at: string | null
-          drink_id: string
           id: string
-          total_cost: number
+          name: string
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
-          calculated_at?: string | null
           created_at?: string | null
-          drink_id: string
           id?: string
-          total_cost: number
+          name: string
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
-          calculated_at?: string | null
           created_at?: string | null
-          drink_id?: string
           id?: string
-          total_cost?: number
+          name?: string
           updated_at?: string | null
+          user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "drink_costs_drink_id_fkey"
-            columns: ["drink_id"]
-            isOneToOne: false
-            referencedRelation: "drinks"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       drink_ingredients: {
         Row: {
           created_at: string | null
           drink_id: string
-          id: string
           ingredient_id: string
           quantity: number
+          unit_id: number | null
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
           drink_id: string
-          id?: string
           ingredient_id: string
           quantity: number
+          unit_id?: number | null
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
           drink_id?: string
-          id?: string
           ingredient_id?: string
           quantity?: number
+          unit_id?: number | null
           updated_at?: string | null
         }
         Relationships: [
@@ -172,34 +161,64 @@ export type Database = {
             referencedRelation: "ingredients"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "drink_ingredients_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "units"
+            referencedColumns: ["id"]
+          },
         ]
       }
       drinks: {
         Row: {
+          calculated_cost: number | null
+          category_id: string | null
           created_at: string | null
+          description: string | null
           id: string
+          image_url: string | null
           name: string
-          type: string
+          profit_margin_percentage: number | null
+          selling_price: number | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
+          calculated_cost?: number | null
+          category_id?: string | null
           created_at?: string | null
+          description?: string | null
           id?: string
+          image_url?: string | null
           name: string
-          type: string
+          profit_margin_percentage?: number | null
+          selling_price?: number | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
+          calculated_cost?: number | null
+          category_id?: string | null
           created_at?: string | null
+          description?: string | null
           id?: string
+          image_url?: string | null
           name?: string
-          type?: string
+          profit_margin_percentage?: number | null
+          selling_price?: number | null
           updated_at?: string | null
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "drinks_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "drink_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       event_drinks: {
         Row: {

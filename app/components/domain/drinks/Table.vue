@@ -15,7 +15,10 @@ const { page, itemsPerPage, items, totalItems, loading, selectedDrink } =
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
   { title: "Nome", key: "name" },
-  { title: "Tipo", key: "type" },
+  { title: "Descrição", key: "description" },
+  { title: "Custo", key: "calculated_cost" },
+  { title: "Preço de venda", key: "selling_price" },
+  { title: "Margem de lucro (%)", key: "profit_margin_percentage" },
   { title: "Criado em", key: "created_at" },
   { title: "Atualizado em", key: "updated_at" },
 ];
@@ -78,6 +81,35 @@ function handleOpenDelete(drink: Datum) {
         @edit="handleOpenUpdate(item)"
         @delete="handleOpenDelete(item)"
       />
+    </template>
+
+    <template #item.name="{ item }">
+      <v-list-item
+        :title="item.name"
+        density="compact"
+        lines="one"
+        class="px-0"
+      >
+        <template #prepend>
+          <v-avatar
+            start
+            size="28"
+            color="grey"
+            density="compact"
+            class="mr-n2"
+          >
+            <v-icon color="white" size="16">mdi-image</v-icon>
+          </v-avatar>
+        </template>
+      </v-list-item>
+    </template>
+
+    <template #item.calculated_cost="{ item }">
+      {{ formatCurrency(item.calculated_cost) }}
+    </template>
+
+    <template #item.selling_price="{ item }">
+      {{ formatCurrency(item.selling_price) }}
     </template>
 
     <template #item.created_at="{ item }">

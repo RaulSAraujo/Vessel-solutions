@@ -6,27 +6,15 @@ export type Drinks = {
 export type Datum = {
     id: string;
     name: string
-    type: string
+    user_id: string;
+    calculated_cost: number | null
+    category_id: string | null
+    description: string | null
+    image_url: string | null
+    profit_margin_percentage: number | null
+    selling_price: number | null
     created_at: Date;
     updated_at: Date;
-    user_id: string;
-    drink_ingredients: DrinkIngredients[]
-}
-
-export type DrinkIngredients = {
-    id?: string
-    quantity: number
-    ingredients: Ingredients
-}
-
-export type Ingredients = {
-    name: string;
-    units: Units
-}
-
-export type Units = {
-    name: string;
-    abbreviation: string
 }
 
 export type Page = {
@@ -34,11 +22,4 @@ export type Page = {
     itemsPerPage: number;
     totalRows: number;
     totalPages: number;
-}
-
-export type FormDrink = {
-    id?: string
-    name?: string
-    type?: string
-    drink_ingredients: DrinkIngredients[]
 }

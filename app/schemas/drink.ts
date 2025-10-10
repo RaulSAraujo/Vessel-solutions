@@ -4,7 +4,4 @@ export const drinkSchema = yup.object({
     name: yup
         .string()
         .required('O nome é obrigatório'),
-    type: yup
-        .string()
-        .required('O nome é obrigatório'),
 });

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { useDrinksApi } from "~/composables/api/useDrinksApi";
-import type { DrinkIngredients } from "~/types/drinks";
+import type { TableDrinkIngredients } from "~/types/drink-ingredient";
 
 defineProps<{
-  drinkIngredients: DrinkIngredients[];
+  drinkIngredients: TableDrinkIngredients[];
 }>();
 
 const emit = defineEmits(["delete"]);
@@ -14,16 +14,18 @@ const loading = ref(false);
 
 const headers = [
   { title: "Ações", key: "actions", maxWidth: 60 },
-  { title: "Nome", key: "ingredients.name", maxWidth: 90 },
+  { title: "Nome", key: "name", maxWidth: 90 },
   { title: "Quantidade", key: "quantity" },
-  { title: "Uni.", key: "ingredients.units.abbreviation" },
+  { title: "Unid. base", key: "unit_id" },
+  { title: "C.R.U.B", key: "real_cost_per_base_unit" },
+  { title: "Custo unitário", key: "cost_unit" },
 ];
 
-async function deleteIngredient(drinkIngredient: DrinkIngredients) {
-  if (drinkIngredient.id) {
+async function deleteIngredient(item: TableDrinkIngredients) {
+  if (item.drink_Ingredient_id) {
     loading.value = true;
 
-    const res = await api.deleteDrinkIngredient(drinkIngredient.id);
+    const res = await api.deleteDrinkIngredient(item.drink_Ingredient_id);
 
     if (!res) {
       loading.value = false;
@@ -33,7 +35,15 @@ async function deleteIngredient(drinkIngredient: DrinkIngredients) {
     loading.value = false;
   }
 
-  emit("delete", drinkIngredient);
+  emit("delete", item);
+}
+
+function calculeCostUnit(item: TableDrinkIngredients) {
+  if (!item.real_cost_per_base_unit) return;
+
+  return (item.real_cost_per_base_unit * item.quantity)
+    .toFixed(2)
+    .replaceAll(".", ",");
 }
 </script>
 
@@ -44,6 +54,26 @@ async function deleteIngredient(drinkIngredient: DrinkIngredients) {
     :disable-sort="true"
     :hide-default-footer="true"
   >
+    <template #header.real_cost_per_base_unit>
+      <span class="text-right">
+        C.R.U.B
+
+        <v-tooltip location="top">
+          <template #activator="{ props }">
+            <v-icon
+              v-bind="props"
+              icon="mdi-information-outline"
+              color="grey"
+            />
+          </template>
+
+          <template #default>
+            <p>Custo Real Unidade Base</p>
+          </template>
+        </v-tooltip>
+      </span>
+    </template>
+
     <template #item.actions="{ item }">
       <v-btn
         color="red"
@@ -55,8 +85,8 @@ async function deleteIngredient(drinkIngredient: DrinkIngredients) {
       />
     </template>
 
-    <template #item.ingredients.name="{ item }">
-      <UiTextWithTooltip :text="item.ingredients.name" />
+    <template #item.name="{ item }">
+      <UiTextWithTooltip :text="item.name" />
     </template>
 
     <template #item.quantity="{ item }">
@@ -67,6 +97,14 @@ async function deleteIngredient(drinkIngredient: DrinkIngredients) {
         :precision="2"
         control-variant="stacked"
       />
+    </template>
+
+    <template #item.real_cost_per_base_unit="{ item }">
+      <span class="mr-2">R$ {{ item.real_cost_per_base_unit }}</span>
+    </template>
+
+    <template #item.cost_unit="{ item }">
+      <span class="mr-2">R$ {{ calculeCostUnit(item) }}</span>
     </template>
   </v-data-table>
 </template>

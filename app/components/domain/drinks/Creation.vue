@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useDrinksApi } from "~/composables/api/useDrinksApi";
-import type { FormDrink } from "~/types/drinks";
+import type { Datum } from "~/types/drinks";
 // components
 import Form from "./form/index.vue";
 
@@ -10,7 +10,7 @@ const api = useDrinksApi();
 
 const loading = ref(false);
 
-async function creation(events: FormDrink) {
+async function creation(events: Datum) {
   loading.value = true;
 
   const drink = await api.createDrink(events);
@@ -20,19 +20,18 @@ async function creation(events: FormDrink) {
     return;
   }
 
-  const drinkIngredients = await api.createDrinkIngredients(
-    drink.id,
-    events.drink_ingredients
-  );
+  // const drinkIngredients = await api.createDrinkIngredients(
+  //   drink.id,
+  // );
 
-  if (!drinkIngredients) {
-    loading.value = false;
-    return;
-  }
+  // if (!drinkIngredients) {
+  //   loading.value = false;
+  //   return;
+  // }
 
-  const item = { ...drink, drink_ingredients: drinkIngredients };
+  // const item = { ...drink, drink_ingredients: drinkIngredients };
 
-  useDrinksStore().addItem(item);
+  // useDrinksStore().addItem(item);
 
   emit("close");
 
@@ -41,11 +40,11 @@ async function creation(events: FormDrink) {
 </script>
 
 <template>
-  <v-dialog width="450">
-    <v-card title="Nova receita" rounded="xl">
+  <v-bottom-sheet content-class="rounded-t-xl">
+    <v-card title="Nova receita" rounded="t-xl">
       <v-card-text>
         <Form :loading="loading" @submit="creation" />
       </v-card-text>
     </v-card>
-  </v-dialog>
+  </v-bottom-sheet>
 </template>

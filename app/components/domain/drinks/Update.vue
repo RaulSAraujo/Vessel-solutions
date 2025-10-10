@@ -57,18 +57,14 @@ async function update(events: FormDrink) {
 
   emit("close");
 }
-
-function reset() {
-  selectedDrink.value = null;
-}
 </script>
 
 <template>
-  <v-dialog width="450" @after-leave="reset">
+  <v-bottom-sheet content-class="rounded-t-xl">
     <v-card title="Atualizar receita" rounded="xl">
       <v-card-text>
         <Form :drink="selectedDrink" :loading="loading" @submit="update" />
       </v-card-text>
     </v-card>
-  </v-dialog>
+  </v-bottom-sheet>
 </template>
