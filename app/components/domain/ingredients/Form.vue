@@ -62,7 +62,7 @@ if (props.ingredient) {
       <v-col cols="12">
         <UiTextField
           v-model="unitVolumeMl"
-          v-maska="'###'"
+          v-maska="'####'"
           label="Volume da unidade (ml)"
           prepend-inner-icon="mdi-beaker"
           :error-messages="errors.unitVolumeMl"
@@ -72,7 +72,7 @@ if (props.ingredient) {
       <v-col cols="12">
         <UiTextField
           v-model="unitWeightG"
-          v-maska="'###'"
+          v-maska="'####'"
           label="Peso da unidade (g)"
           prepend-inner-icon="mdi-weight"
           :error-messages="errors.unitWeightG"
