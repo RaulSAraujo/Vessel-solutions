@@ -3,7 +3,7 @@ import { ingredientSchema } from "~/schemas/ingredient";
 
 import type { Datum } from "~/types/ingredients";
 
-const props = defineProps<{
+const myProps = defineProps<{
   ingredient?: Datum | null;
   loading: boolean;
   units: Units[];
@@ -25,12 +25,12 @@ const onSubmit = handleSubmit((values) => {
   emit("submit", values);
 });
 
-if (props.ingredient) {
-  name.value = props.ingredient.name;
-  unitId.value = props.ingredient.unit_id;
-  unitVolumeMl.value = props.ingredient.unit_volume_ml;
-  unitWeightG.value = props.ingredient.unit_weight_g;
-  wastagePercentage.value = props.ingredient.wastage_percentage;
+if (myProps.ingredient) {
+  name.value = myProps.ingredient.name;
+  unitId.value = myProps.ingredient.unit_id;
+  unitVolumeMl.value = myProps.ingredient.unit_volume_ml;
+  unitWeightG.value = myProps.ingredient.unit_weight_g;
+  wastagePercentage.value = myProps.ingredient.wastage_percentage;
 }
 </script>
 
@@ -48,7 +48,7 @@ if (props.ingredient) {
       </v-col>
 
       <v-col cols="12">
-        <UiSelectField
+        <UiAutocompleteField
           v-model="unitId"
           :items="units || []"
           item-value="id"
@@ -56,7 +56,20 @@ if (props.ingredient) {
           label="Unidade"
           prepend-inner-icon="mdi-ruler"
           :error-messages="errors.unitId"
-        />
+        >
+          <template #item="{ props, item }">
+            <v-list-item
+              lines="one"
+              elevation="0"
+              v-bind="props"
+              :title="item.raw.name"
+            >
+              <template #append>
+                <span class="text-caption">({{ item.raw.abbreviation }})</span>
+              </template>
+            </v-list-item>
+          </template>
+        </UiAutocompleteField>
       </v-col>
 
       <v-col cols="12">

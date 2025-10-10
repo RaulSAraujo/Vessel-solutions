@@ -123,7 +123,7 @@ const internalValue = computed({
 </script>
 
 <template>
-  <v-select
+  <v-autocomplete
     v-model="internalValue"
     :label="label"
     :color="color"
@@ -143,5 +143,5 @@ const internalValue = computed({
     <template v-for="(_, name) in $slots" #[name]="slotProps">
       <slot :name="name" v-bind="slotProps || {}" />
     </template>
-  </v-select>
+  </v-autocomplete>
 </template>
