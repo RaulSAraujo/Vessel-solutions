@@ -20,7 +20,7 @@ const headers = [
   { title: "Peso (g)", key: "unit_weight_g" },
   { title: "Vol. (ml)", key: "unit_volume_ml" },
   { title: "% Desperdício", key: "wastage_percentage" },
-  { title: "Custo unit.", key: "real_cost_per_base_unit" },
+  { title: "C.R.U.B", key: "real_cost_per_base_unit" },
   { title: "Criado em", key: "created_at" },
   { title: "Atualizado em", key: "updated_at" },
 ];
@@ -55,6 +55,20 @@ function handleOpenQuotation(ingredient: Datum) {
     @update:options="store.fetchIngredients"
   >
     <template #buttons>
+      <v-tooltip location="top">
+        <template #activator="{ props }">
+          <v-icon v-bind="props" icon="mdi-information-outline" color="grey" />
+        </template>
+
+        <template #default>
+          <p><strong>C.R.U.B:</strong> Custo Real Unidade Base</p>
+          <p>
+            <strong>Vol. (ml):</strong> Volume em mililitros (ml) da unidade
+          </p>
+          <p><strong>Peso (g):</strong> Peso em gramas (g) da unidade</p>
+        </template>
+      </v-tooltip>
+
       <v-btn
         rounded="xl"
         color="grey"
