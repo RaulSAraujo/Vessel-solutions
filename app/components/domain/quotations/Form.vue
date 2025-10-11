@@ -49,7 +49,7 @@ onMounted(async () => {
   <v-form @submit.prevent="onSubmit">
     <v-row dense>
       <v-col cols="12">
-        <UiSelectField
+        <UiAutocompleteField
           v-model="supplierId"
           :items="suppliers"
           item-value="id"
@@ -61,7 +61,7 @@ onMounted(async () => {
       </v-col>
 
       <v-col cols="12">
-        <UiSelectField
+        <UiAutocompleteField
           v-model="ingredientId"
           :items="ingredients"
           item-value="id"
@@ -78,8 +78,9 @@ onMounted(async () => {
           :min="0"
           :step="0.01"
           :precision="2"
+          hide-details="auto"
           label="Preço de compra"
-          :error-messages="errors.purchasePrice"
+          :error-messages="errors.purchase_price"
         />
       </v-col>
 
@@ -90,20 +91,34 @@ onMounted(async () => {
           :step="0.01"
           :precision="2"
           label="Quantidade"
-          :error-messages="errors.purchaseQuantity"
+          hide-details="auto"
+          :error-messages="errors.purchase_quantity"
         />
       </v-col>
 
       <v-col cols="12">
-        <UiSelectField
+        <UiAutocompleteField
           v-model="purchaseUnitId"
-          :items="units"
+          :items="units || []"
           item-value="id"
           item-title="name"
           label="Unidade"
           prepend-inner-icon="mdi-ruler"
-          :error-messages="errors.name"
-        />
+          :error-messages="errors.purchase_unit_id"
+        >
+          <template #item="{ props: bind, item }">
+            <v-list-item
+              lines="one"
+              v-bind="bind"
+              elevation="0"
+              :title="item.raw.name"
+            >
+              <template #append>
+                <span class="text-caption">({{ item.raw.abbreviation }})</span>
+              </template>
+            </v-list-item>
+          </template>
+        </UiAutocompleteField>
       </v-col>
 
       <v-col cols="12">
