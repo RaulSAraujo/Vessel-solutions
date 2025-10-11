@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useGetUnits } from "~/composables/api/useGetUnits";
+import { useFetchUnits } from "~/composables/api/useUnitsApi";
 
 definePageMeta({
   middleware: ["auth"],
@@ -10,7 +10,7 @@ const dialogCreation = ref(false);
 const dialogUpdate = ref(false);
 const dialogDelete = ref(false);
 
-const { data: units, status } = useGetUnits({ lazy: true });
+const { data: units, status } = useFetchUnits({ lazy: true });
 </script>
 
 <template>

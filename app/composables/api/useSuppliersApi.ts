@@ -1,4 +1,5 @@
 import type { FetchError } from 'ofetch'
+import type { Options } from "~/types/use-fetch";
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from '~/types/data-table';
 import type { Supplier, Datum, FormSupplier } from "~/types/suppliers";
@@ -78,5 +79,27 @@ export function useSuppliersApi() {
         createSupplier,
         updateSupplier,
         deleteSupplier
+    }
+}
+
+export const useFetchSuppliers = (options: Options) => {
+    const { server = true, immediate = true, lazy = false } = options
+
+    const { data, status, error, refresh, execute } = useFetch('/api/suppliers', {
+        lazy,
+        server,
+        immediate,
+        key: 'suppliers',
+        transform: (data) => data.data,
+        params: { page: 1, itemsPerPage: 1000 },
+        getCachedData: (key, nuxtApp) => (nuxtApp.payload.data[key] || nuxtApp.static.data[key])
+    });
+
+    return {
+        refresh,
+        execute,
+        error: readonly(error),
+        status: readonly(status),
+        data: data as unknown as Ref<Datum[]>,
     }
 }

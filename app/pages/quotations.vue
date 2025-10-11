@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useGetUnits } from "~/composables/api/useGetUnits";
-import { useGetSuppliers } from "~/composables/api/useGetSuppliers";
-import { useGetIngredients } from "~/composables/api/useGetIngredients";
+import { useFetchUnits } from "~/composables/api/useUnitsApi";
+import { useFetchSuppliers } from "~/composables/api/useSuppliersApi";
+import { useFetchIngredients } from "~/composables/api/useIngredientsApi";
 
 definePageMeta({
   middleware: ["auth"],
@@ -12,11 +12,11 @@ const dialogCreation = ref(false);
 const dialogUpdate = ref(false);
 const dialogDelete = ref(false);
 
-const { data: units, status: unitsStatus } = useGetUnits({ lazy: true });
-const { data: suppliers, status: suppliersStatus } = useGetSuppliers({
+const { data: units, status: unitsStatus } = useFetchUnits({ lazy: true });
+const { data: suppliers, status: suppliersStatus } = useFetchSuppliers({
   lazy: true,
 });
-const { data: ingredients, status: ingredientsStatus } = useGetIngredients({
+const { data: ingredients, status: ingredientsStatus } = useFetchIngredients({
   lazy: true,
 });
 </script>

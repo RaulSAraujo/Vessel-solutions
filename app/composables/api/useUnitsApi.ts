@@ -1,21 +1,17 @@
-import type { Datum } from '~/types/suppliers';
-
 type Options = {
     lazy?: boolean
     server?: boolean
     immediate?: boolean
 }
 
-export const useGetSuppliers = (options: Options) => {
+export const useFetchUnits = (options: Options) => {
     const { server = true, immediate = true, lazy = false } = options
 
-    const { data, status, error, refresh, execute } = useFetch('/api/suppliers', {
+    const { data, status, error, refresh, execute } = useFetch<Units[]>('/api/units', {
         lazy,
         server,
         immediate,
-        key: 'suppliers',
-        transform: (data) => data.data,
-        params: { page: 1, itemsPerPage: 1000 },
+        key: 'units',
         getCachedData: (key, nuxtApp) => (nuxtApp.payload.data[key] || nuxtApp.static.data[key])
     });
 
@@ -24,6 +20,6 @@ export const useGetSuppliers = (options: Options) => {
         execute,
         error: readonly(error),
         status: readonly(status),
-        data: data as unknown as Ref<Datum[]>,
+        data: data as unknown as Ref<Units[]>,
     }
 }

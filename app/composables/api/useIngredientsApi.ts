@@ -3,7 +3,7 @@ import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from '~/types/data-table';
 import type { Quotations, Datum as Quotation } from '~/types/quotations'
 import type { Ingredients, Datum, FormIngredients } from "~/types/ingredients";
-
+import type { Options } from '~/types/use-fetch'
 
 export function useIngredientsApi() {
     const getIngredients = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {
@@ -138,5 +138,27 @@ export function useIngredientsApi() {
         getQuotationByIngredientId,
         setQuotationForIngredient,
         removeQuotationForIngredient
+    }
+}
+
+export function useFetchIngredients(options: Options) {
+    const { server = true, immediate = true, lazy = false } = options
+
+    const { data, status, error, refresh, execute } = useFetch('/api/ingredients', {
+        lazy,
+        server,
+        immediate,
+        key: 'ingredients',
+        transform: (data) => data.data,
+        params: { page: 1, itemsPerPage: 1000 },
+        getCachedData: (key, nuxtApp) => (nuxtApp.payload.data[key] || nuxtApp.static.data[key])
+    });
+
+    return {
+        refresh,
+        execute,
+        error: readonly(error),
+        status: readonly(status),
+        data: data as unknown as Ref<Datum[]>,
     }
 }
