@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 import { useDrinksApi } from "~/composables/api/useDrinksApi";
-import type { FormDrink, Datum } from "~/types/drinks";
+import type { Datum } from "~/types/drinks";
 // components
 import Form from "./form/index.vue";
+
+defineProps<{
+  units: Units[];
+}>();
 
 const emit = defineEmits(["close"]);
 
@@ -13,7 +17,7 @@ const { selectedDrink } = storeToRefs(store);
 
 const loading = ref(false);
 
-async function update(events: FormDrink) {
+async function update(events: Datum) {
   if (!selectedDrink.value) return;
 
   loading.value = true;
@@ -25,35 +29,35 @@ async function update(events: FormDrink) {
     return;
   }
 
-  const item = { ...drink, drink_ingredients: [] } as Datum;
+  // const item = { ...drink, drink_ingredients: [] } as Datum;
 
-  const update = events.drink_ingredients.filter((e) => e.id);
-  if (update.length > 0) {
-    const drinkIngredients = await api.updateDrinkIngredients(update);
+  // const update = events.drink_ingredients.filter((e) => e.id);
+  // if (update.length > 0) {
+  //   const drinkIngredients = await api.updateDrinkIngredients(update);
 
-    if (!drinkIngredients) {
-      loading.value = false;
-      return;
-    }
+  //   if (!drinkIngredients) {
+  //     loading.value = false;
+  //     return;
+  //   }
 
-    item.drink_ingredients.push(...update);
-  }
+  //   item.drink_ingredients.push(...update);
+  // }
 
-  const create = events.drink_ingredients.filter((e) => !e.id);
-  if (create.length > 0) {
-    const drinkIngredients = await api.createDrinkIngredients(drink.id, create);
+  // const create = events.drink_ingredients.filter((e) => !e.id);
+  // if (create.length > 0) {
+  //   const drinkIngredients = await api.createDrinkIngredients(drink.id, create);
 
-    if (!drinkIngredients) {
-      loading.value = false;
-      return;
-    }
+  //   if (!drinkIngredients) {
+  //     loading.value = false;
+  //     return;
+  //   }
 
-    item.drink_ingredients.push(...drinkIngredients);
-  }
+  //   item.drink_ingredients.push(...drinkIngredients);
+  // }
 
-  store.updateItem(item);
+  // store.updateItem(item);
 
-  loading.value = false;
+  // loading.value = false;
 
   emit("close");
 }
@@ -61,9 +65,18 @@ async function update(events: FormDrink) {
 
 <template>
   <v-bottom-sheet content-class="rounded-t-xl">
-    <v-card title="Atualizar receita" rounded="xl">
+    <v-card
+      rounded="xl"
+      title="Atualizar receita"
+      prepend-icon="mdi-bookmark-outline"
+    >
       <v-card-text>
-        <Form :drink="selectedDrink" :loading="loading" @submit="update" />
+        <Form
+          :drink="selectedDrink"
+          :units="units"
+          :loading="loading"
+          @submit="update"
+        />
       </v-card-text>
     </v-card>
   </v-bottom-sheet>

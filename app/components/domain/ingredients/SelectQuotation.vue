@@ -30,7 +30,6 @@ const internalValue = computed({
 
 const headers = [
   { title: "Fornecedor", key: "suppliers.name", maxWidth: 150 },
-  { title: "Ingrediente", key: "ingredients.name" },
   { title: "Preço", key: "purchase_price" },
   { title: "Quantidade", key: "purchase_quantity" },
   { title: "Unidade", key: "units.name", minWidth: 100 },
@@ -157,6 +156,7 @@ async function removeQuotation() {
           :items="items"
           item-value="id"
           :headers="headers"
+          :loading="loading"
           :show-select="true"
           :return-object="true"
           select-strategy="single"

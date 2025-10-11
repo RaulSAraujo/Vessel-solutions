@@ -15,14 +15,14 @@ const { page, itemsPerPage, items, totalItems, loading, selectedIngredient } =
 
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
-  { title: "Nome", key: "name" },
-  { title: "Unid.", key: "units.name" },
-  { title: "Peso (g)", key: "unit_weight_g" },
-  { title: "Vol. (ml)", key: "unit_volume_ml" },
-  { title: "% Desperdício", key: "wastage_percentage" },
+  { title: "Nome", key: "name", maxWidth: 120 },
+  { title: "Unid.", key: "units.name", maxWidth: 120 },
+  { title: "Peso (g)", key: "unit_weight_g", minWidth: 110 },
+  { title: "Vol. (ml)", key: "unit_volume_ml", minWidth: 110 },
+  { title: "% Desperdício", key: "wastage_percentage", minWidth: 150 },
   { title: "C.R.U.B", key: "real_cost_per_base_unit" },
-  { title: "Criado em", key: "created_at" },
-  { title: "Atualizado em", key: "updated_at" },
+  { title: "Criado em", key: "created_at", minWidth: 120 },
+  { title: "Atualizado em", key: "updated_at", minWidth: 150 },
 ];
 
 function handleOpenUpdate(ingredient: Datum) {
@@ -103,6 +103,8 @@ function handleOpenQuotation(ingredient: Datum) {
         @delete="handleOpenDelete(item)"
       >
         <template #items>
+          <v-divider />
+
           <v-list-item
             title="Selecionar cotação"
             base-color="success"
@@ -116,8 +118,14 @@ function handleOpenQuotation(ingredient: Datum) {
       </UiTableActions>
     </template>
 
+    <template #item.name="{ item }">
+      <UiTextWithTooltip :text="item.name" />
+    </template>
+
     <template #item.units.name="{ item }">
-      {{ item.units.name }} ({{ item.units.abbreviation }})
+      <UiTextWithTooltip
+        :text="`${item.units.name} (${item.units.abbreviation})`"
+      />
     </template>
 
     <template #item.real_cost_per_base_unit="{ item }">

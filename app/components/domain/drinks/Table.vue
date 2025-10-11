@@ -14,13 +14,13 @@ const { page, itemsPerPage, items, totalItems, loading, selectedDrink } =
 
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
-  { title: "Nome", key: "name" },
-  { title: "Descrição", key: "description" },
+  { title: "Nome", key: "name", minWidth: 200 },
+  { title: "Descrição", key: "description", maxWidth: 150 },
   { title: "Custo", key: "calculated_cost" },
-  { title: "Preço de venda", key: "selling_price" },
-  { title: "Margem de lucro (%)", key: "profit_margin_percentage" },
-  { title: "Criado em", key: "created_at" },
-  { title: "Atualizado em", key: "updated_at" },
+  { title: "Preço venda", key: "selling_price", minWidth: 140 },
+  { title: "Marg. Lucro (%)", key: "profit_margin_percentage", minWidth: 155 },
+  { title: "Criado em", key: "created_at", minWidth: 120 },
+  { title: "Atualizado em", key: "updated_at", minWidth: 150 },
 ];
 
 function handleOpenUpdate(drink: Datum) {
@@ -102,6 +102,10 @@ function handleOpenDelete(drink: Datum) {
           </v-avatar>
         </template>
       </v-list-item>
+    </template>
+
+    <template #item.description="{ item }">
+      <UiTextWithTooltip :text="item.description" />
     </template>
 
     <template #item.calculated_cost="{ item }">

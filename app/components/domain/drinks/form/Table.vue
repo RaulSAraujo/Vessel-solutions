@@ -2,7 +2,8 @@
 import { useDrinksApi } from "~/composables/api/useDrinksApi";
 import type { TableDrinkIngredients } from "~/types/drink-ingredient";
 
-defineProps<{
+const myProps = defineProps<{
+  units: Units[];
   drinkIngredients: TableDrinkIngredients[];
 }>();
 
@@ -14,11 +15,11 @@ const loading = ref(false);
 
 const headers = [
   { title: "Ações", key: "actions", maxWidth: 60 },
-  { title: "Nome", key: "name", maxWidth: 90 },
-  { title: "Quantidade", key: "quantity" },
-  { title: "Unid. base", key: "unit_id" },
-  { title: "C.R.U.B", key: "real_cost_per_base_unit" },
-  { title: "Custo unitário", key: "cost_unit" },
+  { title: "Nome", key: "name", minWidth: 110, maxWidth: 150 },
+  { title: "Quantidade", key: "quantity", minWidth: 150 },
+  { title: "Unid. base", key: "unit_id", minWidth: 150 },
+  { title: "C.R.U.B", key: "real_cost_per_base_unit", minWidth: 120 },
+  { title: "Custo unitário", key: "cost_unit", minWidth: 130 },
 ];
 
 async function deleteIngredient(item: TableDrinkIngredients) {
@@ -39,11 +40,29 @@ async function deleteIngredient(item: TableDrinkIngredients) {
 }
 
 function calculeCostUnit(item: TableDrinkIngredients) {
-  if (!item.real_cost_per_base_unit) return;
+  try {
+    if (!item.unit_id) return 0;
 
-  return (item.real_cost_per_base_unit * item.quantity)
-    .toFixed(2)
-    .replaceAll(".", ",");
+    const converted = convertQuantity(
+      item.quantity,
+      item.ingredient_unit_id,
+      item.unit_id!,
+      myProps.units,
+      {
+        unit_volume_ml: item.unit_volume_ml,
+        unit_weight_g: item.unit_weight_g,
+      }
+    );
+
+    const itemCost = converted * (item.real_cost_per_base_unit || 0);
+
+    item.cost_unit = parseFloat(itemCost.toFixed(2));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    $toast().error("Erro ao calcular o custo unitário");
+
+    item.cost_unit = 0;
+  }
 }
 </script>
 
@@ -53,6 +72,7 @@ function calculeCostUnit(item: TableDrinkIngredients) {
     :items="drinkIngredients"
     :disable-sort="true"
     :hide-default-footer="true"
+    class="border-sm rounded-xl"
   >
     <template #header.real_cost_per_base_unit>
       <span class="text-right">
@@ -85,10 +105,6 @@ function calculeCostUnit(item: TableDrinkIngredients) {
       />
     </template>
 
-    <template #item.name="{ item }">
-      <UiTextWithTooltip :text="item.name" />
-    </template>
-
     <template #item.quantity="{ item }">
       <UiNumberField
         v-model="item.quantity"
@@ -96,15 +112,60 @@ function calculeCostUnit(item: TableDrinkIngredients) {
         :step="0.01"
         :precision="2"
         control-variant="stacked"
+        @update:model-value="calculeCostUnit(item)"
       />
     </template>
 
+    <template #item.unit_id="{ item }">
+      <UiAutocompleteField
+        v-model="item.unit_id"
+        :items="units || []"
+        item-value="id"
+        item-title="name"
+        label="Unidade"
+        @update:model-value="calculeCostUnit(item)"
+      >
+        <template #item="{ props, item: { raw } }">
+          <v-list-item
+            lines="one"
+            elevation="0"
+            v-bind="props"
+            :title="raw.name"
+          >
+            <template #append>
+              <span class="text-caption">({{ raw.abbreviation }})</span>
+            </template>
+          </v-list-item>
+        </template>
+      </UiAutocompleteField>
+    </template>
+
     <template #item.real_cost_per_base_unit="{ item }">
-      <span class="mr-2">R$ {{ item.real_cost_per_base_unit }}</span>
+      <span>{{ formatCurrency(item.real_cost_per_base_unit) }}</span>
     </template>
 
     <template #item.cost_unit="{ item }">
-      <span class="mr-2">R$ {{ calculeCostUnit(item) }}</span>
+      <span>{{ formatCurrency(item.cost_unit) }}</span>
+    </template>
+
+    <template #bottom>
+      <v-toolbar
+        title="Custo total:"
+        density="compact"
+        rounded="b-xl"
+        color="transparent"
+        border="t-thin"
+      >
+        <template #append>
+          <span class="text-h6 font-weight-bold text-primary mr-12">
+            {{
+              formatCurrency(
+                drinkIngredients.reduce((a, b) => a + b.cost_unit, 0)
+              )
+            }}
+          </span>
+        </template>
+      </v-toolbar>
     </template>
   </v-data-table>
 </template>

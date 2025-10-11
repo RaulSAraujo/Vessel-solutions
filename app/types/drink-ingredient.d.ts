@@ -23,10 +23,14 @@ export type Page = {
 export type TableDrinkIngredients = {
     drink_Ingredient_id?: string;
     ingredient_id: string;
+    unit_id: number | null;
     name: string;
     quantity: number;
     ingredient_unit_id: number;
     real_cost_per_base_unit: number | null;
+    unit_weight_g: number | null;
+    unit_volume_ml: number | null;
+    cost_unit: number;
 }
 
 export type FormDrinkIngredients = {

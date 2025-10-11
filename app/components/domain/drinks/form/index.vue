@@ -10,8 +10,9 @@ import Table from "./Table.vue";
 import FindIngredient from "./FindIngredient.vue";
 
 const props = defineProps<{
-  drink?: Drink | null;
+  units: Units[];
   loading: boolean;
+  drink?: Drink | null;
 }>();
 
 const emit = defineEmits(["submit"]);
@@ -26,6 +27,9 @@ const { handleSubmit, errors } = useForm({
 const { value: name } = useField<string>("name");
 const { value: categoryId } = useField<string | null>("category_id");
 const { value: description } = useField<string | null>("description");
+const { value: profitMarginPercentage } = useField<number>(
+  "profit_margin_percentage"
+);
 
 const onSubmit = handleSubmit((values) => {
   emit("submit", {
@@ -36,6 +40,14 @@ const onSubmit = handleSubmit((values) => {
 
 watch(selectedIngredient, async () => {
   if (selectedIngredient.value && typeof selectedIngredient.value == "object") {
+    if (!selectedIngredient.value.current_quotation_id) {
+      selectedIngredient.value = null;
+
+      return $toast().error(
+        "Erro: É necessário que o ingrediente tenha uma cotação ativa."
+      );
+    }
+
     drinkIngredients.value.push({
       ingredient_id: selectedIngredient.value.id,
       name: selectedIngredient.value.name,
@@ -43,6 +55,9 @@ watch(selectedIngredient, async () => {
       unit_id: null,
       ingredient_unit_id: selectedIngredient.value.unit_id,
       real_cost_per_base_unit: selectedIngredient.value.real_cost_per_base_unit,
+      unit_volume_ml: selectedIngredient.value.unit_volume_ml,
+      unit_weight_g: selectedIngredient.value.unit_weight_g,
+      cost_unit: 0,
     });
 
     selectedIngredient.value = null;
@@ -54,6 +69,7 @@ onMounted(async () => {
     name.value = props.drink.name;
     description.value = props.drink.description;
     categoryId.value = props.drink.category_id;
+    profitMarginPercentage.value = props.drink.profit_margin_percentage || 0;
   }
 });
 </script>
@@ -77,7 +93,7 @@ onMounted(async () => {
           v-maska="'Ax'"
           label="Categoria"
           prepend-inner-icon="mdi-information-variant"
-          :error-messages="errors.categoryId"
+          :error-messages="errors.category_id"
         />
       </v-col>
 
@@ -92,19 +108,29 @@ onMounted(async () => {
       </v-col>
 
       <v-col cols="12">
-        <FindIngredient v-model="selectedIngredient" />
-      </v-col>
-
-      <v-col cols="12">
-        <Table :drink-ingredients="drinkIngredients" />
-        <!-- @delete="drinkIngredients.splice(drinkIngredients.indexOf($event), 1)" -->
-      </v-col>
-
-      <v-col cols="12" class="d-flex justify-center">
-        <v-btn type="submit" color="primary" block :loading="loading">
-          Salvar
-        </v-btn>
+        <v-slider
+          v-model="profitMarginPercentage"
+          min="0"
+          max="100"
+          color="primary"
+          track-color="grey"
+          :thumb-label="true"
+          hide-details="auto"
+          thumb-color="primary"
+          label="Margem de Lucro (%)"
+          :error="!!errors.profit_margin_percentage"
+          :error-messages="errors.profit_margin_percentage"
+        />
       </v-col>
     </v-row>
+
+    <FindIngredient v-model="selectedIngredient" class="mt-5" />
+
+    <Table :units="units" :drink-ingredients="drinkIngredients" class="my-5" />
+    <!-- @delete="drinkIngredients.splice(drinkIngredients.indexOf($event), 1)" -->
+
+    <v-btn type="submit" color="primary" block :loading="loading">
+      Salvar
+    </v-btn>
   </v-form>
 </template>

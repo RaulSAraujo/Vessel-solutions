@@ -4,6 +4,10 @@ import type { Datum } from "~/types/drinks";
 // components
 import Form from "./form/index.vue";
 
+defineProps<{
+  units: Units[];
+}>();
+
 const emit = defineEmits(["close"]);
 
 const api = useDrinksApi();
@@ -41,9 +45,13 @@ async function creation(events: Datum) {
 
 <template>
   <v-bottom-sheet content-class="rounded-t-xl">
-    <v-card title="Nova receita" rounded="t-xl">
+    <v-card
+      rounded="t-xl"
+      title="Nova receita"
+      prepend-icon="mdi-bookmark-outline"
+    >
       <v-card-text>
-        <Form :loading="loading" @submit="creation" />
+        <Form :loading="loading" :units="units" @submit="creation" />
       </v-card-text>
     </v-card>
   </v-bottom-sheet>
