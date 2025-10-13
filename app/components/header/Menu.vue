@@ -34,6 +34,11 @@ const menus = [
         icon: "mdi-food-variant",
       },
       {
+        title: "Categorias",
+        to: "/categories",
+        icon: "mdi-nutrition",
+      },
+      {
         title: "Drinks/Receitas",
         to: "/drinks",
         icon: "mdi-glass-cocktail",
