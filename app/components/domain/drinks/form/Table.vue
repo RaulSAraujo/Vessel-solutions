@@ -61,7 +61,7 @@ function calculeCostUnit(item: TableDrinkIngredients) {
 
     const itemCost = converted * (item.real_cost_per_base_unit || 0);
 
-    item.cost_unit = parseFloat(itemCost.toFixed(2));
+    item.cost_unit = itemCost;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     $toast().error("Erro ao calcular o custo unitário");
@@ -147,7 +147,9 @@ function calculeCostUnit(item: TableDrinkIngredients) {
     </template>
 
     <template #item.real_cost_per_base_unit="{ item }">
-      <span>{{ formatCurrency(item.real_cost_per_base_unit) }}</span>
+      <span>
+        R$ {{ item.real_cost_per_base_unit?.toFixed(4).replace(".", ",") }}
+      </span>
     </template>
 
     <template #item.cost_unit="{ item }">
