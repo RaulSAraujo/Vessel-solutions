@@ -1,5 +1,3 @@
-import { getSupabaseClientAndUser } from "~~/server/utils/supabase";
-import { applySupabaseFilters } from "~~/server/utils/applyFilters";
 import type { FetchError } from "ofetch";
 import type { Tables } from "~~/server/types/database";
 
@@ -35,9 +33,10 @@ export default defineEventHandler(async (event) => {
       }
     }
 
-    const { data, error, count } = await supabaseQuery
-      .order('created_at', { ascending: false })
-      .range(offset, offset + itemsPerPage - 1);
+    const sortByParam = query.sortBy === null ? undefined : query.sortBy;
+    supabaseQuery = applySort(supabaseQuery, sortByParam);
+
+    const { data, error, count } = await supabaseQuery.range(offset, offset + itemsPerPage - 1);
 
     if (error) {
       throw createError({
