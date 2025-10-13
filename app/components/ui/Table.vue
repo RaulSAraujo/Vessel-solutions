@@ -125,11 +125,6 @@ const internalItemsPerPage = computed({
   set: (value) => emit("update:itemsPerPage", value),
 });
 
-const internalSortBy = computed({
-  get: () => props.sortBy,
-  set: (value) => emit("update:sort-by", value),
-});
-
 const internalSelected = computed({
   get: () => props.selected,
   set: (value) => emit("update:selected", value),
@@ -189,7 +184,6 @@ const handleUpdateOptions = (options: VDataTableServerOptions) => {
     <v-data-table-server
       v-model:selected="internalSelected"
       v-model:expanded="internalExpanded"
-      v-model:sort-by="internalSortBy"
       :headers="headers"
       :items="items"
       :item-value="itemValue"

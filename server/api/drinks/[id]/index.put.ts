@@ -20,7 +20,10 @@ export default defineEventHandler(async (event) => {
             .from('drinks')
             .update(body)
             .eq('id', drinkId)
-            .select();
+            .select(`
+                *,
+                drink_categories (name)
+            `)
 
         if (error) {
             throw createError({

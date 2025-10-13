@@ -28,7 +28,10 @@ export default defineEventHandler(async (event) => {
         ...body,
         user_id: user.id,
       })
-      .select()
+      .select(`
+        *,
+        drink_categories (name)
+      `)
 
     if (error) {
       throw createError({
