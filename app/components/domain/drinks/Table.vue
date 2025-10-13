@@ -15,6 +15,7 @@ const { page, itemsPerPage, items, totalItems, loading, selectedDrink } =
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
   { title: "Nome", key: "name", minWidth: 200 },
+  { title: "Categoria", key: "drink_categories.name", minWidth: 200 },
   { title: "Descrição", key: "description", maxWidth: 150 },
   { title: "Custo", key: "calculated_cost" },
   { title: "Preço venda", key: "selling_price", minWidth: 140 },
@@ -41,6 +42,7 @@ function handleOpenDelete(drink: Datum) {
     title="Lista de bebidas"
     :items="items"
     item-value="id"
+    :multi-sort="true"
     :headers="headers"
     :loading="loading"
     :total-items="totalItems"
@@ -91,7 +93,33 @@ function handleOpenDelete(drink: Datum) {
         class="px-0"
       >
         <template #prepend>
+          <v-menu
+            v-if="item.image_url"
+            offset="15"
+            location="top end"
+            :open-on-hover="true"
+            scroll-strategy="close"
+            open-delay="500"
+          >
+            <template #activator="{ props }">
+              <v-avatar
+                v-bind="props"
+                :image="item.image_url"
+                start
+                size="28"
+                color="grey"
+                density="compact"
+                class="mr-n2"
+              />
+            </template>
+
+            <v-card width="200" max-height="200" rounded="lg">
+              <v-img :src="item.image_url" />
+            </v-card>
+          </v-menu>
+
           <v-avatar
+            v-else
             start
             size="28"
             color="grey"

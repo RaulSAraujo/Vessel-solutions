@@ -32,6 +32,7 @@ const { handleSubmit, errors } = useForm({
 });
 
 const { value: name } = useField<string>("name");
+const { value: imageUrl } = useField<string>("image_url");
 const { value: categoryId } = useField<string | null>("category_id");
 const { value: description } = useField<string | null>("description");
 const { value: profitMarginPercentage } = useField<number>(
@@ -89,6 +90,7 @@ onMounted(async () => {
     name.value = props.drink.name;
     description.value = props.drink.description;
     categoryId.value = props.drink.category_id;
+    imageUrl.value = props.drink.image_url || "";
     profitMarginPercentage.value = props.drink.profit_margin_percentage || 0;
 
     loadingDrinkIngredients.value = true;
@@ -176,13 +178,22 @@ function calculeCostUnit(item: TableDrinkIngredients) {
         />
       </v-col>
 
-      <v-col cols="12" md="6">
+      <v-col cols="12" md="4">
         <UiTextField
           v-model="description"
           v-maska="'Ax'"
           label="Descrição"
           prepend-inner-icon="mdi-comment"
           :error-messages="errors.description"
+        />
+      </v-col>
+
+      <v-col cols="12" md="2">
+        <UiTextField
+          v-model="imageUrl"
+          label="Url da Imagem"
+          prepend-inner-icon="mdi-image"
+          :error-messages="errors.image_url"
         />
       </v-col>
 
