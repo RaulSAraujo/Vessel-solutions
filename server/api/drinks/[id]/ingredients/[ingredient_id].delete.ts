@@ -1,38 +1,35 @@
 import { getSupabaseClientAndUser } from '~~/server/utils/supabase';
 import type { FetchError } from "ofetch";
-import type { TablesUpdate } from '~~/server/types/database';
 
 export default defineEventHandler(async (event) => {
     try {
         const { client } = await getSupabaseClientAndUser(event);
-        const body = await readBody<TablesUpdate<'drink_ingredients'>[]>(event);
+        const drinkId = event.context.params?.id;
+        const ingredientId = event.context.params?.ingredient_id;
 
-        if (!body || body.length === 0) {
+        if (!drinkId || !ingredientId) {
             throw createError({
                 statusCode: 400,
                 statusMessage: 'Bad Request',
-                message: 'No drink ingredients provided.',
+                message: 'Drink Ingredient ID is required.',
             });
         }
 
-        const updates = body.map((ingredient) => ({
-            id: ingredient.id,
-            quantity: ingredient.quantity ?? 0,
-        }));
-
-        const { error } = await client.rpc('bulk_update_ingredients', {
-            updates: updates,
-        })
+        const { error } = await client
+            .from('drink_ingredients')
+            .delete()
+            .eq('drink_id', drinkId)
+            .eq('ingredient_id', ingredientId);
 
         if (error) {
             throw createError({
                 statusCode: 500,
-                statusMessage: 'Failed to update drink',
+                statusMessage: 'Failed to delete drink',
                 message: error.message,
             });
         }
 
-        return true
+        return { message: `Drink Ingredient deleted successfully.` };
     } catch (error: unknown) {
         const err = error as FetchError;
 

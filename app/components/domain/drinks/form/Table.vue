@@ -4,6 +4,8 @@ import type { TableDrinkIngredients } from "~/types/drink-ingredient";
 
 const myProps = defineProps<{
   units: Units[];
+  loading: boolean;
+  drinkId?: string | undefined;
   drinkIngredients: TableDrinkIngredients[];
 }>();
 
@@ -11,7 +13,7 @@ const emit = defineEmits(["delete"]);
 
 const api = useDrinksApi();
 
-const loading = ref(false);
+const loadingDelete = ref(false);
 
 const headers = [
   { title: "Ações", key: "actions", maxWidth: 60 },
@@ -22,18 +24,21 @@ const headers = [
   { title: "Custo unitário", key: "cost_unit", minWidth: 130 },
 ];
 
-async function deleteIngredient(item: TableDrinkIngredients) {
-  if (item.drink_Ingredient_id) {
-    loading.value = true;
+async function deleteDrinkIngredient(item: TableDrinkIngredients) {
+  if (!item.new && myProps.drinkId) {
+    loadingDelete.value = true;
 
-    const res = await api.deleteDrinkIngredient(item.drink_Ingredient_id);
+    const res = await api.deleteDrinkIngredient(
+      myProps.drinkId,
+      item.ingredient_id
+    );
 
     if (!res) {
-      loading.value = false;
+      loadingDelete.value = false;
       return;
     }
 
-    loading.value = false;
+    loadingDelete.value = false;
   }
 
   emit("delete", item);
@@ -69,8 +74,9 @@ function calculeCostUnit(item: TableDrinkIngredients) {
 <template>
   <v-data-table
     :headers="headers"
-    :items="drinkIngredients"
+    :loading="loading"
     :disable-sort="true"
+    :items="drinkIngredients"
     :hide-default-footer="true"
     class="border-sm rounded-xl"
   >
@@ -100,8 +106,8 @@ function calculeCostUnit(item: TableDrinkIngredients) {
         size="small"
         variant="plain"
         icon="mdi-delete"
-        :loading="loading"
-        @click="deleteIngredient(item)"
+        :loading="loadingDelete"
+        @click="deleteDrinkIngredient(item)"
       />
     </template>
 

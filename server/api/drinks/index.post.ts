@@ -9,7 +9,11 @@ export default defineEventHandler(async (event) => {
     const body = await readBody<TablesInsert<"drinks">>(event);
 
     // Validação básica
-    if (!body.name) {
+    if (!body.name ||
+      !body.calculated_cost ||
+      !body.selling_price ||
+      !body.profit_margin_percentage ||
+      !body.category_id) {
       throw createError({
         statusCode: 400,
         statusMessage: "Bad Request",

@@ -1,11 +1,18 @@
 <script lang="ts" setup>
 import { useDrinksApi } from "~/composables/api/useDrinksApi";
-import type { Datum } from "~/types/drinks";
+import type { FormDrink } from "~/types/drinks";
+import type { DrinkCategories } from "~/types/drink-categories";
+import type { FormDrinkIngredients } from "~/types/drink-ingredient";
 // components
 import Form from "./form/index.vue";
 
+type DrinkWithIngredients = FormDrink & {
+  drink_ingredients: FormDrinkIngredients[];
+};
+
 defineProps<{
   units: Units[];
+  categories: DrinkCategories[];
 }>();
 
 const emit = defineEmits(["close"]);
@@ -17,7 +24,7 @@ const { selectedDrink } = storeToRefs(store);
 
 const loading = ref(false);
 
-async function update(events: Datum) {
+async function update(events: DrinkWithIngredients) {
   if (!selectedDrink.value) return;
 
   loading.value = true;
@@ -29,35 +36,19 @@ async function update(events: Datum) {
     return;
   }
 
-  // const item = { ...drink, drink_ingredients: [] } as Datum;
+  const drinkIngredients = await api.upsertDrinkIngredients(
+    drink.id,
+    events.drink_ingredients
+  );
 
-  // const update = events.drink_ingredients.filter((e) => e.id);
-  // if (update.length > 0) {
-  //   const drinkIngredients = await api.updateDrinkIngredients(update);
+  if (!drinkIngredients) {
+    loading.value = false;
+    return;
+  }
 
-  //   if (!drinkIngredients) {
-  //     loading.value = false;
-  //     return;
-  //   }
+  store.updateItem(drink);
 
-  //   item.drink_ingredients.push(...update);
-  // }
-
-  // const create = events.drink_ingredients.filter((e) => !e.id);
-  // if (create.length > 0) {
-  //   const drinkIngredients = await api.createDrinkIngredients(drink.id, create);
-
-  //   if (!drinkIngredients) {
-  //     loading.value = false;
-  //     return;
-  //   }
-
-  //   item.drink_ingredients.push(...drinkIngredients);
-  // }
-
-  // store.updateItem(item);
-
-  // loading.value = false;
+  loading.value = false;
 
   emit("close");
 }
@@ -74,8 +65,11 @@ async function update(events: Datum) {
         <Form
           :drink="selectedDrink"
           :units="units"
+          :categories="categories"
           :loading="loading"
           @submit="update"
+          @selling-price="selectedDrink!.selling_price = $event"
+          @calculated-cost="selectedDrink!.calculated_cost = $event"
         />
       </v-card-text>
     </v-card>

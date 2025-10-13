@@ -1,33 +1,24 @@
 import { getSupabaseClientAndUser } from '~~/server/utils/supabase';
-import type { FetchError } from "ofetch";
+import type { FetchError } from "ofetch"
+import type { Tables } from '~~/server/types/database';
 
 export default defineEventHandler(async (event) => {
     try {
         const { client } = await getSupabaseClientAndUser(event);
-        const drinkIngredientId = event.context.params?.id;
 
-        if (!drinkIngredientId) {
-            throw createError({
-                statusCode: 400,
-                statusMessage: 'Bad Request',
-                message: 'Drink Ingredient ID is required.',
-            });
-        }
-
-        const { error } = await client
-            .from('drink_ingredients')
-            .delete()
-            .eq('id', drinkIngredientId);
+        const { data, error } = await client
+            .from('drink_categories')
+            .select('*')
 
         if (error) {
             throw createError({
                 statusCode: 500,
-                statusMessage: 'Failed to delete drink',
+                statusMessage: 'Failed to fetch units',
                 message: error.message,
             });
         }
 
-        return { message: `Drink Ingredient ${drinkIngredientId} deleted successfully.` };
+        return data as Tables<'drink_categories'>[];
     } catch (error: unknown) {
         const err = error as FetchError;
 

@@ -108,6 +108,10 @@ function handleOpenDelete(drink: Datum) {
       <UiTextWithTooltip :text="item.description" />
     </template>
 
+    <template #item.profit_margin_percentage="{ item }">
+      {{ item.profit_margin_percentage.toFixed(1) }}
+    </template>
+
     <template #item.calculated_cost="{ item }">
       {{ formatCurrency(item.calculated_cost) }}
     </template>

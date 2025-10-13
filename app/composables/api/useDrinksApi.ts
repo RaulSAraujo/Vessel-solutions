@@ -1,7 +1,13 @@
 import type { FetchError } from 'ofetch'
+import type { Options } from '~/types/use-fetch'
 import type { EmittedFilters } from "~/types/filter";
+import type { Drinks, Datum, FormDrink } from "~/types/drinks";
+import type { DrinkCategories } from '~/types/drink-categories'
 import type { VDataTableServerOptions } from '~/types/data-table';
-import type { Drinks, Datum, FormDrink, DrinkIngredients } from "~/types/drinks";
+import type { Datum as Ingredient } from '~/types/ingredients';
+import type { FormDrinkIngredients, Datum as DrinkIngredient } from '~/types/drink-ingredient';
+
+type DrinkIngredientsWithRelations = DrinkIngredient & { ingredients: Ingredient & { units: { name: string, abbreviation: string } } }
 
 export function useDrinksApi() {
     const getDrinks = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {
@@ -33,11 +39,17 @@ export function useDrinksApi() {
 
     const createDrink = async (data: FormDrink) => {
         try {
+
             const res = await $fetch<Datum>('/api/drinks', {
                 method: 'POST',
                 body: {
                     name: data.name,
-                    type: data.type
+                    image_url: data.image_url,
+                    category_id: data.category_id,
+                    description: data.description,
+                    selling_price: data.selling_price,
+                    calculated_cost: data.calculated_cost,
+                    profit_margin_percentage: data.profit_margin_percentage?.toFixed(1)
                 },
             });
 
@@ -54,7 +66,12 @@ export function useDrinksApi() {
                 method: 'PUT',
                 body: {
                     name: data.name,
-                    type: data.type
+                    image_url: data.image_url,
+                    category_id: data.category_id,
+                    description: data.description,
+                    selling_price: data.selling_price,
+                    calculated_cost: data.calculated_cost,
+                    profit_margin_percentage: data.profit_margin_percentage?.toFixed(1)
                 },
             });
 
@@ -78,9 +95,20 @@ export function useDrinksApi() {
         }
     };
 
-    const createDrinkIngredients = async (drinkId: string, data: DrinkIngredients[]) => {
+    const getDrinkIngredients = async (drinkId: string) => {
         try {
-            const res = await $fetch(`/api/drinks/${drinkId}/ingredients`, {
+            const res = await $fetch<DrinkIngredientsWithRelations[]>(`/api/drinks/${drinkId}/ingredients`);
+
+            return res
+        } catch (error: unknown) {
+            const err = error as FetchError;
+            $toast().error(err.message || 'Failed to fetch drink ingredients.');
+        }
+    };
+
+    const upsertDrinkIngredients = async (drinkId: string, data: FormDrinkIngredients[]) => {
+        try {
+            const res = await $fetch(`/api/drinks/${drinkId}/ingredients/upsert-multiple`, {
                 method: 'POST',
                 body: data,
             });
@@ -92,23 +120,10 @@ export function useDrinksApi() {
         }
     };
 
-    const updateDrinkIngredients = async (data: DrinkIngredients[]) => {
+    const deleteDrinkIngredient = async (drinkId: string, ingredientId: string) => {
         try {
-            const res = await $fetch(`/api/drink-ingredient/bulk`, {
-                method: 'PUT',
-                body: data,
-            });
 
-            return res
-        } catch (error: unknown) {
-            const err = error as FetchError;
-            $toast().error(err.message || 'Failed to update drink ingredients.');
-        }
-    };
-
-    const deleteDrinkIngredient = async (drinkIngredientId: string) => {
-        try {
-            await $fetch(`/api/drink-ingredient/${drinkIngredientId}`, {
+            await $fetch(`/api/drinks/${drinkId}/ingredients/${ingredientId}`, {
                 method: 'DELETE',
             });
 
@@ -125,8 +140,28 @@ export function useDrinksApi() {
         createDrink,
         updateDrink,
         deleteDrink,
-        createDrinkIngredients,
-        updateDrinkIngredients,
+        getDrinkIngredients,
+        upsertDrinkIngredients,
         deleteDrinkIngredient
+    }
+}
+
+export const useFetchDrinkCategories = (options: Options) => {
+    const { server = true, immediate = true, lazy = false } = options
+
+    const { data, status, error, refresh, execute } = useFetch<DrinkCategories[]>('/api/drink-categories', {
+        lazy,
+        server,
+        immediate,
+        key: 'drink_categories',
+        getCachedData: (key, nuxtApp) => (nuxtApp.payload.data[key] || nuxtApp.static.data[key])
+    });
+
+    return {
+        refresh,
+        execute,
+        error: readonly(error),
+        status: readonly(status),
+        data: data as unknown as Ref<DrinkCategories[]>,
     }
 }

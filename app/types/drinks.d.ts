@@ -23,3 +23,14 @@ export type Page = {
     totalRows: number;
     totalPages: number;
 }
+
+export type FormDrink = {
+    id?: string
+    name: string
+    category_id: string
+    image_url?: string | null
+    description?: string | null
+    selling_price?: number | null
+    calculated_cost: number | null
+    profit_margin_percentage: number | null
+}

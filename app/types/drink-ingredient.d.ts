@@ -4,7 +4,6 @@ export type DrinkIngredients = {
 }
 
 export type Datum = {
-    id: string
     drink_id: string
     ingredient_id: string
     unit_id: number | null
@@ -21,7 +20,6 @@ export type Page = {
 }
 
 export type TableDrinkIngredients = {
-    drink_Ingredient_id?: string;
     ingredient_id: string;
     unit_id: number | null;
     name: string;
@@ -31,11 +29,12 @@ export type TableDrinkIngredients = {
     unit_weight_g: number | null;
     unit_volume_ml: number | null;
     cost_unit: number;
+    new?: boolean;
 }
 
 export type FormDrinkIngredients = {
-    drink_id: string
     ingredient_id: string
     unit_id: number | null
     quantity: number
+    new?: boolean
 }

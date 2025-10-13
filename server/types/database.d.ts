@@ -185,15 +185,15 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          calculated_cost?: number | null
-          category_id?: string | null
+          calculated_cost: number | null
+          category_id: string | null
           created_at?: string | null
           description?: string | null
           id?: string
           image_url?: string | null
           name: string
-          profit_margin_percentage?: number | null
-          selling_price?: number | null
+          profit_margin_percentage: number | null
+          selling_price: number | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -518,12 +518,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      bulk_update_ingredients: {
-        Args: { updates: Json }
-        Returns: {
-          id: string
-          quantity: number
-        }[]
+      upsert_multiple_drink_ingredients: {
+        Args: {
+          p_drink_ingredients_array: Tables["drink_ingredients"][]
+        }
+        Returns: Tables["drink_ingredients"][]
       }
       insertion_client_and_address: {
         Args: {
