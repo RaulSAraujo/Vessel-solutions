@@ -30,10 +30,10 @@ export default defineEventHandler(async (event) => {
         // 2. Busca dos top 10 drinks por custo unitário
         const { data: drinksData, error } = await client
             .from('drinks')
-            .select('name, calculated_unit_cost')
+            .select('name, calculated_cost')
             .eq('user_id', user.id)
-            .not('calculated_unit_cost', 'is', null) // Apenas drinks com custo calculado
-            .order('calculated_unit_cost', { ascending: false }) // Do mais caro para o mais barato
+            .not('calculated_cost', 'is', null) // Apenas drinks com custo calculado
+            .order('calculated_cost', { ascending: false }) // Do mais caro para o mais barato
             .limit(10); // Top 10 drinks
 
         if (error) {
@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
         const transformedData = drinksData.map((d, index) => ({
             color: colorPalette[index % colorPalette.length], // Atribui uma cor da paleta (cicla se houver mais de 10)
             name: d.name || `Drink ${index + 1}`, // Fallback para nome se for nulo
-            value: d.calculated_unit_cost || 0, // Fallback para 0 se o custo for nulo
+            value: d.calculated_cost || 0, // Fallback para 0 se o custo for nulo
         }));
 
         return transformedData; // Retorna o array de dados já formatado

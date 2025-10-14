@@ -18,9 +18,9 @@ export default defineEventHandler(async (event) => {
         // 2. Busca de eventos para o usuário autenticado
         const { data: eventsData, error } = await client
             .from('events')
-            .select('event_date, total_investment, gross_profit')
+            .select('start_time, total_cost, total_revenue, profit_margin')
             .eq('user_id', user.id)
-            .order('event_date', { ascending: true });
+            .order('start_time', { ascending: true });
 
         if (error) {
             console.error('Supabase fetch error:', error); // Log do erro para depuração
@@ -32,21 +32,22 @@ export default defineEventHandler(async (event) => {
         }
 
         // 3. Agregação mensal dos dados
-        const monthlySummary: { [key: string]: { investment: number, profit: number } } = {};
+        const monthlySummary: { [key: string]: { cost: number, revenue: number, profit: number } } = {};
 
         eventsData.forEach(e => {
             // Ignora eventos com dados incompletos
-            if (e.total_investment === null || e.gross_profit === null) return;
+            if (e.total_cost === null || e.total_revenue === null || e.profit_margin === null) return;
 
-            const date = new Date(e.event_date);
+            const date = new Date(e.start_time);
             // Formata a chave como 'YYYY-MM' para garantir ordenação correta
             const yearMonthKey = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
 
             if (!monthlySummary[yearMonthKey]) {
-                monthlySummary[yearMonthKey] = { investment: 0, profit: 0 };
+                monthlySummary[yearMonthKey] = { cost: 0, revenue: 0, profit: 0 };
             }
-            monthlySummary[yearMonthKey].investment += e.total_investment;
-            monthlySummary[yearMonthKey].profit += e.gross_profit;
+            monthlySummary[yearMonthKey].cost += e.total_cost;
+            monthlySummary[yearMonthKey].revenue += e.total_revenue;
+            monthlySummary[yearMonthKey].profit += e.total_revenue - e.total_cost; // Calcula o lucro bruto
         });
 
         // 4. Transformação para o formato esperado pelo frontend
@@ -60,7 +61,8 @@ export default defineEventHandler(async (event) => {
 
                 return {
                     date: formattedDate,
-                    investment: monthlySummary[yearMonthKey].investment,
+                    cost: monthlySummary[yearMonthKey].cost,
+                    revenue: monthlySummary[yearMonthKey].revenue,
                     profit: monthlySummary[yearMonthKey].profit,
                 };
             });

@@ -19,7 +19,7 @@ async function fetchKPIs() {
   if (overview) {
     totalClients.value = overview.data.clients.count;
     totalEvents.value = overview.data.events.count;
-    totalProfit.value = totalProfit.value = overview.data.events.gross_profit;
+    totalProfit.value = totalProfit.value = overview.data.events.total_cost;
   }
 
   loading.value = false;

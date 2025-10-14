@@ -7,9 +7,9 @@ export default defineEventHandler(async (event) => {
 
         const { data: eventsData, error } = await client
             .from('events')
-            .select('event_date')
+            .select('start_time')
             .eq('user_id', user.id)
-            .order('event_date', { ascending: true });
+            .order('start_time', { ascending: true });
 
         if (error) {
             throw createError({
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
 
         // Agrupa e conta os eventos por mês/ano
         eventsData.forEach(e => {
-            const date = new Date(e.event_date);
+            const date = new Date(e.start_time);
             const yearMonth = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
             monthlyEventsMap[yearMonth] = (monthlyEventsMap[yearMonth] || 0) + 1;
         });

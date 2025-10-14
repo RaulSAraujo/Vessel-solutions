@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
         const { data: events, error: eventsError, count: totalEvents } = await client
             .from("events")
-            .select("gross_profit", { count: "exact" })
+            .select("total_cost", { count: "exact" })
 
         if (clientsError || eventsError) {
             throw createError({
@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
                 },
                 events: {
                     count: totalEvents || 0,
-                    gross_profit: events?.reduce((acc, event) => acc + (event?.gross_profit || 0), 0)
+                    total_cost: events?.reduce((acc, event) => acc + (event?.total_cost || 0), 0)
                 }
             },
         };

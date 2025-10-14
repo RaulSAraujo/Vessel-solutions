@@ -55,6 +55,15 @@ onMounted(() => {
     <v-card-text>
       <v-skeleton-loader v-if="isLoading" type="image" height="300" />
 
+      <div
+        v-else-if="!chartData.length"
+        class="d-flex align-center justify-center"
+        style="height: 300px"
+      >
+        <v-icon icon="mdi-alert" class="mr-2" color="primary" />
+        <span class="text-h6">Nenhum dado de eventos mensais recebido.</span>
+      </div>
+
       <template v-else>
         <BarChart
           :data="chartData"
