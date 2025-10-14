@@ -36,6 +36,40 @@ function handleOpenDelete(supplier: Datum) {
   selectedEvent.value = supplier;
   emit("openDelete");
 }
+
+const getStatusIcon = (status: string) => {
+  switch (status) {
+    case "Proposta":
+      return "mdi-file-document";
+    case "Confirmado":
+      return "mdi-check-circle";
+    case "Em Andamento":
+      return "mdi-progress-clock";
+    case "Concluído":
+      return "mdi-check-circle-outline";
+    case "Cancelado":
+      return "mdi-cancel";
+    default:
+      return "mdi-help-circle"; // Ícone padrão para status desconhecido
+  }
+};
+
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case "Proposta":
+      return "blue";
+    case "Confirmado":
+      return "green";
+    case "Em Andamento":
+      return "orange";
+    case "Concluído":
+      return "gray";
+    case "Cancelado":
+      return "red";
+    default:
+      return "black"; // Cor padrão para status desconhecido
+  }
+};
 </script>
 
 <template>
@@ -76,7 +110,7 @@ function handleOpenDelete(supplier: Datum) {
         icon="mdi-plus"
         variant="text"
         density="comfortable"
-        :to="{ name: 'events-creation' }"
+        @click="$emit('openCreation')"
       />
     </template>
 
@@ -85,6 +119,17 @@ function handleOpenDelete(supplier: Datum) {
         @edit="handleOpenUpdate(item)"
         @delete="handleOpenDelete(item)"
       />
+    </template>
+
+    <template #item.status="{ item }">
+      <span>
+        <v-icon
+          :color="getStatusColor(item.status)"
+          :icon="getStatusIcon(item.status)"
+        />
+
+        {{ item.status }}
+      </span>
     </template>
 
     <template #item.clients.name="{ item }">

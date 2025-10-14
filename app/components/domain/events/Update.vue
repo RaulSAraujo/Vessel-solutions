@@ -2,7 +2,7 @@
 import { useEventsApi } from "~/composables/api/useEventsApi";
 import type { FormEvent } from "~/types/events";
 // components
-import Form from "./Form.vue";
+import Form from "./form/index.vue";
 
 const emit = defineEmits(["close"]);
 
@@ -31,18 +31,14 @@ async function update(events: FormEvent) {
 
   emit("close");
 }
-
-function reset() {
-  selectedEvent.value = null;
-}
 </script>
 
 <template>
-  <v-dialog width="300" @after-leave="reset">
+  <v-bottom-sheet content-class="rounded-t-xl">
     <v-card title="Atualizar fornecedor" rounded="xl">
       <v-card-text>
         <Form :supplier="selectedEvent" :loading="loading" @submit="update" />
       </v-card-text>
     </v-card>
-  </v-dialog>
+  </v-bottom-sheet>
 </template>

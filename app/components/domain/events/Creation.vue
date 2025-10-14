@@ -2,7 +2,7 @@
 import { useEventsApi } from "~/composables/api/useEventsApi";
 import type { FormEvent } from "~/types/events";
 // components
-import Form from "./Form.vue";
+import Form from "./form/index.vue";
 
 const emit = defineEmits(["close"]);
 
@@ -29,11 +29,11 @@ async function creation(events: FormEvent) {
 </script>
 
 <template>
-  <v-dialog width="300">
-    <v-card title="Novo fornecedor" rounded="xl">
+  <v-bottom-sheet content-class="rounded-t-xl">
+    <v-card title="Novo evento" rounded="t-xl" prepend-icon="mdi-calendar">
       <v-card-text>
         <Form :loading="loading" @submit="creation" />
       </v-card-text>
     </v-card>
-  </v-dialog>
+  </v-bottom-sheet>
 </template>

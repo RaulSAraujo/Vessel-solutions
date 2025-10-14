@@ -13,7 +13,11 @@ export type Datum = {
     distance: number
     audience_profile: string
     status: string | null
+    total_cost: number
+    total_revenue: number
+    profit_margin: number
     user_id: string | null
+    notes: string
     updated_at: string | null
     created_at: string | null
 }

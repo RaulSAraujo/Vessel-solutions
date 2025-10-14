@@ -148,7 +148,7 @@ const internalValue = computed({
   set: (value) => emit("update:modelValue", value),
 });
 
-const debounced = refDebounced(internalValue, 600);
+const debounced = refDebounced(internalValue, 1000);
 const loading = ref(false);
 const items = ref<any[]>([]);
 
@@ -205,5 +205,9 @@ watch(debounced, fetchData);
     :hide-details="hideDetails"
     :return-object="returnObject"
     :auto-select-first="autoSelectFirst"
-  />
+  >
+    <template v-for="(_, name) in $slots" #[name]="slotProps">
+      <slot :name="name" v-bind="slotProps || {}" />
+    </template>
+  </v-combobox>
 </template>

@@ -270,6 +270,7 @@ export type Database = {
           status: string | null
           updated_at: string | null
           user_id: string | null
+          notes: string
           total_cost: number
           total_revenue: number
           profit_margin: number
@@ -287,6 +288,7 @@ export type Database = {
           status?: string | null
           updated_at?: string | null
           user_id?: string | null
+          notes?: string
           total_cost?: number
           total_revenue?: number
           profit_margin?: number
@@ -304,6 +306,7 @@ export type Database = {
           status?: string | null
           updated_at?: string | null
           user_id?: string | null
+          notes?: string
           total_cost?: number
           total_revenue?: number
           profit_margin?: number
