@@ -149,7 +149,7 @@ export function useDrinksApi() {
 export const useFetchDrinkCategories = (options: Options) => {
     const { server = true, immediate = true, lazy = false } = options
 
-    const { data, status, error, refresh, execute } = useFetch<DrinkCategories[]>('/api/drink/categories', {
+    const { data, status, error, refresh, execute } = useFetch<DrinkCategories[]>('/api/drinks/categories', {
         lazy,
         server,
         immediate,

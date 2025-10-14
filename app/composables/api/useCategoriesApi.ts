@@ -6,7 +6,7 @@ import type { Categories, Datum, FormCategory } from "~/types/categories";
 export function useCategoriesApi() {
     const getCategories = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {
         try {
-            const res = await $fetch<Categories>('/api/category', {
+            const res = await $fetch<Categories>('/api/drink-categories', {
                 query: {
                     ...props,
                     filters
@@ -22,7 +22,7 @@ export function useCategoriesApi() {
 
     const getCategoryById = async (id: string) => {
         try {
-            const res = await $fetch<Datum>(`/api/category/${id}`);
+            const res = await $fetch<Datum>(`/api/drink-categories/${id}`);
 
             return res;
         } catch (error: unknown) {
@@ -33,7 +33,7 @@ export function useCategoriesApi() {
 
     const createCategory = async (data: FormCategory) => {
         try {
-            const res = await $fetch<Datum>('/api/category', {
+            const res = await $fetch<Datum>('/api/drink-categories', {
                 method: 'POST',
                 body: data,
             });
@@ -47,7 +47,7 @@ export function useCategoriesApi() {
 
     const updateCategory = async (id: string, data: FormCategory) => {
         try {
-            const res = await $fetch<Datum>(`/api/category/${id}`, {
+            const res = await $fetch<Datum>(`/api/drink-categories/${id}`, {
                 method: 'PUT',
                 body: data,
             });
@@ -61,7 +61,7 @@ export function useCategoriesApi() {
 
     const deleteCategory = async (id: string) => {
         try {
-            await $fetch(`/api/category/${id}`, {
+            await $fetch(`/api/drink-categories/${id}`, {
                 method: 'DELETE',
             });
 
