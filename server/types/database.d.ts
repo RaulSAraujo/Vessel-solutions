@@ -223,21 +223,23 @@ export type Database = {
       event_drinks: {
         Row: {
           drink_id: string
-          estimated_quantity: number
           event_id: string
-          id: string
+          actual_quantity: number;
+          estimated_quantity: number
+          created_at: string;
+          updated_at: string;
         }
         Insert: {
           drink_id: string
-          estimated_quantity: number
           event_id: string
-          id?: string
+          actual_quantity?: number;
+          estimated_quantity: number
         }
         Update: {
           drink_id?: string
-          estimated_quantity?: number
           event_id?: string
-          id?: string
+          actual_quantity?: number;
+          estimated_quantity?: number
         }
         Relationships: [
           {
@@ -465,48 +467,6 @@ export type Database = {
         }
         Relationships: []
       }
-      unit_conversions: {
-        Row: {
-          conversion_factor: number
-          created_at: string | null
-          from_unit_id: number
-          id: string
-          to_unit_id: number
-          updated_at: string | null
-        }
-        Insert: {
-          conversion_factor: number
-          created_at?: string | null
-          from_unit_id: number
-          id?: string
-          to_unit_id: number
-          updated_at?: string | null
-        }
-        Update: {
-          conversion_factor?: number
-          created_at?: string | null
-          from_unit_id?: number
-          id?: string
-          to_unit_id?: number
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "unit_conversions_from_unit_id_fkey"
-            columns: ["from_unit_id"]
-            isOneToOne: false
-            referencedRelation: "units"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "unit_conversions_to_unit_id_fkey"
-            columns: ["to_unit_id"]
-            isOneToOne: false
-            referencedRelation: "units"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       units: {
         Row: {
           abbreviation: string
@@ -535,6 +495,12 @@ export type Database = {
           p_drink_ingredients_array: Tables["drink_ingredients"][]
         }
         Returns: Tables["drink_ingredients"][]
+      }
+      upsert_multiple_event_drinks: {
+        Args: {
+          _event_drinks: TablesInsert["event_drinks"][]
+        }
+        Returns: Tables["event_drinks"][]
       }
       insertion_client_and_address: {
         Args: {

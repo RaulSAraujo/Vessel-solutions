@@ -1,7 +1,10 @@
 import type { FetchError } from 'ofetch'
 import type { EmittedFilters } from "~/types/filter";
-import type { VDataTableServerOptions } from '~/types/data-table';
 import type { Events, Datum, FormEvent } from "~/types/events";
+import type { VDataTableServerOptions } from '~/types/data-table';
+import type { Datum as EventDrink, FormEventDrinks } from '~/types/event-drinks';
+
+type EventDrinksWithRelations = EventDrink & { drink: Datum & { drink_categories: { name: string } } }
 
 export function useEventsApi() {
     const getEvents = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {
@@ -35,7 +38,17 @@ export function useEventsApi() {
         try {
             const res = await $fetch<Datum>('/api/events', {
                 method: 'POST',
-                body: data,
+                body: {
+                    client_id: data.client_id,
+                    location: data.location,
+                    start_time: formatDateTimeToDB(data.start_time),
+                    end_time: formatDateTimeToDB(data.start_time),
+                    guest_count: data.guest_count,
+                    distance: data.distance,
+                    audience_profile: data.audience_profile,
+                    status: data.status,
+                    notes: data.notes
+                },
             });
 
             return res;
@@ -72,11 +85,53 @@ export function useEventsApi() {
         }
     };
 
+    const getEventDrinks = async (drinkId: string) => {
+        try {
+            const res = await $fetch<EventDrinksWithRelations[]>(`/api/events/${drinkId}/drinks`);
+
+            return res
+        } catch (error: unknown) {
+            const err = error as FetchError;
+            $toast().error(err.message || 'Failed to fetch event drinks.');
+        }
+    };
+
+    const upsertEventDrinks = async (drinkId: string, data: FormEventDrinks[]) => {
+        try {
+            const res = await $fetch(`/api/events/${drinkId}/drinks/upsert-multiple`, {
+                method: 'POST',
+                body: data,
+            });
+
+            return res
+        } catch (error: unknown) {
+            const err = error as FetchError;
+            $toast().error(err.message || 'Failed to create event drinks.');
+        }
+    };
+
+    const deleteEventDrink = async (eventId: string, drinkId: string) => {
+        try {
+
+            await $fetch(`/api/events/${eventId}/drinks/${drinkId}`, {
+                method: 'DELETE',
+            });
+
+            return true;
+        } catch (error: unknown) {
+            const err = error as FetchError;
+            $toast().error(err.message || 'Failed to delete event drinks.');
+        }
+    };
+
     return {
         getEvents,
         getEventById,
         createEvent,
         updateEvent,
-        deleteEvent
+        deleteEvent,
+        getEventDrinks,
+        upsertEventDrinks,
+        deleteEventDrink
     }
 }

@@ -148,7 +148,7 @@ const internalValue = computed({
   set: (value) => emit("update:modelValue", value),
 });
 
-const debounced = refDebounced(internalValue, 1000);
+const debounced = refDebounced(internalValue, 700);
 const loading = ref(false);
 const items = ref<any[]>([]);
 

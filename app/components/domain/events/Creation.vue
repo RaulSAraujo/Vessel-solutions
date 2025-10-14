@@ -1,8 +1,11 @@
 <script lang="ts" setup>
 import { useEventsApi } from "~/composables/api/useEventsApi";
 import type { FormEvent } from "~/types/events";
+import type { FormEventDrinks } from "~/types/event-drinks";
 // components
 import Form from "./form/index.vue";
+
+type EventWithDrinks = FormEvent & { event_drinks: FormEventDrinks[] };
 
 const emit = defineEmits(["close"]);
 
@@ -10,17 +13,24 @@ const api = useEventsApi();
 
 const loading = ref(false);
 
-async function creation(events: FormEvent) {
+async function creation(events: EventWithDrinks) {
   loading.value = true;
 
-  const res = await api.createEvent(events);
+  const event = await api.createEvent(events);
 
-  if (!res) {
+  if (!event) {
     loading.value = false;
     return;
   }
 
-  useEventsStore().addItem(res);
+  const eventDrink = await api.upsertEventDrinks(event.id, events.event_drinks);
+
+  if (!eventDrink) {
+    loading.value = false;
+    return;
+  }
+
+  useEventsStore().addItem(event);
 
   emit("close");
 

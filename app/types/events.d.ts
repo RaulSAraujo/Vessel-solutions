@@ -39,6 +39,7 @@ export type FormEvent = {
     distance: number
     audience_profile: string
     status: string | null
+    notes?: string
     user_id?: string | null
     updated_at?: string | null
     created_at?: string | null

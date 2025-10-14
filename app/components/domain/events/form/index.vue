@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { eventSchema } from "~/schemas/event";
 import type { Datum } from "~/types/events";
+import type { Datum as Drink } from "~/types/drinks";
 import type { Datum as Client } from "~/types/clients";
+import type { TableDrinks } from "~/types/event-drinks";
 
-import FindClient from "./FindClient.vue";
+// components
+import Table from "./Table.vue";
 import Status from "./Status.vue";
+import FindDrink from "./FindDrink.vue";
+import FindClient from "./FindClient.vue";
+
+type SelectedDrink = Drink & { drink_categories: { name: string } };
 
 const props = defineProps<{
   event?: Datum | null;
@@ -14,6 +21,17 @@ const props = defineProps<{
 const emit = defineEmits(["submit"]);
 
 const client = ref<string | Client | null>(null);
+const selectedDrink = ref<string | SelectedDrink | null>(null);
+const drinks = ref<TableDrinks[]>([]);
+
+const disabledFindDrink = computed(() => {
+  return (
+    !startTime.value ||
+    !endTime.value ||
+    !guestCount.value ||
+    !audienceProfile.value
+  );
+});
 
 const { handleSubmit, errors } = useForm({
   validationSchema: eventSchema,
@@ -30,26 +48,65 @@ const { value: status } = useField<string | null>("status");
 const { value: notes } = useField<string | null>("notes");
 
 const onSubmit = handleSubmit((values) => {
-  emit("submit", values);
+  emit("submit", {
+    ...values,
+    event_drinks: drinks.value.map((e) => ({
+      drink_id: e.drink_id,
+      actual_quantity: e.actual_quantity,
+      estimated_quantity: e.estimated_quantity,
+    })),
+  });
 });
-
-if (props.event) {
-  clientId.value = props.event.client_id;
-  location.value = props.event.location;
-  startTime.value = props.event.start_time;
-  endTime.value = props.event.end_time;
-  guestCount.value = props.event.guest_count;
-  distance.value = props.event.distance;
-  audienceProfile.value = props.event.audience_profile;
-  status.value = props.event.status;
-  notes.value = props.event.notes;
-}
 
 watch(client, (value) => {
   if (value && typeof value === "object") {
     clientId.value = value.id;
   } else {
     clientId.value = null;
+  }
+});
+
+watch(selectedDrink, async () => {
+  if (selectedDrink.value && typeof selectedDrink.value == "object") {
+    const start = formatDateTimeToDB(startTime.value);
+    const end = formatDateTimeToDB(endTime.value);
+
+    const estimatedQuantity = await useCalculateDrinks(
+      audienceProfile.value,
+      new Date(start),
+      new Date(end),
+      guestCount.value
+    );
+
+    drinks.value.push({
+      drink_id: selectedDrink.value.id,
+      name: selectedDrink.value.name,
+      category: selectedDrink.value.drink_categories.name,
+      description: selectedDrink.value.description,
+      image_url: selectedDrink.value.image_url,
+      calculated_cost: selectedDrink.value.calculated_cost || 0,
+      selling_price: selectedDrink.value.selling_price || 0,
+      profit_margin_percentage:
+        selectedDrink.value.profit_margin_percentage || 0,
+      actual_quantity: 0,
+      estimated_quantity: estimatedQuantity || 1,
+    });
+
+    selectedDrink.value = null;
+  }
+});
+
+onMounted(() => {
+  if (props.event) {
+    clientId.value = props.event.client_id;
+    location.value = props.event.location;
+    startTime.value = props.event.start_time;
+    endTime.value = props.event.end_time;
+    guestCount.value = props.event.guest_count;
+    distance.value = props.event.distance;
+    audienceProfile.value = props.event.audience_profile;
+    status.value = props.event.status;
+    notes.value = props.event.notes;
   }
 });
 </script>
@@ -92,12 +149,21 @@ watch(client, (value) => {
         <Status v-model="status" :error-messages="errors.status" />
       </v-col>
 
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="3">
         <UiTextField
           v-model="location"
           label="Endereço completo"
           prepend-inner-icon="mdi-map-marker"
           :error-messages="errors.location"
+        />
+      </v-col>
+
+      <v-col cols="12" md="1">
+        <UiTextField
+          v-model="distance"
+          label="Km"
+          prepend-inner-icon="mdi-road-variant"
+          :error-messages="errors.distance"
         />
       </v-col>
 
@@ -134,7 +200,7 @@ watch(client, (value) => {
         <UiSelectField
           v-model="audienceProfile"
           label="Perfil"
-          :items="['Perfil 1', 'Perfil 2', 'Perfil 3']"
+          :items="['Casual', 'Premium', 'Corporativo']"
           :error-messages="errors.audience_profile"
         />
       </v-col>
@@ -146,12 +212,22 @@ watch(client, (value) => {
           prepend-inner-icon="mdi-comment"
         />
       </v-col>
-
-      <v-col cols="12" class="d-flex justify-center">
-        <v-btn type="submit" color="primary" block :loading="loading">
-          Salvar
-        </v-btn>
-      </v-col>
     </v-row>
+
+    <FindDrink
+      v-model="selectedDrink"
+      :disabled="disabledFindDrink"
+      class="mt-5"
+    />
+
+    <Table
+      class="my-5"
+      :drinks="drinks"
+      @delete="drinks.splice(drinks.indexOf($event), 1)"
+    />
+
+    <v-btn type="submit" color="primary" block :loading="loading">
+      Salvar
+    </v-btn>
   </v-form>
 </template>

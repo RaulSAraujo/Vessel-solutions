@@ -24,21 +24,10 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        const estimated_total_drinks = await recalculateDrinkCost(body.audience_profile, body.start_time, body.end_time, body.guest_count);
-
-        if (isNaN(estimated_total_drinks)) {
-            throw createError({
-                statusCode: 400,
-                statusMessage: "Bad Request",
-                message: "Invalid numeric values for event calculation.",
-            });
-        }
-
         const { data, error } = await client
             .from("events")
             .insert({
                 ...body,
-                estimated_total_drinks, // Adiciona o valor calculado
                 user_id: user.id,
             })
             .select();
