@@ -25,10 +25,9 @@ const { data: categories, status: categoriesStatus } = useFetchDrinkCategories({
       <span class="text-h5">Bebidas</span>
     </div>
 
-    <DrinksFilter v-model="filterDrawer" />
+    <DrinksFilter v-model="filterDrawer" :categories="categories" />
 
     <DrinksTable
-      v-if="unitsStatus === 'success'"
       @open-creation="dialogCreation = true"
       @open-update="dialogUpdate = true"
       @open-filter="filterDrawer = true"

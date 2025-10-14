@@ -238,9 +238,9 @@ watch(
 
         <v-range-slider
           v-model="internalFilters[filter.key]"
-          :min="0"
-          :step="1"
-          :max="1000"
+          :min="filter.layout?.min || 0"
+          :step="filter.layout?.step || 1"
+          :max="filter.layout?.max || 1000"
           track-size="2"
           color="primary"
           thumb-size="10"
