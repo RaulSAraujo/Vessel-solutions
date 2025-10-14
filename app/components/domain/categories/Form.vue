@@ -32,7 +32,7 @@ if (props.category) {
         <UiTextField
           v-model="name"
           v-maska="'Ax'"
-          label="Nome do fornecedor"
+          label="Nome da categoria"
           prepend-inner-icon="mdi-account"
           :error-messages="errors.name"
         />

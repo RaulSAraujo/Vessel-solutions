@@ -16,9 +16,6 @@ const { page, itemsPerPage, items, totalItems, loading, selectedCategory } =
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
   { title: "Nome", key: "name" },
-  { title: "Telefone", key: "phone" },
-  { title: "E-mail", key: "email" },
-  { title: "Observação", key: "observation", maxWidth: 150 },
   { title: "Criado em", key: "created_at" },
   { title: "Atualizado em", key: "updated_at" },
 ];
@@ -38,7 +35,7 @@ function handleOpenDelete(supplier: Datum) {
   <UiTable
     v-model:page="page"
     v-model:items-per-page="itemsPerPage"
-    title="Lista de fornecedores"
+    title="Categorias de produtos"
     :items="items"
     item-value="id"
     :headers="headers"

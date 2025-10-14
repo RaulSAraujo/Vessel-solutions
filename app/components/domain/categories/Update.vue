@@ -39,7 +39,7 @@ function reset() {
 
 <template>
   <v-dialog width="300" @after-leave="reset">
-    <v-card title="Atualizar fornecedor" rounded="xl">
+    <v-card title="Atualizar categoria" rounded="xl">
       <v-card-text>
         <Form
           :supplier="selectedCategory"
