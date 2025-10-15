@@ -1,8 +1,12 @@
 import { useEventsApi } from '~/composables/api/useEventsApi';
 
 import type { Datum } from "~/types/events";
+import type { Datum as Drink } from "~/types/drinks";
 import type { EmittedFilters } from "~/types/filter";
+import type { TableDrinks } from "~/types/event-drinks";
 import type { VDataTableServerOptions } from "~/types/data-table";
+
+type SelectedDrink = Drink & { drink_categories: { name: string } };
 
 export const useEventsStore = defineStore('events', () => {
     // Tabela
@@ -15,7 +19,40 @@ export const useEventsStore = defineStore('events', () => {
     // Filtros
     const activeFilters = ref<EmittedFilters>({});
 
+    // Evento selecionado para edição/exclusão
     const selectedEvent = ref<Datum | null>(null);
+
+    // Drinks vinculados ao evento
+    const drinks = ref<TableDrinks[]>([]);
+
+    const estimatedQuantity = ref(0);
+
+    const totalPercentageDrinks = computed(() => {
+        return drinks.value.reduce(
+            (sum, drink) => sum + (drink.drink_percentage || 0),
+            0
+        );
+    });
+
+    const totalCost = computed(() => {
+        return parseFloat(drinks.value.reduce((sum, item) => {
+            const estimatedQuantityForThisDrink = estimatedQuantity.value * (item.drink_percentage / 100)
+
+            return sum + estimatedQuantityForThisDrink * item.calculated_cost
+        }, 0).toFixed(2))
+    });
+
+    const totalRevenue = computed(() => {
+        return parseFloat(drinks.value.reduce((sum, item) => {
+            const estimatedQuantityForThisDrink = estimatedQuantity.value * (item.drink_percentage / 100)
+
+            return sum + estimatedQuantityForThisDrink * item.selling_price
+        }, 0).toFixed(2))
+    });
+
+    const profitMargin = computed(() => {
+        return parseFloat(((totalRevenue.value - totalCost.value) / totalRevenue.value * 100).toFixed(1));
+    });
 
     async function fetchEvents(props?: VDataTableServerOptions) {
         loading.value = true;
@@ -61,17 +98,44 @@ export const useEventsStore = defineStore('events', () => {
         totalItems.value -= 1;
     }
 
+    function addSelectedDrink(selectedDrink: SelectedDrink) {
+        drinks.value.push({
+            drink_id: selectedDrink.id,
+            name: selectedDrink.name,
+            category: selectedDrink.drink_categories.name,
+            description: selectedDrink.description,
+            image_url: selectedDrink.image_url,
+            calculated_cost: selectedDrink.calculated_cost || 0,
+            selling_price: selectedDrink.selling_price || 0,
+            profit_margin_percentage: selectedDrink.profit_margin_percentage || 0,
+            drink_percentage: 0,
+        });
+    }
+
+    function removeDrink(drink: TableDrinks) {
+        const index = drinks.value.indexOf(drink);
+        drinks.value.splice(index, 1);
+    }
+
     return {
         page,
         items,
+        drinks,
         loading,
         addItem,
+        totalCost,
         updateItem,
         deleteItem,
         totalItems,
         fetchEvents,
+        removeDrink,
+        profitMargin,
+        totalRevenue,
         itemsPerPage,
         activeFilters,
         selectedEvent,
+        addSelectedDrink,
+        estimatedQuantity,
+        totalPercentageDrinks
     }
 })

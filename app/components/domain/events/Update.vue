@@ -14,16 +14,33 @@ const emit = defineEmits(["close"]);
 const api = useEventsApi();
 
 const store = useEventsStore();
-const { selectedEvent } = storeToRefs(store);
+const {
+  selectedEvent,
+  totalPercentageDrinks,
+  estimatedQuantity,
+  totalCost,
+  totalRevenue,
+  profitMargin,
+} = storeToRefs(store);
 
 const loading = ref(false);
 
 async function update(events: EventWithDrinks) {
   if (!selectedEvent.value) return;
 
+  if (totalPercentageDrinks.value !== 100) {
+    return $toast().error("A soma das porcentagens dos drinks deve ser 100%");
+  }
+
   loading.value = true;
 
-  const event = await api.updateEvent(selectedEvent.value?.id, events);
+  const event = await api.updateEvent(selectedEvent.value?.id, {
+    ...events,
+    estimated_total_drinks: estimatedQuantity.value,
+    total_cost: totalCost.value,
+    total_revenue: totalRevenue.value,
+    profit_margin: profitMargin.value,
+  });
 
   if (!event) {
     loading.value = false;

@@ -42,6 +42,10 @@ export type FormEvent = {
     status: string | null
     notes?: string
     user_id?: string | null
+    estimated_total_drinks: number
+    total_cost: number
+    total_revenue: number
+    profit_margin: number
     updated_at?: string | null
     created_at?: string | null
 }

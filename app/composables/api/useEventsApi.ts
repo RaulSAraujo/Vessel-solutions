@@ -48,7 +48,11 @@ export function useEventsApi() {
                     distance: data.distance,
                     audience_profile: data.audience_profile,
                     status: data.status,
-                    notes: data.notes
+                    notes: data.notes,
+                    estimated_total_drinks: data.estimated_total_drinks,
+                    total_cost: data.total_cost,
+                    total_revenue: data.total_revenue,
+                    profit_margin: data.profit_margin
                 },
             });
 
@@ -72,7 +76,11 @@ export function useEventsApi() {
                     distance: data.distance,
                     audience_profile: data.audience_profile,
                     status: data.status,
-                    notes: data.notes
+                    notes: data.notes,
+                    estimated_total_drinks: data.estimated_total_drinks,
+                    total_cost: data.total_cost,
+                    total_revenue: data.total_revenue,
+                    profit_margin: data.profit_margin
                 },
             });
 

@@ -4,8 +4,8 @@ export type EventDrinks = {
 }
 
 export type Datum = {
-    event_id: number;
-    drink_id: number;
+    event_id: string;
+    drink_id: string;
     drink_percentage: number;
     created_at: string;
     updated_at: string;

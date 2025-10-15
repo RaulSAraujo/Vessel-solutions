@@ -1,6 +1,8 @@
 <script lang="ts" setup>
-// componentes
 import type { Datum } from "~/types/events";
+
+// componentes
+import Status from "./Status.vue";
 
 const emit = defineEmits([
   "openFilter",
@@ -15,16 +17,20 @@ const { page, itemsPerPage, items, totalItems, loading, selectedEvent } =
 
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
-  { title: "Status", key: "status" },
-  { title: "Cliente", key: "clients.name", maxWidth: 100 },
-  { title: "Endereço completo", key: "location", maxWidth: 150 },
-  { title: "Nº de convidados", key: "guest_count", maxWidth: 120 },
-  { title: "Inicio do evento", key: "start_time" },
-  { title: "Final do evento", key: "end_time" },
-  { title: "Distância (km)", key: "distance" },
-  { title: "Perfil", key: "audience_profile" },
-  { title: "Criado em", key: "created_at" },
-  { title: "Atualizado em", key: "updated_at" },
+  { title: "Status", key: "status", minWidth: 160 },
+  { title: "Cliente", key: "clients.name", minWidth: 100, maxWidth: 130 },
+  { title: "Endereço completo", key: "location", minWidth: 175, maxWidth: 180 },
+  { title: "Nº de convidados", key: "guest_count", minWidth: 163 },
+  { title: "Inicio do evento", key: "start_time", minWidth: 160 },
+  { title: "Final do evento", key: "end_time", minWidth: 160 },
+  { title: "Distância (km)", key: "distance", minWidth: 150 },
+  { title: "Perfil", key: "audience_profile", minWidth: 100 },
+  { title: "Custo total", key: "total_cost", minWidth: 120 },
+  { title: "Receita total", key: "total_revenue", minWidth: 140 },
+  { title: "Margem de lucro", key: "profit_margin", minWidth: 160 },
+  { title: "Quant. estimada", key: "estimated_total_drinks", minWidth: 157 },
+  { title: "Criado em", key: "created_at", minWidth: 120 },
+  { title: "Atualizado em", key: "updated_at", minWidth: 145 },
 ];
 
 function handleOpenUpdate(event: Datum) {
@@ -36,40 +42,6 @@ function handleOpenDelete(event: Datum) {
   selectedEvent.value = event;
   emit("openDelete");
 }
-
-const getStatusIcon = (status: string) => {
-  switch (status) {
-    case "Proposta":
-      return "mdi-file-document";
-    case "Confirmado":
-      return "mdi-check-circle";
-    case "Em Andamento":
-      return "mdi-progress-clock";
-    case "Concluído":
-      return "mdi-check-circle-outline";
-    case "Cancelado":
-      return "mdi-cancel";
-    default:
-      return "mdi-help-circle"; // Ícone padrão para status desconhecido
-  }
-};
-
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "Proposta":
-      return "blue";
-    case "Confirmado":
-      return "green";
-    case "Em Andamento":
-      return "orange";
-    case "Concluído":
-      return "gray";
-    case "Cancelado":
-      return "red";
-    default:
-      return "black"; // Cor padrão para status desconhecido
-  }
-};
 </script>
 
 <template>
@@ -122,14 +94,7 @@ const getStatusColor = (status: string) => {
     </template>
 
     <template #item.status="{ item }">
-      <span>
-        <v-icon
-          :color="getStatusColor(item.status)"
-          :icon="getStatusIcon(item.status)"
-        />
-
-        {{ item.status }}
-      </span>
+      <Status :status="item.status" />
     </template>
 
     <template #item.clients.name="{ item }">
@@ -138,6 +103,18 @@ const getStatusColor = (status: string) => {
 
     <template #item.location="{ item }">
       <UiTextWithTooltip :text="item.location" />
+    </template>
+
+    <template #item.total_cost="{ item }">
+      {{ formatCurrency(item.total_cost) }}
+    </template>
+
+    <template #item.total_revenue="{ item }">
+      {{ formatCurrency(item.total_revenue) }}
+    </template>
+
+    <template #item.profit_margin="{ item }">
+      {{ item.profit_margin }}%
     </template>
 
     <template #item.start_time="{ item }">
