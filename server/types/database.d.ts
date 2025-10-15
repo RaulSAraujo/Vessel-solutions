@@ -224,22 +224,19 @@ export type Database = {
         Row: {
           drink_id: string
           event_id: string
-          actual_quantity: number;
-          estimated_quantity: number
+          drink_percentage: number
           created_at: string;
           updated_at: string;
         }
         Insert: {
           drink_id: string
           event_id: string
-          actual_quantity?: number;
-          estimated_quantity: number
+          drink_percentage: number
         }
         Update: {
           drink_id?: string
           event_id?: string
-          actual_quantity?: number;
-          estimated_quantity?: number
+          drink_percentage?: number
         }
         Relationships: [
           {
@@ -276,6 +273,7 @@ export type Database = {
           total_cost: number
           total_revenue: number
           profit_margin: number
+          estimated_total_drinks: number
         }
         Insert: {
           audience_profile: string
@@ -294,6 +292,7 @@ export type Database = {
           total_cost?: number
           total_revenue?: number
           profit_margin?: number
+          estimated_total_drinks?: number
         }
         Update: {
           audience_profile?: string
@@ -312,6 +311,7 @@ export type Database = {
           total_cost?: number
           total_revenue?: number
           profit_margin?: number
+          estimated_total_drinks?: number
         }
         Relationships: [
           {

@@ -16,6 +16,7 @@ export type Datum = {
     total_cost: number
     total_revenue: number
     profit_margin: number
+    estimated_total_drinks: number
     user_id: string | null
     notes: string
     updated_at: string | null

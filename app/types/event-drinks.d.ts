@@ -6,8 +6,7 @@ export type EventDrinks = {
 export type Datum = {
     event_id: number;
     drink_id: number;
-    estimated_quantity: number;
-    actual_quantity: number;
+    drink_percentage: number;
     created_at: string;
     updated_at: string;
 }
@@ -28,12 +27,10 @@ export type TableDrinks = {
     calculated_cost: number;
     selling_price: number;
     profit_margin_percentage: number;
-    actual_quantity: number;
-    estimated_quantity: number;
+    drink_percentage: number;
 }
 
 export type FormEventDrinks = {
     drink_id: number;
-    estimated_quantity: number;
-    actual_quantity: number;
+    drink_percentage: number;
 };

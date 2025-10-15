@@ -139,6 +139,10 @@ const props = defineProps({
     type: String,
     default: "*",
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(["update:modelValue"]);
@@ -154,6 +158,8 @@ const items = ref<any[]>([]);
 
 // Função para buscar dados no Supabase
 const fetchData = async () => {
+  if (props.disabled) return;
+
   if (!debounced.value) {
     items.value = [];
     return;
@@ -197,6 +203,7 @@ watch(debounced, fetchData);
     autocomplete="off"
     :loading="loading"
     :multiple="multiple"
+    :disabled="disabled"
     :item-title="itemTitle"
     :item-value="itemValue"
     :menu="menuOpenDefault"

@@ -1,10 +1,11 @@
 import type { FetchError } from 'ofetch'
 import type { EmittedFilters } from "~/types/filter";
+import type { Datum as Drink } from '~/types/drinks'
 import type { Events, Datum, FormEvent } from "~/types/events";
 import type { VDataTableServerOptions } from '~/types/data-table';
 import type { Datum as EventDrink, FormEventDrinks } from '~/types/event-drinks';
 
-type EventDrinksWithRelations = EventDrink & { drink: Datum & { drink_categories: { name: string } } }
+type EventDrinksWithRelations = EventDrink & { drinks: Drink & { drink_categories: { name: string } } }
 
 export function useEventsApi() {
     const getEvents = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {
@@ -62,7 +63,17 @@ export function useEventsApi() {
         try {
             const res = await $fetch<Datum>(`/api/events/${id}`, {
                 method: 'PUT',
-                body: data,
+                body: {
+                    client_id: data.client_id,
+                    location: data.location,
+                    start_time: formatDateTimeToDB(data.start_time),
+                    end_time: formatDateTimeToDB(data.end_time),
+                    guest_count: data.guest_count,
+                    distance: data.distance,
+                    audience_profile: data.audience_profile,
+                    status: data.status,
+                    notes: data.notes
+                },
             });
 
             return res;
@@ -85,9 +96,9 @@ export function useEventsApi() {
         }
     };
 
-    const getEventDrinks = async (drinkId: string) => {
+    const getEventDrinks = async (eventId: string) => {
         try {
-            const res = await $fetch<EventDrinksWithRelations[]>(`/api/events/${drinkId}/drinks`);
+            const res = await $fetch<EventDrinksWithRelations[]>(`/api/events/${eventId}/drinks`);
 
             return res
         } catch (error: unknown) {

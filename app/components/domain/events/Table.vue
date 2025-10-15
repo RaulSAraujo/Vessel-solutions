@@ -27,13 +27,13 @@ const headers = [
   { title: "Atualizado em", key: "updated_at" },
 ];
 
-function handleOpenUpdate(supplier: Datum) {
-  selectedEvent.value = supplier;
+function handleOpenUpdate(event: Datum) {
+  selectedEvent.value = event;
   emit("openUpdate");
 }
 
-function handleOpenDelete(supplier: Datum) {
-  selectedEvent.value = supplier;
+function handleOpenDelete(event: Datum) {
+  selectedEvent.value = event;
   emit("openDelete");
 }
 

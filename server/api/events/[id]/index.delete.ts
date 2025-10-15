@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
             throw createError({
                 statusCode: 400,
                 statusMessage: 'Bad Request',
-                message: 'Drink ID is required.',
+                message: 'Event ID is required.',
             });
         }
 

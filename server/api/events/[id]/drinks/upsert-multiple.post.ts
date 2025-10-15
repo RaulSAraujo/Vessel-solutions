@@ -35,8 +35,7 @@ export default defineEventHandler(async (event) => {
         const drinks = body.map((drink) => ({
             event_id: eventId,
             drink_id: drink.drink_id,
-            estimated_quantity: drink.estimated_quantity,
-            actual_quantity: drink.actual_quantity,
+            drink_percentage: drink.drink_percentage,
         }));
 
         const { data, error: drinksError } = await client.rpc('upsert_multiple_event_drinks', {

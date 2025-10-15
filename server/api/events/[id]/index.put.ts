@@ -16,16 +16,14 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        const estimated_total_drinks = await recalculateDrinkCost(body.audience_profile, body.start_time, body.end_time, body.guest_count);
-
         const { data, error } = await client
             .from('events')
-            .update({
-                ...body,
-                estimated_total_drinks
-            })
+            .update(body)
             .eq('id', eventId)
-            .select();
+            .select(`
+                *,
+                clients!inner (name)
+            `);
 
         if (error) {
             throw createError({

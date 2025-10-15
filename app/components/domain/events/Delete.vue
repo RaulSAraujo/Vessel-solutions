@@ -1,28 +1,28 @@
 <script lang="ts" setup>
-import { useSuppliersApi } from "~/composables/api/useSuppliersApi";
+import { useEventsApi } from "~/composables/api/useEventsApi";
 
 const emit = defineEmits(["close"]);
 
-const api = useSuppliersApi();
+const api = useEventsApi();
 
-const store = useSuppliersStore();
-const { selectedSupplier } = storeToRefs(store);
+const store = useEventsStore();
+const { selectedEvent } = storeToRefs(store);
 
 const loading = ref(false);
 
 async function deleteSupplier() {
-  if (!selectedSupplier.value) return;
+  if (!selectedEvent.value) return;
 
   loading.value = true;
 
-  const res = await api.deleteSupplier(selectedSupplier.value?.id);
+  const res = await api.deleteEvent(selectedEvent.value?.id);
 
   if (!res) {
     loading.value = false;
     return;
   }
 
-  store.deleteItem(selectedSupplier.value);
+  store.deleteItem(selectedEvent.value);
 
   emit("close");
 

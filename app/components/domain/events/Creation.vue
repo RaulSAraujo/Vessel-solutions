@@ -14,6 +14,10 @@ const api = useEventsApi();
 const loading = ref(false);
 
 async function creation(events: EventWithDrinks) {
+  if (events.event_drinks.length === 0) {
+    return $toast().error("Adicione pelo menos um drink.");
+  }
+
   loading.value = true;
 
   const event = await api.createEvent(events);
@@ -32,9 +36,9 @@ async function creation(events: EventWithDrinks) {
 
   useEventsStore().addItem(event);
 
-  emit("close");
-
   loading.value = false;
+
+  emit("close");
 }
 </script>
 

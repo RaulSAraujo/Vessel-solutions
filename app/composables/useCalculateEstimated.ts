@@ -6,7 +6,7 @@
  * @param {number} guestCount - Quantidade de convidados para o evento.
  * @returns {Promise<number>} - O total estimado de drinks para o evento.
  */
-export async function useCalculateDrinks(audienceProfile: string, startTime: Date, endTime: Date, guestCount: number): Promise<number> {
+export async function useCalculateEstimatedDrinkQuantity(audienceProfile: string, startTime: Date, endTime: Date, guestCount: number): Promise<number> {
   // Define os fatores de perfil do público
   const audienceProfileFactors: Record<string, number> = {
     Casual: 1.0,
@@ -24,5 +24,5 @@ export async function useCalculateDrinks(audienceProfile: string, startTime: Dat
   // Calcula o total estimado de drinks
   const estimated_total_drinks = guestCount * eventDurationHours * audienceProfileFactor;
 
-  return estimated_total_drinks;
+  return Math.round(estimated_total_drinks);
 }
