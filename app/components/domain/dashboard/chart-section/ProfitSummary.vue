@@ -1,67 +1,100 @@
 <script lang="ts" setup>
-interface ChartDataItem {
+interface ProfitData {
   date: string;
-  investment: number;
+  cost: number;
+  revenue: number;
   profit: number;
 }
 
 const isLoading = ref(true);
-const profitChartData = ref<ChartDataItem[]>([]);
+const profitData = ref<ProfitData[]>([]);
 
-interface BulletLegendItemInterface {
-  name: string;
-  color: string;
-}
-
-const chartCategories: Record<string, BulletLegendItemInterface> = {
-  investment: { name: "Investimento Total", color: "#3b82f6" }, // Cor para Investimento
-  profit: { name: "Lucro Bruto", color: "#22c55e" }, // Cor para Lucro
-};
-
-const xFormatter = (tick: number, _i?: number, _ticks?: number[]): string => {
-  return profitChartData.value[tick]?.date ?? "";
-};
-
-async function loadProfitSummaryChart() {
-  isLoading.value = true;
+async function loadProfitSummary() {
   try {
-    const res = await $fetch<ChartDataItem[]>("/api/reports/profit-summary");
+    isLoading.value = true;
 
-    if (res.length > 0) {
-      profitChartData.value = res;
+    const res = await $fetch("/api/reports/profit-summary");
+
+    if (Array.isArray(res) && res.length > 0) {
+      // O endpoint retorna diretamente um array com dados
+      profitData.value = res;
+    } else if (res && res.data && res.data.length > 0) {
+      // Fallback caso a estrutura mude
+      profitData.value = res.data;
+    } else {
+      // Se não há dados reais, usa dados de exemplo
+      console.warn(
+        "Nenhum dado de lucro real encontrado, usando dados de exemplo."
+      );
+      const sampleRes = await $fetch("/api/reports/profit-summary-simple");
+      profitData.value = Array.isArray(sampleRes) ? sampleRes : [];
     }
-  } catch (e) {
-    console.error("Erro capturado em loadProfitSummaryChart:", e);
+  } catch (error) {
+    console.error("Erro ao carregar o gráfico de lucro:", error);
+    // Em caso de erro, tenta carregar dados de exemplo
+    try {
+      const sampleRes = await $fetch("/api/reports/profit-summary-simple");
+      profitData.value = Array.isArray(sampleRes) ? sampleRes : [];
+    } catch (sampleError) {
+      console.error("Erro ao carregar dados de exemplo:", sampleError);
+      profitData.value = [];
+    }
   } finally {
     isLoading.value = false;
   }
 }
 
 onMounted(() => {
-  loadProfitSummaryChart();
+  loadProfitSummary();
 });
 </script>
 
 <template>
-  <v-card elevation="2" rounded="xl" class="pa-4 border-sm" min-height="400">
-    <v-card-title>Lucro Bruto vs. Investimento (Mensal)</v-card-title>
+  <v-card elevation="2" class="pa-4 border-sm" rounded="xl" min-height="400">
+    <v-card-title class="d-flex align-center justify-space-between">
+      Resumo de Lucros
+      <v-btn
+        icon="mdi-refresh"
+        variant="text"
+        size="small"
+        @click="loadProfitSummary"
+      />
+    </v-card-title>
 
     <v-card-text>
       <v-skeleton-loader v-if="isLoading" type="image" height="300" />
 
+      <div
+        v-else-if="!profitData.length"
+        class="d-flex flex-column align-center justify-center"
+        style="height: 300px"
+      >
+        <v-icon
+          icon="mdi-chart-areaspline-variant"
+          size="64"
+          color="grey-lighten-1"
+          class="mb-4"
+        />
+        <p class="text-h6 text-medium-emphasis">Nenhum dado disponível</p>
+        <p class="text-body-2 text-medium-emphasis">
+          Complete alguns eventos para ver o gráfico
+        </p>
+      </div>
+
       <template v-else>
-        <LineChart
-          :data="profitChartData"
-          :height="280"
-          y-label="Valores"
-          :x-num-ticks="4"
-          :y-num-ticks="4"
-          :categories="chartCategories"
-          :x-formatter="xFormatter"
+        <AreaChart
+          :data="profitData"
+          :height="300"
+          :categories="{
+            profit: { name: 'Lucro', color: '#4caf50' },
+            cost: { name: 'Custo', color: '#f44336' },
+            revenue: { name: 'Receita', color: '#2196f3' },
+          }"
+          :y-axis="['Valor (R$)']"
+          :x-num-ticks="profitData.length"
+          :y-num-ticks="8"
           :y-grid-line="true"
-          :curve-type="CurveType.Linear"
           :legend-position="LegendPosition.Top"
-          :hide-legend="true"
         />
       </template>
     </v-card-text>

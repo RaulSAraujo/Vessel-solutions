@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
         sortedYearMonths.forEach(yearMonth => {
             const [year, month] = yearMonth.split('-');
             const date = new Date(parseInt(year), parseInt(month) - 1); // Mês é 0-indexado
-            const formattedMonth = date.toLocaleString('pt-BR', { month: 'short', year: 'numeric' });
+            const formattedMonth = date.toLocaleString('pt-BR', { month: 'short', year: '2-digit' });
 
             chartData.push({
                 month: formattedMonth, // Mês já formatado

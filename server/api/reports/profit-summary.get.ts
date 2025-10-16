@@ -57,13 +57,13 @@ export default defineEventHandler(async (event) => {
                 const [year, month] = yearMonthKey.split('-');
                 const dateObj = new Date(parseInt(year), parseInt(month) - 1); // Mês é 0-indexado
                 // Formata a data para exibição no gráfico (ex: "Jan 23")
-                const formattedDate = dateObj.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+                const formattedDate = dateObj.toLocaleString('pt-BR', { month: 'short', year: '2-digit' });
 
                 return {
                     date: formattedDate,
-                    cost: monthlySummary[yearMonthKey].cost,
-                    revenue: monthlySummary[yearMonthKey].revenue,
-                    profit: monthlySummary[yearMonthKey].profit,
+                    cost: monthlySummary[yearMonthKey].cost.toFixed(2),
+                    revenue: monthlySummary[yearMonthKey].revenue.toFixed(2),
+                    profit: monthlySummary[yearMonthKey].profit.toFixed(2),
                 };
             });
 

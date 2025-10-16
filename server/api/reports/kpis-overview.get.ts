@@ -5,20 +5,47 @@ export default defineEventHandler(async (event) => {
     try {
         const { client } = await getSupabaseClientAndUser(event);
 
+        // Buscar dados de clientes
         const { count: totalClients, error: clientsError } = await client
             .from("clients")
-            .select("*", { count: "exact", head: true })
+            .select("*", { count: "exact", head: true });
 
+        // Buscar dados de eventos
         const { data: events, error: eventsError, count: totalEvents } = await client
             .from("events")
-            .select("total_cost", { count: "exact" })
+            .select("total_cost, created_at", { count: "exact" })
             .eq("status", "Concluído");
 
-        if (clientsError || eventsError) {
+        // Buscar dados de bebidas
+        const { count: totalDrinks, error: drinksError } = await client
+            .from("drinks")
+            .select("*", { count: "exact", head: true });
+
+        // Calcular crescimento mensal
+        const currentMonth = new Date().getMonth();
+        const currentYear = new Date().getFullYear();
+        const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+        const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+        const currentMonthEvents = events?.filter(event => {
+            const eventDate = new Date(event.created_at || '');
+            return eventDate.getMonth() === currentMonth && eventDate.getFullYear() === currentYear;
+        }).length || 0;
+
+        const lastMonthEvents = events?.filter(event => {
+            const eventDate = new Date(event.created_at || '');
+            return eventDate.getMonth() === lastMonth && eventDate.getFullYear() === lastMonthYear;
+        }).length || 0;
+
+        const monthlyGrowth = lastMonthEvents > 0
+            ? ((currentMonthEvents - lastMonthEvents) / lastMonthEvents) * 100
+            : 0;
+
+        if (clientsError || eventsError || drinksError) {
             throw createError({
                 statusCode: 500,
-                statusMessage: "Failed to fetch clients",
-                message: clientsError?.message || eventsError?.message,
+                statusMessage: "Failed to fetch data",
+                message: clientsError?.message || eventsError?.message || drinksError?.message,
             });
         }
 
@@ -29,8 +56,12 @@ export default defineEventHandler(async (event) => {
                 },
                 events: {
                     count: totalEvents || 0,
-                    total_cost: events?.reduce((acc, event) => acc + (event?.total_cost || 0), 0)
-                }
+                    total_cost: events?.reduce((acc, event) => acc + (event?.total_cost || 0), 0) || 0
+                },
+                drinks: {
+                    count: totalDrinks || 0
+                },
+                monthly_growth: Math.round(monthlyGrowth * 100) / 100
             },
         };
     } catch (error: unknown) {

@@ -27,19 +27,20 @@ async function loadMonthlyEventsChart() {
 
     const res = await $fetch("/api/reports/monthly-events");
 
-    if (res.data) {
+    if (res && res.data) {
       chartData.value = res.data;
-      chartLegendCategories.value = res.categories;
+      chartLegendCategories.value = res.categories || {};
     } else {
-      // Caso não haja dados, limpa as variáveis do gráfico
       chartData.value = [];
       chartLegendCategories.value = {};
       console.warn("Nenhum dado de eventos mensais recebido.");
     }
   } catch (error) {
     console.error("Erro ao carregar o gráfico de eventos mensais:", error);
+    chartData.value = [];
+    chartLegendCategories.value = {};
   } finally {
-    isLoading.value = false; // Desativa o estado de carregamento
+    isLoading.value = false;
   }
 }
 
@@ -50,18 +51,34 @@ onMounted(() => {
 
 <template>
   <v-card elevation="2" class="pa-4 border-sm" rounded="xl" min-height="400">
-    <v-card-title>Eventos por mês</v-card-title>
+    <v-card-title class="d-flex align-center justify-space-between">
+      Eventos por mês
+      <v-btn
+        icon="mdi-refresh"
+        variant="text"
+        size="small"
+        @click="loadMonthlyEventsChart"
+      />
+    </v-card-title>
 
     <v-card-text>
       <v-skeleton-loader v-if="isLoading" type="image" height="300" />
 
       <div
         v-else-if="!chartData.length"
-        class="d-flex align-center justify-center"
+        class="d-flex flex-column align-center justify-center"
         style="height: 300px"
       >
-        <v-icon icon="mdi-alert" class="mr-2" color="primary" />
-        <span class="text-h6">Nenhum dado de eventos mensais recebido.</span>
+        <v-icon
+          icon="mdi-calendar-alert"
+          size="64"
+          color="grey-lighten-1"
+          class="mb-4"
+        />
+        <p class="text-h6 text-medium-emphasis">Nenhum dado disponível</p>
+        <p class="text-body-2 text-medium-emphasis">
+          Adicione eventos para ver o gráfico
+        </p>
       </div>
 
       <template v-else>
