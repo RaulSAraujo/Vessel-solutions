@@ -43,7 +43,7 @@ export function useEventsApi() {
                     client_id: data.client_id,
                     location: data.location,
                     start_time: formatDateTimeToDB(data.start_time),
-                    end_time: formatDateTimeToDB(data.start_time),
+                    end_time: formatDateTimeToDB(data.end_time),
                     guest_count: data.guest_count,
                     distance: data.distance,
                     audience_profile: data.audience_profile,

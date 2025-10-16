@@ -24,6 +24,7 @@ export const useEventsStore = defineStore('events', () => {
 
     // Drinks vinculados ao evento
     const drinks = ref<TableDrinks[]>([]);
+    const loadingDrinks = ref(false)
 
     const estimatedQuantity = ref(0);
 
@@ -117,6 +118,12 @@ export const useEventsStore = defineStore('events', () => {
         drinks.value.splice(index, 1);
     }
 
+    function resetForm() {
+        selectedEvent.value = null;
+        drinks.value = [];
+        estimatedQuantity.value = 0;
+    }
+
     return {
         page,
         items,
@@ -124,6 +131,7 @@ export const useEventsStore = defineStore('events', () => {
         loading,
         addItem,
         totalCost,
+        resetForm,
         updateItem,
         deleteItem,
         totalItems,
@@ -133,6 +141,7 @@ export const useEventsStore = defineStore('events', () => {
         totalRevenue,
         itemsPerPage,
         activeFilters,
+        loadingDrinks,
         selectedEvent,
         addSelectedDrink,
         estimatedQuantity,

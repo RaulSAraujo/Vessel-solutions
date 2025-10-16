@@ -17,7 +17,7 @@ const dayjs = useDayjs();
 const api = useEventsApi();
 
 const store = useEventsStore();
-const { drinks, estimatedQuantity } = storeToRefs(store);
+const { drinks, estimatedQuantity, loadingDrinks } = storeToRefs(store);
 
 const loadingDelete = ref(false);
 
@@ -82,9 +82,10 @@ async function removeDrink(item: TableDrinks) {
 
 <template>
   <v-data-table
+    :items="drinks"
     :headers="headers"
     :disable-sort="true"
-    :items="drinks"
+    :loading="loadingDrinks"
     :hide-default-footer="true"
     class="border-sm rounded-xl"
   >

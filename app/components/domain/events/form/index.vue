@@ -18,7 +18,7 @@ const emit = defineEmits(["submit", "update:estimated-quantity"]);
 const api = useEventsApi();
 
 const store = useEventsStore();
-const { drinks } = storeToRefs(store);
+const { drinks, loadingDrinks } = storeToRefs(store);
 
 const { handleSubmit, errors, values } = useForm({
   validationSchema: eventSchema,
@@ -37,8 +37,7 @@ const onSubmit = handleSubmit((values) => {
 onMounted(async () => {
   if (!props.event || !props.event.id) return;
 
-  drinks.value = [];
-
+  loadingDrinks.value = true;
   const res = await api.getEventDrinks(props.event.id);
 
   if (res) {
@@ -56,6 +55,12 @@ onMounted(async () => {
       });
     }
   }
+
+  loadingDrinks.value = false;
+});
+
+onUnmounted(() => {
+  store.resetForm();
 });
 </script>
 

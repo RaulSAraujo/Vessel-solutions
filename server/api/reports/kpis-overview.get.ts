@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
         const { data: events, error: eventsError, count: totalEvents } = await client
             .from("events")
             .select("total_cost", { count: "exact" })
+            .eq("status", "Concluído");
 
         if (clientsError || eventsError) {
             throw createError({

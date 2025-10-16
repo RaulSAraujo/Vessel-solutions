@@ -71,6 +71,7 @@ onMounted(() => {
           :categories="chartLegendCategories"
           :y-axis="['Número de Eventos']"
           :x-num-ticks="chartData.length"
+          :y-num-ticks="10"
           :radius="10"
           :y-grid-line="true"
           :x-formatter="xFormatter"

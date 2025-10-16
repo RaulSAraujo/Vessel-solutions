@@ -30,7 +30,10 @@ export default defineEventHandler(async (event) => {
                 ...body,
                 user_id: user.id,
             })
-            .select();
+            .select(`
+                *,
+                clients!inner (name)
+            `);
 
         if (error) {
             throw createError({

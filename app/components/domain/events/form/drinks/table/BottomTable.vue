@@ -56,7 +56,7 @@ const {
           <span class="text-button mr-1">Margem de lucro:</span>
 
           <span class="text-h6 font-weight-bold text-primary">
-            {{ profitMargin }}%
+            {{ profitMargin || 0 }}%
           </span>
         </div>
       </div>

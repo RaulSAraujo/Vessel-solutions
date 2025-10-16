@@ -36,7 +36,7 @@ onMounted(fetchKPIs);
         :loading="loading"
         :title="totalEvents"
         icon="mdi-calendar-check"
-        description="Eventos Realizados"
+        description="Eventos concluídos"
       />
     </v-col>
 
@@ -45,7 +45,7 @@ onMounted(fetchKPIs);
         color="success"
         :loading="loading"
         icon="mdi-currency-usd"
-        description="Lucro Bruto Total"
+        description="Lucro bruto total"
         :title="`R$ ${totalProfit.toFixed(2)}`"
       />
     </v-col>
@@ -56,7 +56,7 @@ onMounted(fetchKPIs);
         :loading="loading"
         :title="totalClients"
         icon="mdi-account-group"
-        description="Clientes Ativos"
+        description="Clientes cadastrados"
       />
     </v-col>
   </v-row>
