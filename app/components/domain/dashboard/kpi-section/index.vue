@@ -50,8 +50,6 @@ async function fetchKPIs() {
   }
 }
 
-onMounted(fetchKPIs);
-
 // Recarregar dados quando o período mudar
 watch(() => props.period, fetchKPIs, { deep: true });
 </script>

@@ -16,7 +16,7 @@ const emit = defineEmits<{
   ];
 }>();
 
-const selectedPeriod = ref("last-30-days");
+const selectedPeriod = ref("this-month");
 
 // Opções de período predefinidas
 const periodOptions: PeriodOption[] = [

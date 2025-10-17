@@ -10,19 +10,13 @@ export default defineEventHandler(async (event) => {
         const startDate = query.start_date as string;
         const endDate = query.end_date as string;
 
-        if (!user) {
-            throw createError({
-                statusCode: 401,
-                statusMessage: 'Unauthorized',
-                message: 'User not authenticated.',
-            });
-        }
-
         // Buscar eventos com filtro de período
         let eventsQuery = client
             .from('events')
             .select('start_time, total_revenue')
             .eq('user_id', user.id)
+            .neq('status', 'Cancelado')
+            .neq('status', 'Proposta')
             .order('start_time', { ascending: true });
 
         if (startDate && endDate) {

@@ -38,24 +38,17 @@ export default defineEventHandler(async (event) => {
         }
 
         // Buscar eventos recentes com dados do cliente
-        let eventsQuery = client
+        const eventsQuery = client
             .from('events')
             .select(`
                 id, 
                 created_at,
                 location,
-                start_time,
                 clients!inner(name)
             `)
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
             .limit(2);
-
-        if (startDate && endDate) {
-            eventsQuery = eventsQuery
-                .gte('created_at', startDate)
-                .lte('created_at', endDate);
-        }
 
         const { data: recentEvents, error: eventsError } = await eventsQuery as { data: EventWithClient[] | null; error: FetchError };
 

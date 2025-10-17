@@ -19,20 +19,19 @@ export default defineEventHandler(async (event) => {
         }
 
         // Buscar clientes com seus eventos e valores
-        let clientsQuery = client
+        const { data: clientsData, error } = await client
             .from('clients')
             .select(`
                 id,
                 name,
-                events (
+                events!inner (
                     id,
                     total_cost,
                     created_at
                 )
             `)
-            .eq('user_id', user.id);
-
-        const { data: clientsData, error } = await clientsQuery;
+            .eq('user_id', user.id)
+            .eq('events.status', 'Concluído');
 
         if (error) {
             throw createError({
