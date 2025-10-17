@@ -7,6 +7,8 @@ const filterDrawer = ref(false);
 const dialogCreation = ref(false);
 const dialogUpdate = ref(false);
 const dialogDelete = ref(false);
+const dialogConvert = ref(false);
+const dialogClientForm = ref(false);
 </script>
 
 <template>
@@ -23,6 +25,7 @@ const dialogDelete = ref(false);
       @open-update="dialogUpdate = true"
       @open-filter="filterDrawer = true"
       @open-delete="dialogDelete = true"
+      @open-convert="dialogConvert = true"
     />
 
     <EventQuotationsCreation
@@ -38,6 +41,17 @@ const dialogDelete = ref(false);
     <EventQuotationsDelete
       v-model="dialogDelete"
       @close="dialogDelete = false"
+    />
+
+    <EventQuotationsConvert
+      v-model="dialogConvert"
+      @close="dialogConvert = false"
+      @open-form="dialogClientForm = true"
+    />
+
+    <EventQuotationsClient
+      v-model="dialogClientForm"
+      @close="dialogClientForm = false"
     />
   </v-container>
 </template>

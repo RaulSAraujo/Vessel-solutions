@@ -9,6 +9,7 @@ const emit = defineEmits([
   "openCreation",
   "openUpdate",
   "openDelete",
+  "openConvert",
 ]);
 
 const store = useEventQuotationsStore();
@@ -42,6 +43,11 @@ function handleOpenUpdate(eventQuotation: EventQuotation) {
 function handleOpenDelete(eventQuotation: EventQuotation) {
   selectedEventQuotation.value = eventQuotation;
   emit("openDelete");
+}
+
+function handleOpenConvert(eventQuotation: EventQuotation) {
+  selectedEventQuotation.value = eventQuotation;
+  emit("openConvert");
 }
 </script>
 
@@ -91,7 +97,21 @@ function handleOpenDelete(eventQuotation: EventQuotation) {
       <UiTableActions
         @edit="handleOpenUpdate(item)"
         @delete="handleOpenDelete(item)"
-      />
+      >
+        <template #items>
+          <v-divider />
+
+          <v-list-item
+            title="Converter para Evento"
+            base-color="success"
+            @click="handleOpenConvert(item)"
+          >
+            <template #prepend>
+              <v-icon size="small" start icon="mdi-calendar-plus" />
+            </template>
+          </v-list-item>
+        </template>
+      </UiTableActions>
     </template>
 
     <template #item.status="{ item }">

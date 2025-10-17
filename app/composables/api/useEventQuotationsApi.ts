@@ -153,6 +153,19 @@ export function useEventQuotationsApi() {
         }
     };
 
+    const convertToEvent = async (eventQuotationId: string) => {
+        try {
+            const res = await $fetch(`/api/event-quotations/${eventQuotationId}/convert-to-event`, {
+                method: 'POST',
+            });
+
+            return res;
+        } catch (error: unknown) {
+            const err = error as FetchError;
+            $toast().error(err.message || 'Failed to convert event quotation to event.');
+        }
+    };
+
     return {
         getEventQuotations,
         getEventQuotationById,
@@ -161,6 +174,7 @@ export function useEventQuotationsApi() {
         deleteEventQuotation,
         getEventQuotationDrinks,
         upsertEventQuotationDrinks,
-        deleteEventQuotationDrink
+        deleteEventQuotationDrink,
+        convertToEvent
     }
 }
