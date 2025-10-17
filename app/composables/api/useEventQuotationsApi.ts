@@ -1,16 +1,12 @@
 import type { FetchError } from 'ofetch'
 import type { EmittedFilters } from "~/types/filter";
-import type { Datum as Drink } from '~/types/drinks'
-import type { Events, Datum, FormEvent } from "~/types/events";
 import type { VDataTableServerOptions } from '~/types/data-table';
-import type { Datum as EventDrink, FormEventDrinks } from '~/types/event-drinks';
+import type { EventQuotations, EventQuotation, FormEventQuotation, FormEventQuotationDrink } from "~/types/event-quotations";
 
-type EventDrinksWithRelations = EventDrink & { drinks: Drink & { drink_categories: { name: string } } }
-
-export function useEventsApi() {
-    const getEvents = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {
+export function useEventQuotationsApi() {
+    const getEventQuotations = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {
         try {
-            const res = await $fetch<Events>('/api/events', {
+            const res = await $fetch<EventQuotations>('/api/event-quotations', {
                 query: {
                     ...props,
                     filters
@@ -20,27 +16,29 @@ export function useEventsApi() {
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.message || 'Failed to fetch Events.');
+            $toast().error(err.message || 'Failed to fetch Event Quotations.');
         }
     };
 
-    const getEventById = async (id: string) => {
+    const getEventQuotationById = async (id: string) => {
         try {
-            const res = await $fetch<Datum>(`/api/events/${id}`);
+            const res = await $fetch<EventQuotation>(`/api/event-quotations/${id}`);
 
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.message || `Failed to fetch event with ID ${id}.`);
+            $toast().error(err.message || `Failed to fetch event quotation with ID ${id}.`);
         }
     };
 
-    const createEvent = async (data: FormEvent) => {
+    const createEventQuotation = async (data: FormEventQuotation) => {
         try {
-            const res = await $fetch<Datum>('/api/events', {
+            const res = await $fetch<EventQuotation>('/api/event-quotations', {
                 method: 'POST',
                 body: {
-                    client_id: data.client_id,
+                    client_name: data.client_name,
+                    client_email: data.client_email,
+                    client_phone: data.client_phone,
                     location: data.location,
                     start_time: formatDateTimeToDB(data.start_time),
                     end_time: formatDateTimeToDB(data.end_time),
@@ -64,16 +62,18 @@ export function useEventsApi() {
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.message || 'Failed to create event.');
+            $toast().error(err.message || 'Failed to create event quotation.');
         }
     };
 
-    const updateEvent = async (id: string, data: FormEvent) => {
+    const updateEventQuotation = async (id: string, data: FormEventQuotation) => {
         try {
-            const res = await $fetch<Datum>(`/api/events/${id}`, {
+            const res = await $fetch<EventQuotation>(`/api/event-quotations/${id}`, {
                 method: 'PUT',
                 body: {
-                    client_id: data.client_id,
+                    client_name: data.client_name,
+                    client_email: data.client_email,
+                    client_phone: data.client_phone,
                     location: data.location,
                     start_time: formatDateTimeToDB(data.start_time),
                     end_time: formatDateTimeToDB(data.end_time),
@@ -90,44 +90,44 @@ export function useEventsApi() {
                     num_bartenders: data.num_bartenders,
                     helper_hourly_rate: data.helper_hourly_rate,
                     num_helpers: data.num_helpers,
-                    fuel_cost_per_km: data.fuel_cost_per_km
+                    fuel_cost_per_km: data.fuel_cost_per_km,
                 },
             });
 
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.message || `Failed to update event with ID ${id}.`);
+            $toast().error(err.message || `Failed to update event quotation with ID ${id}.`);
         }
     };
 
-    const deleteEvent = async (id: string) => {
+    const deleteEventQuotation = async (id: string) => {
         try {
-            await $fetch(`/api/events/${id}`, {
+            await $fetch(`/api/event-quotations/${id}`, {
                 method: 'DELETE',
             });
 
             return true;
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.message || `Failed to delete event with ID ${id}.`);
+            $toast().error(err.message || `Failed to delete event quotation with ID ${id}.`);
         }
     };
 
-    const getEventDrinks = async (eventId: string) => {
+    const getEventQuotationDrinks = async (eventQuotationId: string) => {
         try {
-            const res = await $fetch<EventDrinksWithRelations[]>(`/api/events/${eventId}/drinks`);
+            const res = await $fetch(`/api/event-quotations/${eventQuotationId}/drinks`);
 
             return res
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.message || 'Failed to fetch event drinks.');
+            $toast().error(err.message || 'Failed to fetch event quotation drinks.');
         }
     };
 
-    const upsertEventDrinks = async (drinkId: string, data: FormEventDrinks[]) => {
+    const upsertEventQuotationDrinks = async (drinkId: string, data: FormEventQuotationDrink[]) => {
         try {
-            const res = await $fetch(`/api/events/${drinkId}/drinks/upsert-multiple`, {
+            const res = await $fetch(`/api/event-quotations/${drinkId}/drinks/upsert-multiple`, {
                 method: 'POST',
                 body: data,
             });
@@ -135,32 +135,32 @@ export function useEventsApi() {
             return res
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.message || 'Failed to create event drinks.');
+            $toast().error(err.message || 'Failed to create event quotation drinks.');
         }
     };
 
-    const deleteEventDrink = async (eventId: string, eventDrinkId: string) => {
+    const deleteEventQuotationDrink = async (eventQuotationId: string, eventQuotationDrinkId: string) => {
         try {
 
-            await $fetch(`/api/events/${eventId}/drinks/${eventDrinkId}`, {
+            await $fetch(`/api/event-quotations/${eventQuotationId}/drinks/${eventQuotationDrinkId}`, {
                 method: 'DELETE',
             });
 
             return true;
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.message || 'Failed to delete event drinks.');
+            $toast().error(err.message || 'Failed to delete event quotation drinks.');
         }
     };
 
     return {
-        getEvents,
-        getEventById,
-        createEvent,
-        updateEvent,
-        deleteEvent,
-        getEventDrinks,
-        upsertEventDrinks,
-        deleteEventDrink
+        getEventQuotations,
+        getEventQuotationById,
+        createEventQuotation,
+        updateEventQuotation,
+        deleteEventQuotation,
+        getEventQuotationDrinks,
+        upsertEventQuotationDrinks,
+        deleteEventQuotationDrink
     }
 }

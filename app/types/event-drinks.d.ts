@@ -6,7 +6,6 @@ export type EventDrinks = {
 export type Datum = {
     id: string;
     event_id: string;
-    drink_id: string | null;
     drink_percentage: number;
     drink_name: string;
     drink_category_name: string;
@@ -28,7 +27,6 @@ export type Page = {
 
 export type TableDrinks = {
     id: string;
-    drink_id: string | null;
     drink_name: string;
     drink_category_name: string;
     drink_description: string | null;
@@ -40,7 +38,6 @@ export type TableDrinks = {
 }
 
 export type FormEventDrinks = {
-    drink_id: string | null;
     drink_percentage: number;
     drink_name: string;
     drink_category_name: string;

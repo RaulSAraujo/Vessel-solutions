@@ -1,33 +1,37 @@
 import { getSupabaseClientAndUser } from '~~/server/utils/supabase';
 import type { FetchError } from "ofetch";
-import type { Tables, TablesInsert } from '~~/server/types/database';
-
-type EventDrink = Tables<"event_drinks">;
 
 export default defineEventHandler(async (event) => {
     try {
         const { client } = await getSupabaseClientAndUser(event);
-        const eventId = event.context.params?.id;
-        const body = await readBody<TablesInsert<'event_drinks'>[]>(event);
+        const id = getRouterParam(event, 'id');
+        const body = await readBody(event);
 
-        if (!eventId) {
+        if (!id) {
             throw createError({
                 statusCode: 400,
-                statusMessage: "Bad Request",
-                message: "Event ID is required.",
+                statusMessage: 'Bad Request',
+                message: 'ID is required',
             });
         }
 
-        if (!body || body.length === 0) {
+        // Deletar drinks existentes
+        const { error: deleteError } = await client
+            .from('event_quotation_drinks')
+            .delete()
+            .eq('event_quotation_id', id);
+
+        if (deleteError) {
             throw createError({
-                statusCode: 400,
-                statusMessage: "Bad Request",
-                message: "At least one drink is required.",
+                statusCode: 500,
+                statusMessage: 'Failed to delete existing event quotation drinks',
+                message: deleteError.message,
             });
         }
 
-        const drinks = body.map((drink) => ({
-            event_id: eventId,
+        // Inserir novos drinks
+        const drinksData = body.map((drink: any) => ({
+            event_quotation_id: id,
             drink_percentage: drink.drink_percentage,
             drink_name: drink.drink_name,
             drink_category_name: drink.drink_category_name,
@@ -38,19 +42,20 @@ export default defineEventHandler(async (event) => {
             drink_profit_margin_percentage: drink.drink_profit_margin_percentage,
         }));
 
-        const { data, error: drinksError } = await client.rpc('upsert_multiple_event_drinks', {
-            _event_drinks: drinks
-        })
+        const { data, error: insertError } = await client
+            .from('event_quotation_drinks')
+            .insert(drinksData)
+            .select();
 
-        if (drinksError) {
+        if (insertError) {
             throw createError({
                 statusCode: 500,
-                statusMessage: "Failed to add drinks",
-                message: drinksError.message,
+                statusMessage: 'Failed to insert event quotation drinks',
+                message: insertError.message,
             });
         }
 
-        return data as EventDrink[];
+        return data;
     } catch (error: unknown) {
         const err = error as FetchError;
 

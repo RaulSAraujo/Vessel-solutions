@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import { eventSchema } from "~/schemas/event";
-import { useEventsApi } from "~/composables/api/useEventsApi";
+import { eventQuotationSchema } from "~/schemas/event-quotation";
+import { useEventQuotationsApi } from "~/composables/api/useEventQuotationsApi";
 
-import type { Datum as Event } from "~/types/events";
+import type { EventQuotation } from "~/types/event-quotations";
 
 // Components
 import Fields from "./fields/index.vue";
 import Drinks from "./drinks/index.vue";
 
 const props = defineProps<{
-  event?: Event | null;
+  eventQuotation?: EventQuotation | null;
   loading: boolean;
 }>();
 
 const emit = defineEmits(["submit", "update:estimated-quantity"]);
 
-const api = useEventsApi();
+const api = useEventQuotationsApi();
 
-const store = useEventsStore();
+const store = useEventQuotationsStore();
 const { drinks, loadingDrinks } = storeToRefs(store);
 
 const { handleSubmit, errors, values } = useForm({
-  validationSchema: eventSchema,
+  validationSchema: eventQuotationSchema,
 });
 
 const onSubmit = handleSubmit((values) => {
   emit("submit", {
     ...values,
-    event_drinks: drinks.value.map((e) => ({
+    event_quotation_drinks: drinks.value.map((e) => ({
       drink_percentage: e.drink_percentage,
       drink_name: e.drink_name,
       drink_category_name: e.drink_category_name,
@@ -41,17 +41,17 @@ const onSubmit = handleSubmit((values) => {
 });
 
 onMounted(async () => {
-  if (!props.event || !props.event.id) return;
+  if (!props.eventQuotation || !props.eventQuotation.id) return;
 
   loadingDrinks.value = true;
-  const res = await api.getEventDrinks(props.event.id);
+  const res = await api.getEventQuotationDrinks(props.eventQuotation.id);
 
   if (res) {
     for (const drink of res) {
       drinks.value.push({
         id: drink.id,
-        drink_name: drink.drink_name,
-        drink_category_name: drink.drink_category_name,
+        drink_name: drink.drink_name || "",
+        drink_category_name: drink.drink_category_name || "",
         drink_description: drink.drink_description,
         drink_image_url: drink.drink_image_url,
         drink_calculated_cost: drink.drink_calculated_cost || 0,
@@ -73,11 +73,11 @@ onUnmounted(() => {
 
 <template>
   <v-form @submit.prevent="onSubmit">
-    <Fields :event="event" :errors="errors" />
+    <Fields :event-quotation="eventQuotation" :errors="errors" />
 
     <v-divider class="my-4" />
 
-    <Drinks :event="event" :form="values" />
+    <Drinks :event-quotation="eventQuotation" :form="values" />
 
     <v-btn type="submit" color="primary" block :loading="loading">
       Salvar

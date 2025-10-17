@@ -185,15 +185,15 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
-          calculated_cost: number | null
-          category_id: string | null
+          calculated_cost?: number | null
+          category_id?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
           image_url?: string | null
           name: string
-          profit_margin_percentage: number | null
-          selling_price: number | null
+          profit_margin_percentage?: number | null
+          selling_price?: number | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -222,45 +222,46 @@ export type Database = {
       }
       event_drinks: {
         Row: {
-          id: string
-          drink_id: string | null
-          event_id: string
-          drink_percentage: number
-          drink_name: string | null
+          created_at: string | null
+          drink_calculated_cost: number | null
           drink_category_name: string | null
           drink_description: string | null
           drink_image_url: string | null
-          drink_calculated_cost: number | null
-          drink_selling_price: number | null
+          drink_name: string | null
+          drink_percentage: number
           drink_profit_margin_percentage: number | null
-          created_at: string;
-          updated_at: string;
+          drink_selling_price: number | null
+          event_id: string
+          id: string
+          updated_at: string | null
         }
         Insert: {
-          id?: string
-          drink_id?: string | null
-          event_id: string
-          drink_percentage: number
-          drink_name?: string | null
+          created_at?: string | null
+          drink_calculated_cost?: number | null
           drink_category_name?: string | null
           drink_description?: string | null
           drink_image_url?: string | null
-          drink_calculated_cost?: number | null
-          drink_selling_price?: number | null
+          drink_name?: string | null
+          drink_percentage?: number
           drink_profit_margin_percentage?: number | null
+          drink_selling_price?: number | null
+          event_id: string
+          id?: string
+          updated_at?: string | null
         }
         Update: {
-          id?: string
-          drink_id?: string | null
-          event_id?: string
-          drink_percentage?: number
-          drink_name?: string | null
+          created_at?: string | null
+          drink_calculated_cost?: number | null
           drink_category_name?: string | null
           drink_description?: string | null
           drink_image_url?: string | null
-          drink_calculated_cost?: number | null
-          drink_selling_price?: number | null
+          drink_name?: string | null
+          drink_percentage?: number
           drink_profit_margin_percentage?: number | null
+          drink_selling_price?: number | null
+          event_id?: string
+          id?: string
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -272,78 +273,212 @@ export type Database = {
           },
         ]
       }
-      events: {
+      event_quotation_drinks: {
+        Row: {
+          created_at: string | null
+          drink_calculated_cost: number | null
+          drink_category_name: string | null
+          drink_description: string | null
+          drink_image_url: string | null
+          drink_name: string | null
+          drink_percentage: number
+          drink_profit_margin_percentage: number | null
+          drink_selling_price: number | null
+          event_quotation_id: string
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          drink_calculated_cost?: number | null
+          drink_category_name?: string | null
+          drink_description?: string | null
+          drink_image_url?: string | null
+          drink_name?: string | null
+          drink_percentage?: number
+          drink_profit_margin_percentage?: number | null
+          drink_selling_price?: number | null
+          event_quotation_id: string
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          drink_calculated_cost?: number | null
+          drink_category_name?: string | null
+          drink_description?: string | null
+          drink_image_url?: string | null
+          drink_name?: string | null
+          drink_percentage?: number
+          drink_profit_margin_percentage?: number | null
+          drink_selling_price?: number | null
+          event_quotation_id?: string
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_quotation_drinks_event_quotation_id_fkey"
+            columns: ["event_quotation_id"]
+            isOneToOne: false
+            referencedRelation: "event_quotations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_quotations: {
         Row: {
           audience_profile: string
-          client_id: string
+          bartender_hourly_rate: number | null
+          client_email: string | null
+          client_name: string
+          client_phone: string
           created_at: string | null
           distance: number
-          end_time: Date
+          end_time: string
+          estimated_total_drinks: number | null
+          fuel_cost_per_km: number | null
           guest_count: number
+          helper_hourly_rate: number | null
           id: string
           location: string
-          start_time: Date
+          notes: string | null
+          num_bartenders: number | null
+          num_helpers: number | null
+          profit_margin: number | null
+          start_time: string
           status: string | null
+          total_cost: number | null
+          total_revenue: number | null
           updated_at: string | null
           user_id: string | null
-          notes: string
-          total_cost: number
-          total_revenue: number
-          profit_margin: number
-          estimated_total_drinks: number
-          bartender_hourly_rate: number | null
-          num_bartenders: number | null
-          helper_hourly_rate: number | null
-          num_helpers: number | null
-          fuel_cost_per_km: number | null
         }
         Insert: {
           audience_profile: string
-          client_id: string
+          bartender_hourly_rate?: number | null
+          client_email?: string | null
+          client_name: string
+          client_phone: string
           created_at?: string | null
           distance: number
-          end_time: Date
+          end_time: string
+          estimated_total_drinks?: number | null
+          fuel_cost_per_km?: number | null
           guest_count: number
+          helper_hourly_rate?: number | null
           id?: string
           location: string
-          start_time: Date
+          notes?: string | null
+          num_bartenders?: number | null
+          num_helpers?: number | null
+          profit_margin?: number | null
+          start_time: string
           status?: string | null
+          total_cost?: number | null
+          total_revenue?: number | null
           updated_at?: string | null
           user_id?: string | null
-          notes?: string
-          total_cost?: number
-          total_revenue?: number
-          profit_margin?: number
-          estimated_total_drinks?: number
-          bartender_hourly_rate?: number | null
-          num_bartenders?: number | null
-          helper_hourly_rate?: number | null
-          num_helpers?: number | null
-          fuel_cost_per_km?: number | null
         }
         Update: {
           audience_profile?: string
+          bartender_hourly_rate?: number | null
+          client_email?: string | null
+          client_name?: string
+          client_phone?: string
+          created_at?: string | null
+          distance?: number
+          end_time?: string
+          estimated_total_drinks?: number | null
+          fuel_cost_per_km?: number | null
+          guest_count?: number
+          helper_hourly_rate?: number | null
+          id?: string
+          location?: string
+          notes?: string | null
+          num_bartenders?: number | null
+          num_helpers?: number | null
+          profit_margin?: number | null
+          start_time?: string
+          status?: string | null
+          total_cost?: number | null
+          total_revenue?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      events: {
+        Row: {
+          audience_profile: string
+          bartender_hourly_rate: number | null
+          client_id: string
+          created_at: string | null
+          distance: number
+          end_time: string
+          estimated_total_drinks: number | null
+          fuel_cost_per_km: number | null
+          guest_count: number
+          helper_hourly_rate: number | null
+          id: string
+          location: string
+          notes: string | null
+          num_bartenders: number | null
+          num_helpers: number | null
+          profit_margin: number | null
+          start_time: string
+          status: string | null
+          total_cost: number | null
+          total_revenue: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          audience_profile: string
+          bartender_hourly_rate?: number | null
+          client_id: string
+          created_at?: string | null
+          distance: number
+          end_time: string
+          estimated_total_drinks?: number | null
+          fuel_cost_per_km?: number | null
+          guest_count: number
+          helper_hourly_rate?: number | null
+          id?: string
+          location: string
+          notes?: string | null
+          num_bartenders?: number | null
+          num_helpers?: number | null
+          profit_margin?: number | null
+          start_time: string
+          status?: string | null
+          total_cost?: number | null
+          total_revenue?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          audience_profile?: string
+          bartender_hourly_rate?: number | null
           client_id?: string
           created_at?: string | null
           distance?: number
-          end_time?: Date
+          end_time?: string
+          estimated_total_drinks?: number | null
+          fuel_cost_per_km?: number | null
           guest_count?: number
+          helper_hourly_rate?: number | null
           id?: string
           location?: string
-          start_time?: Date
+          notes?: string | null
+          num_bartenders?: number | null
+          num_helpers?: number | null
+          profit_margin?: number | null
+          start_time?: string
           status?: string | null
+          total_cost?: number | null
+          total_revenue?: number | null
           updated_at?: string | null
           user_id?: string | null
-          notes?: string
-          total_cost?: number
-          total_revenue?: number
-          profit_margin?: number
-          estimated_total_drinks?: number
-          bartender_hourly_rate?: number | null
-          num_bartenders?: number | null
-          helper_hourly_rate?: number | null
-          num_helpers?: number | null
-          fuel_cost_per_km?: number | null
         }
         Relationships: [
           {
@@ -357,45 +492,52 @@ export type Database = {
       }
       ingredients: {
         Row: {
-          unit_volume_ml: number | null
           created_at: string | null
+          current_quotation_id: string | null
           id: string
           name: string
+          real_cost_per_base_unit: number | null
           unit_id: number
+          unit_volume_ml: number | null
           unit_weight_g: number | null
           updated_at: string | null
           user_id: string | null
-          current_quotation_id: string | null
           wastage_percentage: number
-          real_cost_per_base_unit: number
         }
         Insert: {
-          unit_volume_ml?: number | null
           created_at?: string | null
+          current_quotation_id?: string | null
           id?: string
           name: string
+          real_cost_per_base_unit?: number | null
           unit_id: number
+          unit_volume_ml?: number | null
           unit_weight_g?: number | null
           updated_at?: string | null
           user_id?: string | null
-          current_quotation_id?: string | null
           wastage_percentage?: number
-          real_cost_per_base_unit?: number | null
         }
         Update: {
-          unit_volume_ml?: number | null
           created_at?: string | null
+          current_quotation_id?: string | null
           id?: string
           name?: string
+          real_cost_per_base_unit?: number | null
           unit_id?: number
+          unit_volume_ml?: number | null
           unit_weight_g?: number | null
           updated_at?: string | null
           user_id?: string | null
-          current_quotation_id?: string | null
           wastage_percentage?: number
-          real_cost_per_base_unit?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "ingredients_current_quotation_id_fkey"
+            columns: ["current_quotation_id"]
+            isOneToOne: false
+            referencedRelation: "quotations"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "ingredients_unit_id_fkey"
             columns: ["unit_id"]
@@ -522,41 +664,34 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      upsert_multiple_drink_ingredients: {
-        Args: {
-          p_drink_ingredients_array: Tables["drink_ingredients"][]
-        }
-        Returns: Tables["drink_ingredients"][]
-      }
-      upsert_multiple_event_drinks: {
-        Args: {
-          _event_drinks: TablesInsert["event_drinks"][]
-        }
-        Returns: Tables["event_drinks"][]
-      }
       insertion_client_and_address: {
         Args: {
-          p_additional_info: string | null
+          p_additional_info: string
           p_city: string
           p_email: string
           p_name: string
           p_neighborhood: string
           p_number: string
           p_phone: string
-          p_phone_optional: string | null
+          p_phone_optional: string
           p_state: string
           p_street: string
           p_user_id: string
           p_zip_code: string
         }
-        Returns: {
-          client: Tables["clients"]
-          address: Tables["client_addresses"]
-        }
+        Returns: Json
+      }
+      unaccent: {
+        Args: { "": string }
+        Returns: string
+      }
+      unaccent_init: {
+        Args: { "": unknown }
+        Returns: unknown
       }
       update_client_and_address: {
         Args: {
-          p_additional_info: string | null
+          p_additional_info: string
           p_city: string
           p_client_id: string
           p_email: string
@@ -564,15 +699,40 @@ export type Database = {
           p_neighborhood: string
           p_number: string
           p_phone: string
-          p_phone_optional: string | null
+          p_phone_optional: string
           p_state: string
           p_street: string
           p_zip_code: string
         }
+        Returns: Json
+      }
+      upsert_multiple_drink_ingredients: {
+        Args: { p_drink_ingredients_array: Json }
         Returns: {
-          client: Tables["clients"]
-          address: Tables["client_addresses"]
-        }
+          created_at: string | null
+          drink_id: string
+          ingredient_id: string
+          quantity: number
+          unit_id: number | null
+          updated_at: string | null
+        }[]
+      }
+      upsert_multiple_event_drinks: {
+        Args: { _event_drinks: Json[] }
+        Returns: {
+          created_at: string
+          drink_calculated_cost: number
+          drink_category_name: string
+          drink_description: string
+          drink_image_url: string
+          drink_name: string
+          drink_percentage: number
+          drink_profit_margin_percentage: number
+          drink_selling_price: number
+          event_id: string
+          id: string
+          updated_at: string
+        }[]
       }
     }
     Enums: {

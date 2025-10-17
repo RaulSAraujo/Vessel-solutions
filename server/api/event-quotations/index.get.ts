@@ -1,0 +1,78 @@
+import { getSupabaseClientAndUser } from '~~/server/utils/supabase';
+import type { FetchError } from "ofetch";
+
+export default defineEventHandler(async (event) => {
+    try {
+        const { client } = await getSupabaseClientAndUser(event);
+
+        const query = getQuery(event);
+
+        const page = parseInt(query.page as string) || 1;
+        const itemsPerPage = parseInt(query.itemsPerPage as string) || 10;
+        const offset = (page - 1) * itemsPerPage;
+
+        let supabaseQuery = client
+            .from("event_quotations")
+            .select(`
+                *,
+                event_quotation_drinks (
+                    id,
+                    drink_percentage,
+                    drink_name,
+                    drink_category_name,
+                    drink_description,
+                    drink_image_url,
+                    drink_calculated_cost,
+                    drink_selling_price,
+                    drink_profit_margin_percentage
+                )
+                `,
+                { count: "exact" }
+            );
+
+        if (query.filters && typeof query.filters === "string") {
+            try {
+                const filters = JSON.parse(query.filters);
+                supabaseQuery = applySupabaseFilters(supabaseQuery, filters);
+            } catch (jsonError) {
+                console.error("Failed to parse filters JSON:", jsonError);
+                throw createError({
+                    statusCode: 400,
+                    statusMessage: "Bad Request",
+                    message: "Invalid 'filters' parameter format. Must be a valid JSON string.",
+                });
+            }
+        }
+
+        const sortByParam = query.sortBy === null ? undefined : query.sortBy;
+        supabaseQuery = applySort(supabaseQuery, sortByParam);
+
+        const { data, error, count } = await supabaseQuery.range(offset, offset + itemsPerPage - 1);
+
+        if (error) {
+            throw createError({
+                statusCode: 500,
+                statusMessage: 'Failed to fetch event quotations',
+                message: error.message,
+            });
+        }
+
+        return {
+            data: data || [],
+            page: {
+                page,
+                itemsPerPage,
+                totalRows: count || 0,
+                totalPages: Math.ceil((count || 0) / itemsPerPage),
+            }
+        };
+    } catch (error: unknown) {
+        const err = error as FetchError;
+
+        throw createError({
+            statusCode: err.statusCode || 500,
+            statusMessage: err.statusMessage || "Internal Server Error",
+            message: err.message,
+        });
+    }
+});

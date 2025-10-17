@@ -10,7 +10,7 @@ const menus = [
       },
       {
         title: "Propostas e Orçamentos",
-        to: "/proposals",
+        to: "/event-quotations",
         icon: "mdi-file-document-edit",
       },
     ],

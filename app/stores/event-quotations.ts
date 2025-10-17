@@ -1,26 +1,26 @@
-import { useEventsApi } from '~/composables/api/useEventsApi';
+import { useEventQuotationsApi } from '~/composables/api/useEventQuotationsApi';
 
-import type { Datum } from "~/types/events";
-import type { Datum as Drink } from "~/types/drinks";
+import type { EventQuotation } from "~/types/event-quotations";
 import type { EmittedFilters } from "~/types/filter";
-import type { TableDrinks } from "~/types/event-drinks";
 import type { VDataTableServerOptions } from "~/types/data-table";
+import type { TableDrinks } from "~/types/event-drinks";
+import type { Datum as Drink } from "~/types/drinks";
 
 type SelectedDrink = Drink & { drink_categories: { name: string } };
 
-export const useEventsStore = defineStore('events', () => {
+export const useEventQuotationsStore = defineStore('eventQuotations', () => {
     // Tabela
     const page = ref(1);
     const totalItems = ref(0)
     const loading = ref(false)
-    const items = ref<Datum[]>([])
+    const items = ref<EventQuotation[]>([])
     const itemsPerPage = ref<10 | 25 | 50>(10)
 
     // Filtros
     const activeFilters = ref<EmittedFilters>({});
 
     // Evento selecionado para edição/exclusão
-    const selectedEvent = ref<Datum | null>(null);
+    const selectedEventQuotation = ref<EventQuotation | null>(null);
 
     // Drinks vinculados ao evento
     const drinks = ref<TableDrinks[]>([]);
@@ -70,7 +70,7 @@ export const useEventsStore = defineStore('events', () => {
         return totalRevenue.value > 0 ? parseFloat(((totalRevenue.value - totalCostFinal) / totalRevenue.value * 100).toFixed(1)) : 0;
     });
 
-    async function fetchEvents(props?: VDataTableServerOptions) {
+    async function fetchEventQuotations(props?: VDataTableServerOptions) {
         loading.value = true;
 
         // Se props nao for passado, cria um objeto com as propriedades padrão
@@ -84,7 +84,7 @@ export const useEventsStore = defineStore('events', () => {
             };
         }
 
-        const res = await useEventsApi().getEvents(props, activeFilters.value);
+        const res = await useEventQuotationsApi().getEventQuotations(props, activeFilters.value);
 
         if (res) {
             items.value = res.data;
@@ -94,7 +94,7 @@ export const useEventsStore = defineStore('events', () => {
         loading.value = false;
     }
 
-    function addItem(item: Datum) {
+    function addItem(item: EventQuotation) {
         if (items.value.length > itemsPerPage.value) {
             items.value.pop();
         }
@@ -103,15 +103,23 @@ export const useEventsStore = defineStore('events', () => {
         totalItems.value += 1;
     }
 
-    function updateItem(item: Datum) {
+    function updateItem(item: EventQuotation) {
         const index = items.value.findIndex((i) => i.id === item.id);
-        items.value[index] = item;
+        if (index !== -1) {
+            items.value[index] = item;
+        }
     }
 
-    function deleteItem(item: Datum) {
+    function deleteItem(item: EventQuotation) {
         const index = items.value.findIndex((i) => i.id === item.id);
-        items.value.splice(index, 1);
-        totalItems.value -= 1;
+        if (index !== -1) {
+            items.value.splice(index, 1);
+            totalItems.value -= 1;
+        }
+    }
+
+    function setSelectedEventQuotation(quotation: EventQuotation | null) {
+        selectedEventQuotation.value = quotation;
     }
 
     function addSelectedDrink(selectedDrink: SelectedDrink) {
@@ -145,7 +153,7 @@ export const useEventsStore = defineStore('events', () => {
     }
 
     function resetForm() {
-        selectedEvent.value = null;
+        selectedEventQuotation.value = null;
         drinks.value = [];
         estimatedQuantity.value = 0;
         eventDurationHours.value = 0;
@@ -164,14 +172,14 @@ export const useEventsStore = defineStore('events', () => {
         updateItem,
         deleteItem,
         totalItems,
-        fetchEvents,
+        fetchEventQuotations,
         removeDrink,
         profitMargin,
         totalRevenue,
         itemsPerPage,
         activeFilters,
         loadingDrinks,
-        selectedEvent,
+        selectedEventQuotation,
         addSelectedDrink,
         estimatedQuantity,
         eventDurationHours,

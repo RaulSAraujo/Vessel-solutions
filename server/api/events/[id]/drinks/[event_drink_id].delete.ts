@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     try {
         const { client } = await getSupabaseClientAndUser(event);
         const eventId = event.context.params?.id;
-        const eventDrinkId = event.context.params?.drink_id;
+        const eventDrinkId = event.context.params?.event_drink_id;
 
         if (!eventId || !eventDrinkId) {
             throw createError({
