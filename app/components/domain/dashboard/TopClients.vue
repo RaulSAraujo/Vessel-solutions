@@ -71,7 +71,11 @@ watch(() => props.period, fetchTopClients, { deep: true });
     <v-card-text class="pa-0">
       <v-skeleton-loader v-if="loading" type="list-item-avatar-three-line" />
 
-      <div v-else-if="!topClients.length" class="pa-6 text-center">
+      <div
+        v-else-if="!topClients.length"
+        class="d-flex flex-column align-center justify-center pa-6 text-center"
+        style="height: 250px"
+      >
         <v-icon
           icon="mdi-account-group-outline"
           size="48"

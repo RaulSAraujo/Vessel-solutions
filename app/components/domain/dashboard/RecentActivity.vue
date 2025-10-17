@@ -55,16 +55,20 @@ watch(() => props.period, fetchRecentActivity, { deep: true });
 </script>
 
 <template>
-  <v-card elevation="2" class="border-sm" rounded="xl" min-height="200">
+  <v-card elevation="2" class="border-sm" rounded="xl" min-height="300">
     <v-card-title class="d-flex align-center">
       <v-icon icon="mdi-clock-outline" class="mr-2" color="primary" />
       Atividades Recentes
     </v-card-title>
 
     <v-card-text class="pa-0">
-      <v-skeleton-loader v-if="loading" type="list-item-avatar-three-line" />
+      <v-skeleton-loader v-if="loading" type="list-item-avatar-three-line@3" />
 
-      <div v-else-if="!activities.length" class="pa-6 text-center">
+      <div
+        v-else-if="!activities.length"
+        class="d-flex flex-column align-center justify-center pa-6 text-center"
+        style="height: 250px"
+      >
         <v-icon
           icon="mdi-information-outline"
           size="48"
