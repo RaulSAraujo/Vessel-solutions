@@ -5,21 +5,21 @@ export default defineEventHandler(async (event) => {
     try {
         const { client } = await getSupabaseClientAndUser(event);
         const eventId = event.context.params?.id;
-        const drinkId = event.context.params?.drink_id;
+        const eventDrinkId = event.context.params?.drink_id;
 
-        if (!eventId || !drinkId) {
+        if (!eventId || !eventDrinkId) {
             throw createError({
                 statusCode: 400,
                 statusMessage: 'Bad Request',
-                message: 'Event and Drink ID is required.',
+                message: 'Event and Event Drink ID is required.',
             });
         }
 
         const { error } = await client
             .from('event_drinks')
             .delete()
-            .eq('event_id', eventId)
-            .eq('drink_id', drinkId);
+            .eq('id', eventDrinkId)
+            .eq('event_id', eventId);
 
         if (error) {
             throw createError({
@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        return { message: `Drink Ingredient deleted successfully.` };
+        return { message: `Event drink deleted successfully.` };
     } catch (error: unknown) {
         const err = error as FetchError;
 

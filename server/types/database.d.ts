@@ -222,30 +222,47 @@ export type Database = {
       }
       event_drinks: {
         Row: {
-          drink_id: string
+          id: string
+          drink_id: string | null
           event_id: string
           drink_percentage: number
+          drink_name: string | null
+          drink_category_name: string | null
+          drink_description: string | null
+          drink_image_url: string | null
+          drink_calculated_cost: number | null
+          drink_selling_price: number | null
+          drink_profit_margin_percentage: number | null
           created_at: string;
           updated_at: string;
         }
         Insert: {
-          drink_id: string
+          id?: string
+          drink_id?: string | null
           event_id: string
           drink_percentage: number
+          drink_name?: string | null
+          drink_category_name?: string | null
+          drink_description?: string | null
+          drink_image_url?: string | null
+          drink_calculated_cost?: number | null
+          drink_selling_price?: number | null
+          drink_profit_margin_percentage?: number | null
         }
         Update: {
-          drink_id?: string
+          id?: string
+          drink_id?: string | null
           event_id?: string
           drink_percentage?: number
+          drink_name?: string | null
+          drink_category_name?: string | null
+          drink_description?: string | null
+          drink_image_url?: string | null
+          drink_calculated_cost?: number | null
+          drink_selling_price?: number | null
+          drink_profit_margin_percentage?: number | null
         }
         Relationships: [
-          {
-            foreignKeyName: "event_drinks_drink_id_fkey"
-            columns: ["drink_id"]
-            isOneToOne: false
-            referencedRelation: "drinks"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "event_drinks_event_id_fkey"
             columns: ["event_id"]

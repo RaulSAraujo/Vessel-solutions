@@ -30,6 +30,13 @@ const onSubmit = handleSubmit((values) => {
     event_drinks: drinks.value.map((e) => ({
       drink_id: e.drink_id,
       drink_percentage: e.drink_percentage,
+      drink_name: e.drink_name,
+      drink_category_name: e.drink_category_name,
+      drink_description: e.drink_description,
+      drink_image_url: e.drink_image_url,
+      drink_calculated_cost: e.drink_calculated_cost,
+      drink_selling_price: e.drink_selling_price,
+      drink_profit_margin_percentage: e.drink_profit_margin_percentage,
     })),
   });
 });
@@ -43,14 +50,16 @@ onMounted(async () => {
   if (res) {
     for (const drink of res) {
       drinks.value.push({
+        id: drink.id,
         drink_id: drink.drink_id,
-        name: drink.drinks.name,
-        category: drink.drinks.drink_categories.name,
-        description: drink.drinks.description,
-        image_url: drink.drinks.image_url,
-        calculated_cost: drink.drinks.calculated_cost || 0,
-        selling_price: drink.drinks.selling_price || 0,
-        profit_margin_percentage: drink.drinks.profit_margin_percentage || 0,
+        drink_name: drink.drink_name,
+        drink_category_name: drink.drink_category_name,
+        drink_description: drink.drink_description,
+        drink_image_url: drink.drink_image_url,
+        drink_calculated_cost: drink.drink_calculated_cost || 0,
+        drink_selling_price: drink.drink_selling_price || 0,
+        drink_profit_margin_percentage:
+          drink.drink_profit_margin_percentage || 0,
         drink_percentage: drink.drink_percentage || 0,
       });
     }

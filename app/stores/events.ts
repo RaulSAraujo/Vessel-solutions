@@ -49,7 +49,7 @@ export const useEventsStore = defineStore('events', () => {
         return parseFloat(drinks.value.reduce((sum, item) => {
             const estimatedQuantityForThisDrink = estimatedQuantity.value * (item.drink_percentage / 100)
 
-            return sum + estimatedQuantityForThisDrink * item.calculated_cost
+            return sum + estimatedQuantityForThisDrink * (item.drink_calculated_cost || 0)
         }, 0).toFixed(2))
     });
 
@@ -57,7 +57,7 @@ export const useEventsStore = defineStore('events', () => {
         return parseFloat(drinks.value.reduce((sum, item) => {
             const estimatedQuantityForThisDrink = estimatedQuantity.value * (item.drink_percentage / 100)
 
-            return sum + estimatedQuantityForThisDrink * item.selling_price
+            return sum + estimatedQuantityForThisDrink * (item.drink_selling_price || 0)
         }, 0).toFixed(2))
     });
 
@@ -116,14 +116,15 @@ export const useEventsStore = defineStore('events', () => {
 
     function addSelectedDrink(selectedDrink: SelectedDrink) {
         drinks.value.push({
+            id: crypto.randomUUID(), // Gerar ID temporário para novos drinks
             drink_id: selectedDrink.id,
-            name: selectedDrink.name,
-            category: selectedDrink.drink_categories.name,
-            description: selectedDrink.description,
-            image_url: selectedDrink.image_url,
-            calculated_cost: selectedDrink.calculated_cost || 0,
-            selling_price: selectedDrink.selling_price || 0,
-            profit_margin_percentage: selectedDrink.profit_margin_percentage || 0,
+            drink_name: selectedDrink.name,
+            drink_category_name: selectedDrink.drink_categories.name,
+            drink_description: selectedDrink.description,
+            drink_image_url: selectedDrink.image_url,
+            drink_calculated_cost: selectedDrink.calculated_cost || 0,
+            drink_selling_price: selectedDrink.selling_price || 0,
+            drink_profit_margin_percentage: selectedDrink.profit_margin_percentage || 0,
             drink_percentage: 0,
         });
     }

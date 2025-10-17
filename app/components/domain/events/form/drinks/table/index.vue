@@ -23,11 +23,15 @@ const loadingDelete = ref(false);
 
 const headers = [
   { title: "Ações", key: "actions", maxWidth: 60 },
-  { title: "Nome", key: "name", minWidth: 200 },
-  { title: "Categoria", key: "category", minWidth: 200 },
-  { title: "Custo", key: "calculated_cost", minWidth: 140 },
-  { title: "Preço venda", key: "selling_price", minWidth: 140 },
-  { title: "Marg. Lucro (%)", key: "profit_margin_percentage", minWidth: 155 },
+  { title: "Nome", key: "drink_name", minWidth: 200 },
+  { title: "Categoria", key: "drink_category_name", minWidth: 200 },
+  { title: "Custo", key: "drink_calculated_cost", minWidth: 140 },
+  { title: "Preço venda", key: "drink_selling_price", minWidth: 140 },
+  {
+    title: "Marg. Lucro (%)",
+    key: "drink_profit_margin_percentage",
+    minWidth: 155,
+  },
   { title: "% do drink", key: "drink_percentage", minWidth: 150 },
 ];
 
@@ -63,10 +67,10 @@ watch(
 );
 
 async function removeDrink(item: TableDrinks) {
-  if (props.event?.id && item.drink_id) {
+  if (props.event?.id && item.id) {
     loadingDelete.value = true;
 
-    const res = await api.deleteEventDrink(props.event?.id, item.drink_id);
+    const res = await api.deleteEventDrink(props.event?.id, item.id);
 
     if (!res) {
       loadingDelete.value = false;
@@ -100,20 +104,20 @@ async function removeDrink(item: TableDrinks) {
       />
     </template>
 
-    <template #item.name="{ item }">
+    <template #item.drink_name="{ item }">
       <Name :item="item" />
     </template>
 
-    <template #item.calculated_cost="{ item }">
-      {{ formatCurrency(item.calculated_cost) }}
+    <template #item.drink_calculated_cost="{ item }">
+      {{ formatCurrency(item.drink_calculated_cost) }}
     </template>
 
-    <template #item.selling_price="{ item }">
-      {{ formatCurrency(item.selling_price) }}
+    <template #item.drink_selling_price="{ item }">
+      {{ formatCurrency(item.drink_selling_price) }}
     </template>
 
-    <template #item.profit_margin_percentage="{ item }">
-      {{ item.profit_margin_percentage.toFixed(1) }}
+    <template #item.drink_profit_margin_percentage="{ item }">
+      {{ item.drink_profit_margin_percentage?.toFixed(1) || "0.0" }}
     </template>
 
     <template #item.drink_percentage="{ item }">

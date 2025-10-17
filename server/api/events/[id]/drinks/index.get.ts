@@ -2,13 +2,7 @@ import { getSupabaseClientAndUser } from "~~/server/utils/supabase";
 import type { FetchError } from "ofetch";
 import type { Tables } from "~~/server/types/database";
 
-type EventDrinkWithRelation = Tables<"event_drinks"> & {
-    drinks: Tables<"drinks"> & {
-        drink_categories: {
-            name: string;
-        }
-    }
-}
+type EventDrink = Tables<"event_drinks">;
 
 export default defineEventHandler(async (event) => {
     try {
@@ -26,11 +20,9 @@ export default defineEventHandler(async (event) => {
 
         const { data, error } = await client
             .from("event_drinks")
-            .select(`
-                *,
-                drinks (*, drink_categories (name))
-            `)
+            .select("*")
             .eq("event_id", eventId)
+            .order("created_at", { ascending: true });
 
         if (error) {
             throw createError({
@@ -40,7 +32,7 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        return data as EventDrinkWithRelation[];
+        return data as EventDrink[];
     } catch (error: unknown) {
         const err = error as FetchError;
 

@@ -7,10 +7,15 @@ defineProps<{
 </script>
 
 <template>
-  <v-list-item :title="item.name" density="compact" lines="one" class="px-0">
+  <v-list-item
+    :title="item.drink_name"
+    density="compact"
+    lines="one"
+    class="px-0"
+  >
     <template #prepend>
       <v-menu
-        v-if="item.image_url"
+        v-if="item.drink_image_url"
         offset="15"
         location="top end"
         :open-on-hover="true"
@@ -20,7 +25,7 @@ defineProps<{
         <template #activator="{ props: bind }">
           <v-avatar
             v-bind="bind"
-            :image="item.image_url"
+            :image="item.drink_image_url"
             start
             size="28"
             color="grey"
@@ -30,7 +35,7 @@ defineProps<{
         </template>
 
         <v-card width="200" max-height="200" rounded="lg">
-          <v-img :src="item.image_url" />
+          <v-img :src="item.drink_image_url" />
         </v-card>
       </v-menu>
 
