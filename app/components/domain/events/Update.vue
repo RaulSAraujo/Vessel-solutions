@@ -64,7 +64,7 @@ async function update(events: EventWithDrinks) {
 
 <template>
   <v-bottom-sheet content-class="rounded-t-xl">
-    <v-card title="Atualizar fornecedor" rounded="xl">
+    <v-card title="Atualizar evento" rounded="xl">
       <v-card-text>
         <Form :event="selectedEvent" :loading="loading" @submit="update" />
       </v-card-text>

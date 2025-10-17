@@ -21,6 +21,11 @@ export type Datum = {
     notes: string
     updated_at: string | null
     created_at: string | null
+    bartender_hourly_rate: number | null
+    num_bartenders: number | null
+    helper_hourly_rate: number | null
+    num_helpers: number | null
+    fuel_cost_per_km: number | null
 }
 
 export type Page = {
@@ -48,4 +53,9 @@ export type FormEvent = {
     profit_margin: number
     updated_at?: string | null
     created_at?: string | null
+    bartender_hourly_rate?: number | null
+    num_bartenders?: number | null
+    helper_hourly_rate?: number | null
+    num_helpers?: number | null
+    fuel_cost_per_km?: number | null
 }

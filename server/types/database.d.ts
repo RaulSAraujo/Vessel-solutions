@@ -274,6 +274,11 @@ export type Database = {
           total_revenue: number
           profit_margin: number
           estimated_total_drinks: number
+          bartender_hourly_rate: number | null
+          num_bartenders: number | null
+          helper_hourly_rate: number | null
+          num_helpers: number | null
+          fuel_cost_per_km: number | null
         }
         Insert: {
           audience_profile: string
@@ -293,6 +298,11 @@ export type Database = {
           total_revenue?: number
           profit_margin?: number
           estimated_total_drinks?: number
+          bartender_hourly_rate?: number | null
+          num_bartenders?: number | null
+          helper_hourly_rate?: number | null
+          num_helpers?: number | null
+          fuel_cost_per_km?: number | null
         }
         Update: {
           audience_profile?: string
@@ -312,6 +322,11 @@ export type Database = {
           total_revenue?: number
           profit_margin?: number
           estimated_total_drinks?: number
+          bartender_hourly_rate?: number | null
+          num_bartenders?: number | null
+          helper_hourly_rate?: number | null
+          num_helpers?: number | null
+          fuel_cost_per_km?: number | null
         }
         Relationships: [
           {

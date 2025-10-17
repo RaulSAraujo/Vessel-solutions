@@ -29,6 +29,13 @@ const headers = [
   { title: "Receita total", key: "total_revenue", minWidth: 140 },
   { title: "Margem de lucro", key: "profit_margin", minWidth: 160 },
   { title: "Quant. estimada", key: "estimated_total_drinks", minWidth: 157 },
+  {
+    title: "Taxa Bartender (R$/h)",
+    key: "bartender_hourly_rate",
+    minWidth: 180,
+  },
+  { title: "Nº Bartenders", key: "num_bartenders", minWidth: 130 },
+  { title: "Custo Combustível/km", key: "fuel_cost_per_km", minWidth: 180 },
   { title: "Criado em", key: "created_at", minWidth: 120 },
   { title: "Atualizado em", key: "updated_at", minWidth: 145 },
 ];
@@ -131,6 +138,22 @@ function handleOpenDelete(event: Datum) {
 
     <template #item.updated_at="{ item }">
       {{ formatDate(item.updated_at) }}
+    </template>
+
+    <template #item.bartender_hourly_rate="{ item }">
+      {{
+        item.bartender_hourly_rate
+          ? formatCurrency(item.bartender_hourly_rate)
+          : "-"
+      }}
+    </template>
+
+    <template #item.num_bartenders="{ item }">
+      {{ item.num_bartenders || "-" }}
+    </template>
+
+    <template #item.fuel_cost_per_km="{ item }">
+      {{ item.fuel_cost_per_km ? formatCurrency(item.fuel_cost_per_km) : "-" }}
     </template>
   </UiTable>
 </template>

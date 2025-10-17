@@ -45,14 +45,19 @@ export function useEventsApi() {
                     start_time: formatDateTimeToDB(data.start_time),
                     end_time: formatDateTimeToDB(data.end_time),
                     guest_count: data.guest_count,
-                    distance: data.distance,
                     audience_profile: data.audience_profile,
                     status: data.status,
                     notes: data.notes,
                     estimated_total_drinks: data.estimated_total_drinks,
                     total_cost: data.total_cost,
+                    distance: data.distance,
                     total_revenue: data.total_revenue,
-                    profit_margin: data.profit_margin
+                    profit_margin: data.profit_margin,
+                    bartender_hourly_rate: data.bartender_hourly_rate,
+                    num_bartenders: data.num_bartenders,
+                    helper_hourly_rate: data.helper_hourly_rate,
+                    num_helpers: data.num_helpers,
+                    fuel_cost_per_km: data.fuel_cost_per_km
                 },
             });
 
@@ -73,14 +78,19 @@ export function useEventsApi() {
                     start_time: formatDateTimeToDB(data.start_time),
                     end_time: formatDateTimeToDB(data.end_time),
                     guest_count: data.guest_count,
-                    distance: data.distance,
                     audience_profile: data.audience_profile,
                     status: data.status,
                     notes: data.notes,
                     estimated_total_drinks: data.estimated_total_drinks,
                     total_cost: data.total_cost,
                     total_revenue: data.total_revenue,
-                    profit_margin: data.profit_margin
+                    distance: data.distance,
+                    profit_margin: data.profit_margin,
+                    bartender_hourly_rate: data.bartender_hourly_rate,
+                    num_bartenders: data.num_bartenders,
+                    helper_hourly_rate: data.helper_hourly_rate,
+                    num_helpers: data.num_helpers,
+                    fuel_cost_per_km: data.fuel_cost_per_km
                 },
             });
 

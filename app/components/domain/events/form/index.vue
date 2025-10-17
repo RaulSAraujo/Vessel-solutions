@@ -5,7 +5,7 @@ import { useEventsApi } from "~/composables/api/useEventsApi";
 import type { Datum as Event } from "~/types/events";
 
 // Components
-import Fields from "./Fields.vue";
+import Fields from "./fields/index.vue";
 import Drinks from "./drinks/index.vue";
 
 const props = defineProps<{
@@ -67,6 +67,8 @@ onUnmounted(() => {
 <template>
   <v-form @submit.prevent="onSubmit">
     <Fields :event="event" :errors="errors" />
+
+    <v-divider class="my-4" />
 
     <Drinks :event="event" :form="values" />
 

@@ -24,9 +24,19 @@ export const useEventsStore = defineStore('events', () => {
 
     // Drinks vinculados ao evento
     const drinks = ref<TableDrinks[]>([]);
-    const loadingDrinks = ref(false)
+    const loadingDrinks = ref<boolean>(false)
 
-    const estimatedQuantity = ref(0);
+    // Quantidade estimada de drinks
+    const estimatedQuantity = ref<number>(0);
+
+    // Duração do evento
+    const eventDurationHours = ref<number>(0);
+
+    // Custos de staff e helper
+    const staffCost = ref<number>(0);
+
+    // Custo de combustível
+    const fuelCost = ref<number>(0);
 
     const totalPercentageDrinks = computed(() => {
         return drinks.value.reduce(
@@ -51,8 +61,13 @@ export const useEventsStore = defineStore('events', () => {
         }, 0).toFixed(2))
     });
 
+    const totalCostWithStaffAndFuel = computed(() => {
+        return parseFloat((totalCost.value + staffCost.value + fuelCost.value).toFixed(2));
+    });
+
     const profitMargin = computed(() => {
-        return parseFloat(((totalRevenue.value - totalCost.value) / totalRevenue.value * 100).toFixed(1));
+        const totalCostFinal = totalCostWithStaffAndFuel.value;
+        return totalRevenue.value > 0 ? parseFloat(((totalRevenue.value - totalCostFinal) / totalRevenue.value * 100).toFixed(1)) : 0;
     });
 
     async function fetchEvents(props?: VDataTableServerOptions) {
@@ -118,10 +133,22 @@ export const useEventsStore = defineStore('events', () => {
         drinks.value.splice(index, 1);
     }
 
+    function calculateEventDuration(startTime: string, endTime: string) {
+        if (!startTime || !endTime) {
+            eventDurationHours.value = 0;
+            return;
+        }
+
+        const start = new Date(formatDateTimeToDB(startTime));
+        const end = new Date(formatDateTimeToDB(endTime));
+        eventDurationHours.value = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+    }
+
     function resetForm() {
         selectedEvent.value = null;
         drinks.value = [];
         estimatedQuantity.value = 0;
+        eventDurationHours.value = 0;
     }
 
     return {
@@ -130,6 +157,8 @@ export const useEventsStore = defineStore('events', () => {
         drinks,
         loading,
         addItem,
+        fuelCost,
+        staffCost,
         totalCost,
         resetForm,
         updateItem,
@@ -145,6 +174,9 @@ export const useEventsStore = defineStore('events', () => {
         selectedEvent,
         addSelectedDrink,
         estimatedQuantity,
-        totalPercentageDrinks
+        eventDurationHours,
+        totalPercentageDrinks,
+        calculateEventDuration,
+        totalCostWithStaffAndFuel
     }
 })

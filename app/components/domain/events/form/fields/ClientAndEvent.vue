@@ -12,7 +12,10 @@ const props = defineProps<{
   errors: Partial<Record<string, string | undefined>>;
 }>();
 
+const dayjs = useDayjs();
 const api = useClientsApi();
+const store = useEventsStore();
+const { eventDurationHours } = storeToRefs(store);
 
 const disabledFindClient = ref(true);
 const client = ref<string | Client | null>(null);
@@ -22,7 +25,7 @@ const { value: location } = useField<string>("location");
 const { value: startTime } = useField<string>("start_time");
 const { value: endTime } = useField<string>("end_time");
 const { value: guestCount } = useField<number>("guest_count");
-const { value: distance } = useField<number>("distance");
+
 const { value: audienceProfile } = useField<string>("audience_profile");
 const { value: status } = useField<string | null>("status");
 const { value: notes } = useField<string | null>("notes");
@@ -35,16 +38,33 @@ watch(client, (value) => {
   }
 });
 
+// Watch para calcular duração do evento
+watch([startTime, endTime], ([start, end]) => {
+  if (
+    start &&
+    end &&
+    dayjs(start, "DD/MM/YYYY HH:mm").isValid() &&
+    dayjs(end, "DD/MM/YYYY HH:mm").isValid()
+  ) {
+    store.calculateEventDuration(start, end);
+  }
+});
+
 onMounted(async () => {
   if (props.event) {
     location.value = props.event.location;
     startTime.value = formatDate(props.event.start_time, "DD/MM/YYYY HH:mm");
     endTime.value = formatDate(props.event.end_time, "DD/MM/YYYY HH:mm");
     guestCount.value = props.event.guest_count;
-    distance.value = props.event.distance;
     audienceProfile.value = props.event.audience_profile;
     status.value = props.event.status;
     notes.value = props.event.notes;
+
+    // Calcular duração do evento
+    store.calculateEventDuration(
+      formatDate(props.event.start_time, "DD/MM/YYYY HH:mm"),
+      formatDate(props.event.end_time, "DD/MM/YYYY HH:mm")
+    );
 
     const resClient = await api.getClientById(props.event.client_id);
     if (resClient) {
@@ -97,7 +117,7 @@ onMounted(async () => {
       <Status v-model="status" :error-messages="errors.status" />
     </v-col>
 
-    <v-col cols="12" md="3">
+    <v-col cols="12" md="4">
       <UiTextField
         v-model="location"
         label="Endereço completo"
@@ -106,33 +126,31 @@ onMounted(async () => {
       />
     </v-col>
 
-    <v-col cols="12" md="1">
-      <UiTextField
-        v-model="distance"
-        label="Km"
-        prepend-inner-icon="mdi-road-variant"
-        :error-messages="errors.distance"
-      />
-    </v-col>
+    <v-col cols="12" md="4">
+      <div class="d-flex align-center ga-2">
+        <UiTextField
+          v-model="startTime"
+          v-maska="'##/##/#### ##:##'"
+          label="Inicio do evento"
+          placeholder="__/__/____ __:__"
+          :error-messages="errors.start_time"
+        />
 
-    <v-col cols="12" md="2">
-      <UiTextField
-        v-model="startTime"
-        v-maska="'##/##/#### ##:##'"
-        label="Inicio do evento"
-        placeholder="__/__/____ __:__"
-        :error-messages="errors.start_time"
-      />
-    </v-col>
+        <UiTextField
+          v-model="endTime"
+          v-maska="'##/##/#### ##:##'"
+          label="Final do evento"
+          placeholder="__/__/____ __:__"
+          :error-messages="errors.end_time"
+        />
 
-    <v-col cols="12" md="2">
-      <UiTextField
-        v-model="endTime"
-        v-maska="'##/##/#### ##:##'"
-        label="Final do evento"
-        placeholder="__/__/____ __:__"
-        :error-messages="errors.end_time"
-      />
+        <div class="d-flex flex-column align-center">
+          <span class="text-caption mr-1">Duração:</span>
+          <span class="text-caption font-weight-bold text-primary">
+            {{ eventDurationHours.toFixed(2) }}
+          </span>
+        </div>
+      </div>
     </v-col>
 
     <v-col cols="12" md="2">

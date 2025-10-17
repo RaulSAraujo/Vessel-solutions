@@ -6,6 +6,9 @@ const {
   totalRevenue,
   profitMargin,
   totalPercentageDrinks,
+  staffCost,
+  fuelCost,
+  totalCostWithStaffAndFuel,
 } = storeToRefs(store);
 </script>
 
@@ -36,17 +39,34 @@ const {
 
         <v-spacer />
 
-        <div class="d-flex align-center">
-          <span class="text-button mr-1">Custo total:</span>
+        <v-tooltip location="top">
+          <template #activator="{ props }">
+            <div v-bind="props" class="d-flex align-center">
+              <span class="text-button mr-1">Custo total:</span>
+              <span class="text-h6 font-weight-bold text-primary">
+                {{ formatCurrency(totalCostWithStaffAndFuel) }}
+              </span>
+            </div>
+          </template>
 
-          <span class="text-h6 font-weight-bold text-primary">
-            {{ formatCurrency(totalCost) }}
-          </span>
-        </div>
+          <template #default>
+            <p>
+              <strong>Custo drinks:</strong>
+              {{ formatCurrency(totalCost) }}
+            </p>
+            <p>
+              <strong>Custo staff:</strong>
+              {{ formatCurrency(staffCost) }}
+            </p>
+            <p>
+              <strong>Custo combustível:</strong>
+              {{ formatCurrency(fuelCost) }}
+            </p>
+          </template>
+        </v-tooltip>
 
         <div class="d-flex align-center">
           <span class="text-button mr-1">Receita total:</span>
-
           <span class="text-h6 font-weight-bold text-primary">
             {{ formatCurrency(totalRevenue) }}
           </span>
@@ -54,7 +74,6 @@ const {
 
         <div class="d-flex align-center mr-4">
           <span class="text-button mr-1">Margem de lucro:</span>
-
           <span class="text-h6 font-weight-bold text-primary">
             {{ profitMargin || 0 }}%
           </span>

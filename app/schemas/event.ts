@@ -47,4 +47,26 @@ export const eventSchema = yup.object({
     notes: yup
         .string()
         .notRequired(),
+    bartender_hourly_rate: yup
+        .number()
+        .min(0, 'A taxa horária do bartender deve ser maior ou igual a zero')
+        .notRequired(),
+    num_bartenders: yup
+        .number()
+        .integer('O número de bartenders deve ser um número inteiro')
+        .min(0, 'O número de bartenders deve ser maior ou igual a zero')
+        .notRequired(),
+    helper_hourly_rate: yup
+        .number()
+        .min(0, 'A taxa horária dos ajudantes deve ser maior ou igual a zero')
+        .notRequired(),
+    num_helpers: yup
+        .number()
+        .integer('O número de ajudantes deve ser um número inteiro')
+        .min(0, 'O número de ajudantes deve ser maior ou igual a zero')
+        .notRequired(),
+    fuel_cost_per_km: yup
+        .number()
+        .min(0, 'O custo de combustível por km deve ser maior ou igual a zero')
+        .notRequired(),
 });
