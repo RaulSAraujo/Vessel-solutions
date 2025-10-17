@@ -1,9 +1,33 @@
 import { getSupabaseClientAndUser } from '../../utils/supabase';
 import type { FetchError } from 'ofetch';
+import type { Tables } from '../../types/database';
+
+// Tipos baseados no database
+type EventWithClient = Tables<'events'> & {
+    clients: Pick<Tables<'clients'>, 'name'>;
+};
+
+type Client = Tables<'clients'>;
+type Drink = Tables<'drinks'>;
+
+interface ActivityItem {
+    id: string;
+    type: 'event' | 'client' | 'drink';
+    title: string;
+    description: string;
+    timestamp: string;
+    icon: string;
+    color: string;
+}
 
 export default defineEventHandler(async (event) => {
     try {
         const { client, user } = await getSupabaseClientAndUser(event);
+
+        // Obter parâmetros de período da query
+        const query = getQuery(event);
+        const startDate = query.start_date as string;
+        const endDate = query.end_date as string;
 
         if (!user) {
             throw createError({
@@ -13,29 +37,59 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        // Buscar eventos recentes
-        const { data: recentEvents, error: eventsError } = await client
+        // Buscar eventos recentes com dados do cliente
+        let eventsQuery = client
             .from('events')
-            .select('id, name, created_at')
+            .select(`
+                id, 
+                created_at,
+                location,
+                start_time,
+                clients!inner(name)
+            `)
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
-            .limit(3);
+            .limit(2);
+
+        if (startDate && endDate) {
+            eventsQuery = eventsQuery
+                .gte('created_at', startDate)
+                .lte('created_at', endDate);
+        }
+
+        const { data: recentEvents, error: eventsError } = await eventsQuery as { data: EventWithClient[] | null; error: FetchError };
 
         // Buscar clientes recentes
-        const { data: recentClients, error: clientsError } = await client
+        let clientsQuery = client
             .from('clients')
             .select('id, name, created_at')
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
-            .limit(2);
+            .limit(1);
+
+        if (startDate && endDate) {
+            clientsQuery = clientsQuery
+                .gte('created_at', startDate)
+                .lte('created_at', endDate);
+        }
+
+        const { data: recentClients, error: clientsError } = await clientsQuery as { data: Client[] | null; error: FetchError };
 
         // Buscar bebidas recentes
-        const { data: recentDrinks, error: drinksError } = await client
+        let drinksQuery = client
             .from('drinks')
             .select('id, name, created_at')
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
-            .limit(2);
+            .limit(1);
+
+        if (startDate && endDate) {
+            drinksQuery = drinksQuery
+                .gte('created_at', startDate)
+                .lte('created_at', endDate);
+        }
+
+        const { data: recentDrinks, error: drinksError } = await drinksQuery as { data: Drink[] | null; error: FetchError };
 
         if (eventsError || clientsError || drinksError) {
             throw createError({
@@ -46,52 +100,88 @@ export default defineEventHandler(async (event) => {
         }
 
         // Combinar e formatar as atividades
-        const activities = [];
+        const activities: ActivityItem[] = [];
 
         // Adicionar eventos
         recentEvents?.forEach(event => {
-            activities.push({
-                id: `event-${event.id}`,
-                type: 'event',
-                title: 'Novo evento criado',
-                description: event.name,
-                timestamp: formatTimeAgo(event.created_at),
-                icon: 'mdi-calendar-check',
-                color: 'primary'
-            });
+            if (event.created_at) {
+                const eventName = `${event.clients.name} - ${event.location}`;
+                activities.push({
+                    id: `event-${event.id}`,
+                    type: 'event',
+                    title: 'Novo evento criado',
+                    description: eventName,
+                    timestamp: formatTimeAgo(event.created_at),
+                    icon: 'mdi-calendar-check',
+                    color: 'primary'
+                });
+            }
         });
 
         // Adicionar clientes
         recentClients?.forEach(client => {
-            activities.push({
-                id: `client-${client.id}`,
-                type: 'client',
-                title: 'Cliente cadastrado',
-                description: client.name,
-                timestamp: formatTimeAgo(client.created_at || ''),
-                icon: 'mdi-account-plus',
-                color: 'success'
-            });
+            if (client.created_at) {
+                activities.push({
+                    id: `client-${client.id}`,
+                    type: 'client',
+                    title: 'Cliente cadastrado',
+                    description: client.name,
+                    timestamp: formatTimeAgo(client.created_at),
+                    icon: 'mdi-account-plus',
+                    color: 'success'
+                });
+            }
         });
 
         // Adicionar bebidas
         recentDrinks?.forEach(drink => {
-            activities.push({
-                id: `drink-${drink.id}`,
-                type: 'drink',
-                title: 'Nova bebida adicionada',
-                description: drink.name,
-                timestamp: formatTimeAgo(drink.created_at || ''),
-                icon: 'mdi-glass-cocktail',
-                color: 'warning'
-            });
+            if (drink.created_at) {
+                activities.push({
+                    id: `drink-${drink.id}`,
+                    type: 'drink',
+                    title: 'Nova bebida adicionada',
+                    description: drink.name,
+                    timestamp: formatTimeAgo(drink.created_at),
+                    icon: 'mdi-glass-cocktail',
+                    color: 'warning'
+                });
+            }
         });
 
-        // Ordenar por timestamp (mais recente primeiro)
-        activities.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+        // Ordenar por data de criação (mais recente primeiro)
+        activities.sort((a, b) => {
+            // Encontrar as datas originais baseadas no ID
+            let aDate: string | null = null;
+            let bDate: string | null = null;
+
+            if (a.id.startsWith('event-')) {
+                const eventId = a.id.replace('event-', '');
+                aDate = recentEvents?.find(e => e.id === eventId)?.created_at || null;
+            } else if (a.id.startsWith('client-')) {
+                const clientId = a.id.replace('client-', '');
+                aDate = recentClients?.find(c => c.id === clientId)?.created_at || null;
+            } else if (a.id.startsWith('drink-')) {
+                const drinkId = a.id.replace('drink-', '');
+                aDate = recentDrinks?.find(d => d.id === drinkId)?.created_at || null;
+            }
+
+            if (b.id.startsWith('event-')) {
+                const eventId = b.id.replace('event-', '');
+                bDate = recentEvents?.find(e => e.id === eventId)?.created_at || null;
+            } else if (b.id.startsWith('client-')) {
+                const clientId = b.id.replace('client-', '');
+                bDate = recentClients?.find(c => c.id === clientId)?.created_at || null;
+            } else if (b.id.startsWith('drink-')) {
+                const drinkId = b.id.replace('drink-', '');
+                bDate = recentDrinks?.find(d => d.id === drinkId)?.created_at || null;
+            }
+
+            if (!aDate || !bDate) return 0;
+            return new Date(bDate).getTime() - new Date(aDate).getTime();
+        });
 
         return {
-            data: activities.slice(0, 5) // Retorna apenas as 5 mais recentes
+            data: activities.slice(0, 3) // Retorna apenas as 3 mais recentes
         };
 
     } catch (error: unknown) {

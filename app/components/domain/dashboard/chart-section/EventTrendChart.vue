@@ -2,16 +2,10 @@
 import { useReportsApi } from "~/composables/api/useReportsApi";
 import type { PeriodFilter } from "~/composables/usePeriodFilter";
 
-interface ChartDataItem {
+interface EventTrendData {
   month: string;
-  "Número de Eventos": number;
-}
-
-interface ChartCategories {
-  [key: string]: {
-    name: string;
-    color: string;
-  };
+  events: number;
+  revenue: number;
 }
 
 interface Props {
@@ -22,16 +16,26 @@ const props = defineProps<Props>();
 
 const reportsApi = useReportsApi();
 const isLoading = ref(true);
-const chartData = ref<ChartDataItem[]>([]);
-const chartLegendCategories = ref<ChartCategories>({});
+const eventTrendData = ref<EventTrendData[]>([]);
+
+const categories = {
+  events: {
+    name: "Eventos",
+    color: "#3b82f6",
+  },
+  revenue: {
+    name: "Receita (R$)",
+    color: "#10b981",
+  },
+};
 
 const xFormatter = (i: number): string => {
-  return chartData.value[i]?.month || "";
+  return eventTrendData.value[i]?.month || "";
 };
 
 const yFormatter = (tick: number) => tick.toString();
 
-async function loadMonthlyEventsChart() {
+async function loadEventTrendData() {
   try {
     isLoading.value = true;
 
@@ -42,42 +46,39 @@ async function loadMonthlyEventsChart() {
         }
       : undefined;
 
-    const res = await reportsApi.getMonthlyEvents(periodParams);
+    const res = await reportsApi.getEventTrend(periodParams);
 
-    if (res && res.data) {
-      chartData.value = res.data;
-      chartLegendCategories.value = res.categories || {};
-    } else {
-      chartData.value = [];
-      chartLegendCategories.value = {};
-      console.warn("Nenhum dado de eventos mensais recebido.");
+    if (Array.isArray(res) && res.length > 0) {
+      eventTrendData.value = res;
     }
   } catch (error) {
-    console.error("Erro ao carregar o gráfico de eventos mensais:", error);
-    chartData.value = [];
-    chartLegendCategories.value = {};
+    console.error("Erro ao carregar dados de tendência:", error);
   } finally {
     isLoading.value = false;
   }
 }
 
 onMounted(() => {
-  loadMonthlyEventsChart();
+  loadEventTrendData();
 });
 
 // Recarregar dados quando o período mudar
-watch(() => props.period, loadMonthlyEventsChart, { deep: true });
+watch(() => props.period, loadEventTrendData, { deep: true });
 </script>
 
 <template>
-  <v-card elevation="2" class="pa-4 border-sm" rounded="xl" min-height="400">
+  <v-card elevation="2" class="pa-4 border-sm" rounded="xl" height="450">
     <v-card-title class="d-flex align-center justify-space-between">
-      Eventos por mês
+      <div class="d-flex align-center">
+        <v-icon icon="mdi-chart-line" class="mr-2" color="primary" />
+        Tendência de Eventos e Receita
+      </div>
       <v-btn
         icon="mdi-refresh"
         variant="text"
         size="small"
-        @click="loadMonthlyEventsChart"
+        :loading="isLoading"
+        @click="loadEventTrendData"
       />
     </v-card-title>
 
@@ -85,36 +86,37 @@ watch(() => props.period, loadMonthlyEventsChart, { deep: true });
       <v-skeleton-loader v-if="isLoading" type="image" height="300" />
 
       <div
-        v-else-if="!chartData.length"
+        v-else-if="!eventTrendData.length"
         class="d-flex flex-column align-center justify-center"
         style="height: 300px"
       >
         <v-icon
-          icon="mdi-calendar-alert"
+          icon="mdi-chart-line-variant"
           size="64"
           color="grey-lighten-1"
           class="mb-4"
         />
         <p class="text-h6 text-medium-emphasis">Nenhum dado disponível</p>
         <p class="text-body-2 text-medium-emphasis">
-          Adicione eventos para ver o gráfico
+          Adicione eventos para ver a tendência
         </p>
       </div>
 
       <template v-else>
-        <BarChart
-          :data="chartData"
+        <LineChart
+          :data="eventTrendData"
           :height="300"
-          :categories="chartLegendCategories"
-          :y-axis="['Número de Eventos']"
-          :x-num-ticks="chartData.length"
-          :y-num-ticks="10"
-          :radius="10"
+          :categories="categories"
+          :y-axis="['events', 'revenue']"
+          :x-num-ticks="eventTrendData.length"
+          :y-num-ticks="6"
           :y-grid-line="true"
           :x-formatter="xFormatter"
           :y-formatter="yFormatter"
           :legend-position="LegendPosition.Top"
-          :hide-legend="true"
+          :hide-legend="false"
+          x-label="Mês"
+          y-label="Quantidade / Valor"
         />
       </template>
     </v-card-text>

@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { useReportsApi } from "~/composables/api/useReportsApi";
+import type { PeriodFilter } from "~/composables/usePeriodFilter";
+
 interface ActivityItem {
   id: string;
   type: "event" | "client" | "drink" | "quotation";
@@ -9,6 +12,13 @@ interface ActivityItem {
   color: string;
 }
 
+interface Props {
+  period?: PeriodFilter;
+}
+
+const props = defineProps<Props>();
+
+const reportsApi = useReportsApi();
 const activities = ref<ActivityItem[]>([]);
 const loading = ref(false);
 
@@ -16,7 +26,14 @@ async function fetchRecentActivity() {
   loading.value = true;
 
   try {
-    const res = await $fetch("/api/reports/recent-activity");
+    const periodParams = props.period
+      ? {
+          start_date: props.period.startDate,
+          end_date: props.period.endDate,
+        }
+      : undefined;
+
+    const res = await reportsApi.getRecentActivity(periodParams);
 
     if (res && res.data) {
       activities.value = res.data;
@@ -32,6 +49,9 @@ async function fetchRecentActivity() {
 }
 
 onMounted(fetchRecentActivity);
+
+// Recarregar dados quando o período mudar
+watch(() => props.period, fetchRecentActivity, { deep: true });
 </script>
 
 <template>

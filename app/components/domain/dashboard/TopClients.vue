@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { useReportsApi } from "~/composables/api/useReportsApi";
+import type { PeriodFilter } from "~/composables/usePeriodFilter";
+
 interface TopClient {
   id: string;
   name: string;
@@ -7,6 +10,13 @@ interface TopClient {
   avatar?: string;
 }
 
+interface Props {
+  period?: PeriodFilter;
+}
+
+const props = defineProps<Props>();
+
+const reportsApi = useReportsApi();
 const topClients = ref<TopClient[]>([]);
 const loading = ref(false);
 
@@ -14,7 +24,14 @@ async function fetchTopClients() {
   loading.value = true;
 
   try {
-    const res = await $fetch("/api/reports/top-clients");
+    const periodParams = props.period
+      ? {
+          start_date: props.period.startDate,
+          end_date: props.period.endDate,
+        }
+      : undefined;
+
+    const res = await reportsApi.getTopClients(periodParams);
 
     if (res && res.data) {
       topClients.value = res.data;
@@ -39,10 +56,13 @@ const getInitials = (name: string) => {
 };
 
 onMounted(fetchTopClients);
+
+// Recarregar dados quando o período mudar
+watch(() => props.period, fetchTopClients, { deep: true });
 </script>
 
 <template>
-  <v-card elevation="2" class="border-sm" rounded="xl" min-height="275">
+  <v-card elevation="2" class="border-sm" rounded="xl" height="320">
     <v-card-title class="d-flex align-center">
       <v-icon icon="mdi-trophy" class="mr-2" color="primary" />
       Top Clientes

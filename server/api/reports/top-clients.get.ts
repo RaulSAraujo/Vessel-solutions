@@ -5,6 +5,11 @@ export default defineEventHandler(async (event) => {
     try {
         const { client, user } = await getSupabaseClientAndUser(event);
 
+        // Obter parâmetros de período da query
+        const query = getQuery(event);
+        const startDate = query.start_date as string;
+        const endDate = query.end_date as string;
+
         if (!user) {
             throw createError({
                 statusCode: 401,
@@ -14,17 +19,20 @@ export default defineEventHandler(async (event) => {
         }
 
         // Buscar clientes com seus eventos e valores
-        const { data: clientsData, error } = await client
+        let clientsQuery = client
             .from('clients')
             .select(`
                 id,
                 name,
                 events (
                     id,
-                    total_cost
+                    total_cost,
+                    created_at
                 )
             `)
             .eq('user_id', user.id);
+
+        const { data: clientsData, error } = await clientsQuery;
 
         if (error) {
             throw createError({
@@ -36,7 +44,19 @@ export default defineEventHandler(async (event) => {
 
         // Processar dados para calcular estatísticas por cliente
         const clientStats = clientsData?.map(client => {
-            const events = client.events || [];
+            let events = client.events || [];
+
+            // Filtrar eventos por período se especificado
+            if (startDate && endDate) {
+                events = events.filter(event => {
+                    if (!event.created_at) return false;
+                    const eventDate = new Date(event.created_at);
+                    const start = new Date(startDate);
+                    const end = new Date(endDate);
+                    return eventDate >= start && eventDate <= end;
+                });
+            }
+
             const totalValue = events.reduce((sum, event) => sum + (event.total_cost || 0), 0);
 
             return {

@@ -5,11 +5,24 @@ export default defineEventHandler(async (event) => {
     try {
         const { client, user } = await getSupabaseClientAndUser(event);
 
-        const { data: eventsData, error } = await client
+        // Obter parâmetros de período da query
+        const query = getQuery(event);
+        const startDate = query.start_date as string;
+        const endDate = query.end_date as string;
+
+        let eventsQuery = client
             .from('events')
             .select('start_time')
             .eq('user_id', user.id)
             .order('start_time', { ascending: true });
+
+        if (startDate && endDate) {
+            eventsQuery = eventsQuery
+                .gte('start_time', startDate)
+                .lte('start_time', endDate);
+        }
+
+        const { data: eventsData, error } = await eventsQuery;
 
         if (error) {
             throw createError({

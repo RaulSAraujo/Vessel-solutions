@@ -6,6 +6,11 @@ export default defineEventHandler(async (event) => {
     try {
         const { client, user } = await getSupabaseClientAndUser(event);
 
+        // Obter parâmetros de período da query
+        const query = getQuery(event);
+        const startDate = query.start_date as string;
+        const endDate = query.end_date as string;
+
         // 1. Validação de autenticação
         if (!user) {
             throw createError({
@@ -15,12 +20,20 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        // 2. Busca de eventos para o usuário autenticado
-        const { data: eventsData, error } = await client
+        // 2. Busca de eventos para o usuário autenticado com filtro de período
+        let eventsQuery = client
             .from('events')
             .select('start_time, total_cost, total_revenue, profit_margin')
             .eq('user_id', user.id)
             .order('start_time', { ascending: true });
+
+        if (startDate && endDate) {
+            eventsQuery = eventsQuery
+                .gte('start_time', startDate)
+                .lte('start_time', endDate);
+        }
+
+        const { data: eventsData, error } = await eventsQuery;
 
         if (error) {
             console.error('Supabase fetch error:', error); // Log do erro para depuração

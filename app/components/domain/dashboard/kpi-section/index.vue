@@ -1,8 +1,15 @@
 <script lang="ts" setup>
 import { useReportsApi } from "~/composables/api/useReportsApi";
+import type { PeriodFilter } from "~/composables/usePeriodFilter";
 
 // components
 import Card from "./Card.vue";
+
+interface Props {
+  period?: PeriodFilter;
+}
+
+const props = defineProps<Props>();
 
 const reportsApi = useReportsApi();
 
@@ -18,7 +25,14 @@ async function fetchKPIs() {
   loading.value = true;
 
   try {
-    const overview = await reportsApi.getKpisOverview();
+    const periodParams = props.period
+      ? {
+          start_date: props.period.startDate,
+          end_date: props.period.endDate,
+        }
+      : undefined;
+
+    const overview = await reportsApi.getKpisOverview(periodParams);
 
     if (overview) {
       totalClients.value = overview.data.clients.count;
@@ -37,6 +51,9 @@ async function fetchKPIs() {
 }
 
 onMounted(fetchKPIs);
+
+// Recarregar dados quando o período mudar
+watch(() => props.period, fetchKPIs, { deep: true });
 </script>
 
 <template>

@@ -5,16 +5,29 @@ export default defineEventHandler(async (event) => {
     try {
         const { client } = await getSupabaseClientAndUser(event);
 
+        // Obter parâmetros de período da query
+        const query = getQuery(event);
+        const startDate = query.start_date as string;
+        const endDate = query.end_date as string;
+
         // Buscar dados de clientes
         const { count: totalClients, error: clientsError } = await client
             .from("clients")
             .select("*", { count: "exact", head: true });
 
-        // Buscar dados de eventos
-        const { data: events, error: eventsError, count: totalEvents } = await client
+        // Buscar dados de eventos com filtro de período
+        let eventsQuery = client
             .from("events")
             .select("total_cost, created_at", { count: "exact" })
             .eq("status", "Concluído");
+
+        if (startDate && endDate) {
+            eventsQuery = eventsQuery
+                .gte("created_at", startDate)
+                .lte("created_at", endDate);
+        }
+
+        const { data: events, error: eventsError, count: totalEvents } = await eventsQuery;
 
         // Buscar dados de bebidas
         const { count: totalDrinks, error: drinksError } = await client

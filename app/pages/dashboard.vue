@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { usePeriodFilter } from "~/composables/usePeriodFilter";
+
 definePageMeta({
   middleware: ["auth"],
 });
+
+const { currentPeriod, updatePeriod } = usePeriodFilter();
 </script>
 
 <template>
@@ -15,29 +19,23 @@ definePageMeta({
         </p>
       </div>
 
-      <div class="d-flex gap-3">
+      <div class="d-flex align-center">
         <v-btn
-          color="primary"
-          variant="elevated"
-          prepend-icon="mdi-plus"
-          to="/events"
-        >
-          Novo Evento
-        </v-btn>
-
-        <v-btn
-          color="secondary"
+          rounded="lg"
+          class="mr-2"
+          color="grey"
           variant="outlined"
-          prepend-icon="mdi-refresh"
+          icon="mdi-refresh"
+          density="comfortable"
           @click="$router.go(0)"
-        >
-          Atualizar
-        </v-btn>
+        />
+
+        <UiPeriodFilter @update:period="updatePeriod" />
       </div>
     </div>
 
     <!-- KPI Cards Section -->
-    <DashboardKpiSection />
+    <DashboardKpiSection :period="currentPeriod" />
 
     <!-- Main Content Grid -->
     <v-row>
@@ -46,17 +44,17 @@ definePageMeta({
         <v-row>
           <!-- Monthly Events Chart -->
           <v-col cols="12" md="6">
-            <DashboardChartSectionMonthlyEvents />
+            <DashboardChartSectionMonthlyEvents :period="currentPeriod" />
           </v-col>
 
           <!-- Profit Summary Chart -->
           <v-col cols="12" md="6">
-            <DashboardChartSectionProfitSummary />
+            <DashboardChartSectionProfitSummary :period="currentPeriod" />
           </v-col>
 
-          <!-- Drink Cost Distribution -->
+          <!-- Event Trend Chart -->
           <v-col cols="12">
-            <DashboardChartSectionDrinkCostDistribution />
+            <DashboardChartSectionEventTrendChart :period="currentPeriod" />
           </v-col>
         </v-row>
       </v-col>
@@ -66,7 +64,7 @@ definePageMeta({
         <v-row>
           <!-- Recent Activity -->
           <v-col cols="12">
-            <DashboardRecentActivity />
+            <DashboardRecentActivity :period="currentPeriod" />
           </v-col>
 
           <!-- Quick Actions -->
@@ -76,7 +74,7 @@ definePageMeta({
 
           <!-- Top Clients -->
           <v-col cols="12">
-            <DashboardTopClients />
+            <DashboardTopClients :period="currentPeriod" />
           </v-col>
         </v-row>
       </v-col>

@@ -1,9 +1,15 @@
 import type { FetchError } from 'ofetch'
 
+interface PeriodParams {
+    start_date?: string;
+    end_date?: string;
+}
+
 export function useReportsApi() {
-    const getKpisOverview = async () => {
+    const getKpisOverview = async (period?: PeriodParams) => {
         try {
-            const res = await $fetch('/api/reports/kpis-overview');
+            const params = period ? { ...period } : {};
+            const res = await $fetch('/api/reports/kpis-overview', { query: params });
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
@@ -11,9 +17,10 @@ export function useReportsApi() {
         }
     };
 
-    const getMonthlyEvents = async () => {
+    const getMonthlyEvents = async (period?: PeriodParams) => {
         try {
-            const res = await $fetch('/api/reports/monthly-events');
+            const params = period ? { ...period } : {};
+            const res = await $fetch('/api/reports/monthly-events', { query: params });
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
@@ -21,9 +28,10 @@ export function useReportsApi() {
         }
     };
 
-    const getProfitSummary = async () => {
+    const getProfitSummary = async (period?: PeriodParams) => {
         try {
-            const res = await $fetch('/api/reports/profit-summary');
+            const params = period ? { ...period } : {};
+            const res = await $fetch('/api/reports/profit-summary', { query: params });
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
@@ -31,9 +39,21 @@ export function useReportsApi() {
         }
     };
 
-    const getDrinkCostDistribution = async () => {
+    const getEventTrend = async (period?: PeriodParams) => {
         try {
-            const res = await $fetch('/api/reports/drink-cost-distribution');
+            const params = period ? { ...period } : {};
+            const res = await $fetch('/api/reports/event-trend', { query: params });
+            return res;
+        } catch (error: unknown) {
+            const err = error as FetchError;
+            $toast().error(err.message || 'Failed to fetch event trend.');
+        }
+    };
+
+    const getDrinkCostDistribution = async (period?: PeriodParams) => {
+        try {
+            const params = period ? { ...period } : {};
+            const res = await $fetch('/api/reports/drink-cost-distribution', { query: params });
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
@@ -41,9 +61,10 @@ export function useReportsApi() {
         }
     };
 
-    const getRecentActivity = async () => {
+    const getRecentActivity = async (period?: PeriodParams) => {
         try {
-            const res = await $fetch('/api/reports/recent-activity');
+            const params = period ? { ...period } : {};
+            const res = await $fetch('/api/reports/recent-activity', { query: params });
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
@@ -51,9 +72,10 @@ export function useReportsApi() {
         }
     };
 
-    const getTopClients = async () => {
+    const getTopClients = async (period?: PeriodParams) => {
         try {
-            const res = await $fetch('/api/reports/top-clients');
+            const params = period ? { ...period } : {};
+            const res = await $fetch('/api/reports/top-clients', { query: params });
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
@@ -65,6 +87,7 @@ export function useReportsApi() {
         getKpisOverview,
         getMonthlyEvents,
         getProfitSummary,
+        getEventTrend,
         getDrinkCostDistribution,
         getRecentActivity,
         getTopClients

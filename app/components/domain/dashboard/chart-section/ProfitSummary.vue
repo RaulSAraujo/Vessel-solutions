@@ -1,11 +1,21 @@
 <script lang="ts" setup>
+import { useReportsApi } from "~/composables/api/useReportsApi";
+import type { PeriodFilter } from "~/composables/usePeriodFilter";
+
 interface ProfitData {
   date: string;
-  cost: number;
-  revenue: number;
-  profit: number;
+  cost: string;
+  revenue: string;
+  profit: string;
 }
 
+interface Props {
+  period?: PeriodFilter;
+}
+
+const props = defineProps<Props>();
+
+const reportsApi = useReportsApi();
 const isLoading = ref(true);
 const profitData = ref<ProfitData[]>([]);
 
@@ -13,32 +23,20 @@ async function loadProfitSummary() {
   try {
     isLoading.value = true;
 
-    const res = await $fetch("/api/reports/profit-summary");
+    const periodParams = props.period
+      ? {
+          start_date: props.period.startDate,
+          end_date: props.period.endDate,
+        }
+      : undefined;
+
+    const res = await reportsApi.getProfitSummary(periodParams);
 
     if (Array.isArray(res) && res.length > 0) {
-      // O endpoint retorna diretamente um array com dados
       profitData.value = res;
-    } else if (res && res.data && res.data.length > 0) {
-      // Fallback caso a estrutura mude
-      profitData.value = res.data;
-    } else {
-      // Se não há dados reais, usa dados de exemplo
-      console.warn(
-        "Nenhum dado de lucro real encontrado, usando dados de exemplo."
-      );
-      const sampleRes = await $fetch("/api/reports/profit-summary-simple");
-      profitData.value = Array.isArray(sampleRes) ? sampleRes : [];
     }
   } catch (error) {
     console.error("Erro ao carregar o gráfico de lucro:", error);
-    // Em caso de erro, tenta carregar dados de exemplo
-    try {
-      const sampleRes = await $fetch("/api/reports/profit-summary-simple");
-      profitData.value = Array.isArray(sampleRes) ? sampleRes : [];
-    } catch (sampleError) {
-      console.error("Erro ao carregar dados de exemplo:", sampleError);
-      profitData.value = [];
-    }
   } finally {
     isLoading.value = false;
   }
@@ -47,10 +45,13 @@ async function loadProfitSummary() {
 onMounted(() => {
   loadProfitSummary();
 });
+
+// Recarregar dados quando o período mudar
+watch(() => props.period, loadProfitSummary, { deep: true });
 </script>
 
 <template>
-  <v-card elevation="2" class="pa-4 border-sm" rounded="xl" min-height="400">
+  <v-card elevation="2" class="pa-4 border-sm" rounded="xl" height="400">
     <v-card-title class="d-flex align-center justify-space-between">
       Resumo de Lucros
       <v-btn
@@ -62,12 +63,12 @@ onMounted(() => {
     </v-card-title>
 
     <v-card-text>
-      <v-skeleton-loader v-if="isLoading" type="image" height="300" />
+      <v-skeleton-loader v-if="isLoading" type="image" height="280" />
 
       <div
         v-else-if="!profitData.length"
         class="d-flex flex-column align-center justify-center"
-        style="height: 300px"
+        style="height: 280px"
       >
         <v-icon
           icon="mdi-chart-areaspline-variant"
@@ -84,7 +85,7 @@ onMounted(() => {
       <template v-else>
         <AreaChart
           :data="profitData"
-          :height="300"
+          :height="280"
           :categories="{
             profit: { name: 'Lucro', color: '#4caf50' },
             cost: { name: 'Custo', color: '#f44336' },

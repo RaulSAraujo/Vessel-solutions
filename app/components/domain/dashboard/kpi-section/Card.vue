@@ -10,7 +10,7 @@ interface Props {
   trendLabel?: string;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const getTrendColor = (trend: number) => {
   if (trend > 0) return "success";

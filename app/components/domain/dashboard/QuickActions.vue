@@ -59,7 +59,6 @@ const handleAction = (action: QuickAction) => {
       <v-row>
         <v-col v-for="action in quickActions" :key="action.id" cols="3">
           <v-card
-            :color="`${action.color}-lighten-5`"
             variant="flat"
             rounded="xl"
             class="pa-2 text-center cursor-pointer"
