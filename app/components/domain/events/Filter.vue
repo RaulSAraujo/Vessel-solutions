@@ -6,8 +6,8 @@ const { activeFilters } = storeToRefs(store);
 
 const filterDefinitions = ref<FilterDefinition[]>([
   {
-    key: "name",
-    label: "Nome",
+    key: "clients.name",
+    label: "Nome do Cliente",
     type: "string",
     op: "ilike",
     layout: {
@@ -15,21 +15,117 @@ const filterDefinitions = ref<FilterDefinition[]>([
     },
   },
   {
-    key: "phone",
-    label: "Telefone",
+    key: "status",
+    label: "Status",
+    type: "array",
+    op: "eq",
+    options: [
+      { value: "Proposta", text: "Proposta" },
+      { value: "Confirmado", text: "Confirmado" },
+      { value: "Em andamento", text: "Em andamento" },
+      { value: "Concluído", text: "Concluído" },
+      { value: "Cancelado", text: "Cancelado" },
+    ],
+    layout: {
+      clearable: true,
+    },
+  },
+  {
+    key: "audience_profile",
+    label: "Perfil da Audiência",
+    type: "array",
+    op: "eq",
+    options: [
+      { value: "Casual", text: "Casual" },
+      { value: "Corporativo", text: "Corporativo" },
+      { value: "Premium", text: "Premium" },
+    ],
+    layout: {
+      clearable: true,
+    },
+  },
+  {
+    key: "location",
+    label: "Localização",
     type: "string",
+    op: "ilike",
+    layout: {
+      clearable: true,
+    },
+  },
+  {
+    key: "start_time",
+    label: "Data de Início",
+    type: "date",
     op: "eq",
     layout: {
       clearable: true,
     },
   },
   {
-    key: "email",
-    label: "Email",
-    type: "string",
+    key: "end_time",
+    label: "Data de Fim",
+    type: "date",
     op: "eq",
     layout: {
       clearable: true,
+    },
+  },
+  {
+    key: "guest_count",
+    label: "Número de Convidados",
+    type: "number",
+    op: "between",
+    layout: {
+      min: 0,
+      max: 1000,
+      step: 1,
+    },
+  },
+  {
+    key: "total_cost",
+    label: "Custo Total",
+    type: "currency",
+    op: "between",
+    defaultValue: [0, 100000],
+    layout: {
+      min: 0,
+      max: 100000,
+      step: 0.01,
+    },
+  },
+  {
+    key: "total_revenue",
+    label: "Receita Total",
+    type: "currency",
+    op: "between",
+    defaultValue: [0, 100000],
+    layout: {
+      min: 0,
+      max: 100000,
+      step: 0.01,
+    },
+  },
+  {
+    key: "profit_margin",
+    label: "Margem de Lucro (%)",
+    type: "number",
+    op: "between",
+    layout: {
+      min: 0,
+      max: 100,
+      step: 0.1,
+    },
+  },
+  {
+    key: "distance",
+    label: "Distância (km)",
+    type: "number",
+    op: "between",
+    layout: {
+      min: 0,
+      max: 1000,
+      step: 0.1,
     },
   },
 ]);
