@@ -15,8 +15,7 @@ export default defineEventHandler(async (event) => {
             .from('events')
             .select('start_time, total_revenue')
             .eq('user_id', user.id)
-            .neq('status', 'Cancelado')
-            .neq('status', 'Proposta')
+            .eq('status', 'Concluído')
             .order('start_time', { ascending: true });
 
         if (startDate && endDate) {

@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
         // Buscar dados de eventos com filtro de período
         let eventsQuery = client
             .from("events")
-            .select("total_cost, created_at", { count: "exact" })
+            .select("total_cost, total_revenue, created_at", { count: "exact" })
             .eq("status", "Concluído");
 
         if (startDate && endDate) {
@@ -69,7 +69,8 @@ export default defineEventHandler(async (event) => {
                 },
                 events: {
                     count: totalEvents || 0,
-                    total_cost: events?.reduce((acc, event) => acc + (event?.total_cost || 0), 0) || 0
+                    total_cost: events?.reduce((acc, event) => acc + (event?.total_cost || 0), 0) || 0,
+                    total_revenue: events?.reduce((acc, event) => acc + (event?.total_revenue || 0), 0) || 0
                 },
                 drinks: {
                     count: totalDrinks || 0
