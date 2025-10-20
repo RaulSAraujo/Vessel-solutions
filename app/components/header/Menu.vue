@@ -65,17 +65,17 @@ const menus = [
     items: [
       {
         title: "Lucratividade de Eventos",
-        to: "/reports/profitability",
+        to: "/profitability",
         icon: "mdi-chart-line",
       },
       {
         title: "Consumo de Ingredientes",
-        to: "/reports/ingredient-consumption",
+        to: "/ingredient-consumption",
         icon: "mdi-chart-pie",
       },
       {
         title: "Histórico de Cotações",
-        to: "/reports/quotation-history",
+        to: "/quotation-history",
         icon: "mdi-history",
       },
     ],
