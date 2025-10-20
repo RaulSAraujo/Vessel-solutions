@@ -8,7 +8,6 @@ const dialogCreation = ref(false);
 const dialogUpdate = ref(false);
 const dialogDelete = ref(false);
 const dialogConvert = ref(false);
-const dialogClientForm = ref(false);
 </script>
 
 <template>
@@ -46,12 +45,6 @@ const dialogClientForm = ref(false);
     <EventQuotationsConvert
       v-model="dialogConvert"
       @close="dialogConvert = false"
-      @open-form="dialogClientForm = true"
-    />
-
-    <EventQuotationsClient
-      v-model="dialogClientForm"
-      @close="dialogClientForm = false"
     />
   </v-container>
 </template>

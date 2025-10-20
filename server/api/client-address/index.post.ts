@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
             p_name: body.name,
             p_email: body.email,
             p_phone: body.phone,
-            p_phone_optional: body.phone_optional || null,
+            p_phone_optional: body.phone_optional || "",
             p_user_id: user.id,
             p_zip_code: body.zip_code,
             p_city: body.city,
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
             p_neighborhood: body.neighborhood,
             p_street: body.street,
             p_number: body.number,
-            p_additional_info: body.additional_info || null
+            p_additional_info: body.additional_info || "",
         })
 
         if (error) {

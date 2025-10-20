@@ -118,10 +118,6 @@ export const useEventQuotationsStore = defineStore('eventQuotations', () => {
         }
     }
 
-    function setSelectedEventQuotation(quotation: EventQuotation | null) {
-        selectedEventQuotation.value = quotation;
-    }
-
     function addSelectedDrink(selectedDrink: SelectedDrink) {
         drinks.value.push({
             id: crypto.randomUUID(), // Gerar ID temporário para novos drinks

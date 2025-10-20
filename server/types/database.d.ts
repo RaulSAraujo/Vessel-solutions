@@ -679,15 +679,10 @@ export type Database = {
           p_user_id: string
           p_zip_code: string
         }
-        Returns: Json
-      }
-      unaccent: {
-        Args: { "": string }
-        Returns: string
-      }
-      unaccent_init: {
-        Args: { "": unknown }
-        Returns: unknown
+        Returns: {
+          client: Tables["clients"]
+          address: Tables["client_addresses"]
+        }
       }
       update_client_and_address: {
         Args: {
@@ -704,7 +699,10 @@ export type Database = {
           p_street: string
           p_zip_code: string
         }
-        Returns: Json
+        Returns: {
+          client: Tables["clients"]
+          address: Tables["client_addresses"]
+        }
       }
       upsert_multiple_drink_ingredients: {
         Args: { p_drink_ingredients_array: Json }

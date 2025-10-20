@@ -2,6 +2,7 @@ import type { FetchError } from 'ofetch'
 import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from '~/types/data-table';
 import type { EventQuotations, EventQuotation, FormEventQuotation, FormEventQuotationDrink } from "~/types/event-quotations";
+import type { FormClient, FormClientAddresses } from "~/types/clients";
 
 export function useEventQuotationsApi() {
     const getEventQuotations = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {
@@ -153,10 +154,14 @@ export function useEventQuotationsApi() {
         }
     };
 
-    const convertToEvent = async (eventQuotationId: string) => {
+    const convertToEvent = async (
+        eventQuotationId: string,
+        clientData?: FormClient & FormClientAddresses
+    ) => {
         try {
             const res = await $fetch(`/api/event-quotations/${eventQuotationId}/convert-to-event`, {
                 method: 'POST',
+                body: clientData,
             });
 
             return res;
