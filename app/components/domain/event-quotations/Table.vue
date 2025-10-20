@@ -25,12 +25,24 @@ const {
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
   { title: "Status", key: "status", minWidth: 120 },
-  { title: "Nome do Cliente", key: "client_name", minWidth: 150 },
-  { title: "Email", key: "client_email", minWidth: 200 },
-  { title: "Telefone", key: "client_phone", minWidth: 100, maxWidth: 120 },
-  { title: "Nº de Convidados", key: "guest_count", minWidth: 150 },
-  { title: "Valor Total", key: "total_value", minWidth: 120 },
-  { title: "Observações", key: "notes", minWidth: 200 },
+  { title: "Cliente", key: "client_name", minWidth: 150 },
+  { title: "Endereço completo", key: "location", minWidth: 175, maxWidth: 180 },
+  { title: "Nº de convidados", key: "guest_count", minWidth: 163 },
+  { title: "Inicio do evento", key: "start_time", minWidth: 160 },
+  { title: "Final do evento", key: "end_time", minWidth: 160 },
+  { title: "Distância (km)", key: "distance", minWidth: 150 },
+  { title: "Perfil", key: "audience_profile", minWidth: 100 },
+  { title: "Custo total", key: "total_cost", minWidth: 120 },
+  { title: "Receita total", key: "total_revenue", minWidth: 140 },
+  { title: "Margem de lucro", key: "profit_margin", minWidth: 160 },
+  { title: "Quant. estimada", key: "estimated_total_drinks", minWidth: 157 },
+  {
+    title: "Taxa Bartender (R$/h)",
+    key: "bartender_hourly_rate",
+    minWidth: 180,
+  },
+  { title: "Nº Bartenders", key: "num_bartenders", minWidth: 130 },
+  { title: "Custo Combustível/km", key: "fuel_cost_per_km", minWidth: 180 },
   { title: "Criado em", key: "created_at", minWidth: 120 },
   { title: "Atualizado em", key: "updated_at", minWidth: 145 },
 ];
@@ -122,20 +134,28 @@ function handleOpenConvert(eventQuotation: EventQuotation) {
       <UiTextWithTooltip :text="item.client_name" />
     </template>
 
-    <template #item.client_email="{ item }">
-      <UiTextWithTooltip :text="item.client_email" />
+    <template #item.location="{ item }">
+      <UiTextWithTooltip :text="item.location" />
     </template>
 
-    <template #item.client_phone="{ item }">
-      <UiTextWithTooltip :text="item.client_phone" />
+    <template #item.total_cost="{ item }">
+      {{ formatCurrency(item.total_cost) }}
     </template>
 
-    <template #item.notes="{ item }">
-      <UiTextWithTooltip :text="item.notes" />
+    <template #item.total_revenue="{ item }">
+      {{ formatCurrency(item.total_revenue) }}
     </template>
 
-    <template #item.total_value="{ item }">
-      {{ formatCurrency(item.total_value) }}
+    <template #item.profit_margin="{ item }">
+      {{ item.profit_margin }}%
+    </template>
+
+    <template #item.start_time="{ item }">
+      {{ formatDate(item.start_time, "DD/MM [ás] HH:mm") }}
+    </template>
+
+    <template #item.end_time="{ item }">
+      {{ formatDate(item.end_time, "DD/MM [ás] HH:mm") }}
     </template>
 
     <template #item.created_at="{ item }">
@@ -144,6 +164,22 @@ function handleOpenConvert(eventQuotation: EventQuotation) {
 
     <template #item.updated_at="{ item }">
       {{ formatDate(item.updated_at) }}
+    </template>
+
+    <template #item.bartender_hourly_rate="{ item }">
+      {{
+        item.bartender_hourly_rate
+          ? formatCurrency(item.bartender_hourly_rate)
+          : "-"
+      }}
+    </template>
+
+    <template #item.num_bartenders="{ item }">
+      {{ item.num_bartenders || "-" }}
+    </template>
+
+    <template #item.fuel_cost_per_km="{ item }">
+      {{ item.fuel_cost_per_km ? formatCurrency(item.fuel_cost_per_km) : "-" }}
     </template>
   </UiTable>
 </template>

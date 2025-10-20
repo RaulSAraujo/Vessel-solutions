@@ -25,7 +25,7 @@ const filterDefinitions = ref<FilterDefinition[]>([
   },
   {
     key: "client_phone",
-    label: "Telefone",
+    label: "Telefone do Cliente",
     type: "string",
     op: "ilike",
     layout: {
@@ -49,12 +49,101 @@ const filterDefinitions = ref<FilterDefinition[]>([
     },
   },
   {
+    key: "audience_profile",
+    label: "Perfil da Audiência",
+    type: "array",
+    op: "eq",
+    options: [
+      { value: "Casual", text: "Casual" },
+      { value: "Corporativo", text: "Corporativo" },
+      { value: "Premium", text: "Premium" },
+    ],
+    layout: {
+      clearable: true,
+    },
+  },
+  {
+    key: "location",
+    label: "Localização",
+    type: "string",
+    op: "ilike",
+    layout: {
+      clearable: true,
+    },
+  },
+  {
     key: "start_time",
-    label: "Data do Evento",
+    label: "Data de Início",
     type: "date",
     op: "eq",
     layout: {
       clearable: true,
+    },
+  },
+  {
+    key: "end_time",
+    label: "Data de Fim",
+    type: "date",
+    op: "eq",
+    layout: {
+      clearable: true,
+    },
+  },
+  {
+    key: "guest_count",
+    label: "Número de Convidados",
+    type: "number",
+    op: "between",
+    layout: {
+      min: 0,
+      max: 1000,
+      step: 1,
+    },
+  },
+  {
+    key: "total_cost",
+    label: "Custo Total",
+    type: "currency",
+    op: "between",
+    defaultValue: [0, 100000],
+    layout: {
+      min: 0,
+      max: 100000,
+      step: 0.01,
+    },
+  },
+  {
+    key: "total_revenue",
+    label: "Receita Total",
+    type: "currency",
+    op: "between",
+    defaultValue: [0, 100000],
+    layout: {
+      min: 0,
+      max: 100000,
+      step: 0.01,
+    },
+  },
+  {
+    key: "profit_margin",
+    label: "Margem de Lucro (%)",
+    type: "number",
+    op: "between",
+    layout: {
+      min: 0,
+      max: 100,
+      step: 0.1,
+    },
+  },
+  {
+    key: "distance",
+    label: "Distância (km)",
+    type: "number",
+    op: "between",
+    layout: {
+      min: 0,
+      max: 1000,
+      step: 0.1,
     },
   },
 ]);
