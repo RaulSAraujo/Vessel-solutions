@@ -14,7 +14,7 @@ const { currentPeriod, updatePeriod } = usePeriodFilter();
 <template>
   <div>
     <!-- Header com filtros -->
-    <ReportsHeader
+    <HeaderPeriod
       title="Histórico de Cotações Unitárias"
       description="Análise do histórico de cotações unitárias e variação de preços de fornecedores"
       :period="currentPeriod"

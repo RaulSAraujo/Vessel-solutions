@@ -80,21 +80,6 @@ const menus = [
       },
     ],
   },
-  {
-    title: "Configurações",
-    items: [
-      {
-        title: "Meu Perfil",
-        to: "/profile",
-        icon: "mdi-account-circle",
-      },
-      // {
-      //   title: "Gestão de Usuários", // Opcional, se houver gerenciamento de usuários
-      //   to: "/admin/users",
-      //   icon: "mdi-account-multiple",
-      // },
-    ],
-  },
 ];
 </script>
 

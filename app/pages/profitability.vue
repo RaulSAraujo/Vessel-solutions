@@ -14,7 +14,7 @@ const { currentPeriod, updatePeriod } = usePeriodFilter();
 <template>
   <div>
     <!-- Header com filtros -->
-    <ReportsHeader
+    <HeaderPeriod
       title="Lucratividade de Eventos"
       description="Análise detalhada da lucratividade e performance financeira dos eventos"
       :period="currentPeriod"

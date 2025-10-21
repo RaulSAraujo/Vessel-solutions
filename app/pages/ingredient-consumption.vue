@@ -14,7 +14,7 @@ const { currentPeriod, updatePeriod } = usePeriodFilter();
 <template>
   <div>
     <!-- Header com filtros -->
-    <ReportsHeader
+    <HeaderPeriod
       title="Consumo de Ingredientes"
       description="Análise do consumo e utilização de ingredientes nos eventos"
       :period="currentPeriod"

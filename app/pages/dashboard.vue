@@ -10,29 +10,12 @@ const { currentPeriod, updatePeriod } = usePeriodFilter();
 
 <template>
   <v-container fluid>
-    <!-- Header Section -->
-    <div class="d-flex align-center justify-space-between mb-8">
-      <div>
-        <h1 class="text-h3 font-weight-bold text-primary mb-2">Dashboard</h1>
-        <p class="text-body-1 text-medium-emphasis">
-          Visão geral completa do seu negócio de coquetelaria
-        </p>
-      </div>
-
-      <div class="d-flex align-center">
-        <v-btn
-          rounded="lg"
-          class="mr-2"
-          color="grey"
-          variant="outlined"
-          icon="mdi-refresh"
-          density="comfortable"
-          @click="$router.go(0)"
-        />
-
-        <UiPeriodFilter @update:period="updatePeriod" />
-      </div>
-    </div>
+    <HeaderPeriod
+      title="Dashboard"
+      description="Visão geral completa do seu negócio de coquetelaria"
+      :period="currentPeriod"
+      @update:period="updatePeriod"
+    />
 
     <!-- KPI Cards Section -->
     <DashboardKpiSection :period="currentPeriod" />
