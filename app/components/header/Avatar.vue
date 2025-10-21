@@ -4,6 +4,7 @@ import LogoVessel from "~/assets/images/logo-vessel.png";
 
 const theme = useTheme();
 const useAuth = useAuthApi();
+const user = useSupabaseUser();
 
 const logout = async () => {
   await useAuth.logout();
@@ -17,7 +18,7 @@ const logout = async () => {
       <v-btn icon v-bind="props" class="mr-5">
         <v-avatar
           size="large"
-          :image="LogoVessel"
+          :image="user ? user.user_metadata.avatar_url : LogoVessel"
           :class="theme.current.value.dark ? 'logo-vessel-dark' : ''"
           class="opacity-80"
         />
@@ -34,11 +35,7 @@ const logout = async () => {
 
         <v-divider />
 
-        <v-list-item
-          title="Profile"
-          prepend-icon="mdi-account"
-          @click="console.log('profile')"
-        />
+        <v-list-item title="Perfil" prepend-icon="mdi-account" to="/profile" />
 
         <v-divider />
 
