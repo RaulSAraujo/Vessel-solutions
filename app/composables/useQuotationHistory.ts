@@ -1,10 +1,11 @@
 import { ref, computed } from "vue";
 import { useReportsApi } from "~/composables/api/useReportsApi";
 import type { PeriodFilter } from "~/composables/usePeriodFilter";
+import type { VDataTableServerOptions } from "~/types/data-table";
+import type { EmittedFilters } from "~/types/filter";
 import type {
     QuotationItem,
     SupplierAnalysis,
-    PriceHistoryItem,
     IngredientPriceTrend,
     QuotationHistoryData,
     QuotationHistorySummary,
@@ -18,6 +19,14 @@ export function useQuotationHistory() {
     const reportsApi = useReportsApi();
     const loading = ref<boolean>(false);
     const errorMessage = ref<string | null>(null);
+
+    // Paginação
+    const page = ref(1);
+    const totalItems = ref(0);
+    const itemsPerPage = ref<10 | 25 | 50>(10);
+
+    // Filtros
+    const activeFilters = ref<EmittedFilters>({});
 
     // Dados reativos
     const quotationData = ref<QuotationHistoryData | null>(null);
@@ -43,33 +52,60 @@ export function useQuotationHistory() {
 
     // Headers da tabela
     const headers = [
-        { title: "Fornecedor", key: "supplier_name", sortable: true },
-        { title: "Data", key: "created_at", sortable: true },
-        { title: "Ingrediente", key: "ingredient_name", sortable: true },
-        { title: "Preço Unit.", key: "purchase_price", sortable: true },
+        { title: "Fornecedor", key: "suppliers.name", sortable: true },
+        { title: "Ingrediente", key: "ingredients.name", sortable: true },
+        { title: "Unidade", key: "units.name", sortable: true },
         { title: "Quantidade", key: "purchase_quantity", sortable: true },
-        { title: "Valor Total", key: "total_value", sortable: true },
-        { title: "Ações", key: "actions", sortable: false },
-    ] as const;
+        { title: "Preço", key: "total_value", sortable: true },
+        { title: "Data da Cotação", key: "quotation_date", sortable: true },
+        { title: "Criado em", key: "created_at", sortable: true },
+    ];
 
     // Função principal para carregar dados
-    async function loadQuotationData(period?: PeriodFilter): Promise<void> {
+    async function loadQuotationData(period?: PeriodFilter, tableOptions?: VDataTableServerOptions): Promise<void> {
         loading.value = true;
         errorMessage.value = null;
 
         try {
+            // Se tableOptions não for passado, usa valores padrão
+            if (!tableOptions || typeof tableOptions !== 'object' || !('page' in tableOptions)) {
+                tableOptions = {
+                    page: page.value,
+                    itemsPerPage: itemsPerPage.value,
+                    groupBy: [],
+                    sortBy: [],
+                    search: '',
+                };
+            }
+
             const periodParams = period
                 ? {
                     start_date: period.startDate,
                     end_date: period.endDate,
+                    page: tableOptions.page,
+                    itemsPerPage: tableOptions.itemsPerPage,
+                    sortBy: tableOptions.sortBy,
+                    filters: activeFilters.value,
                 }
-                : undefined;
+                : {
+                    page: tableOptions.page,
+                    itemsPerPage: tableOptions.itemsPerPage,
+                    sortBy: tableOptions.sortBy,
+                    filters: activeFilters.value,
+                };
 
             const response = await reportsApi.getQuotationHistory(periodParams) as QuotationHistoryResponse;
 
             if (response?.data) {
                 quotationData.value = response.data;
                 quotations.value = response.data.quotations || [];
+
+                // Atualizar paginação
+                if (response.page) {
+                    page.value = response.page.page;
+                    totalItems.value = response.page.totalRows;
+                    itemsPerPage.value = response.page.itemsPerPage as 10 | 25 | 50;
+                }
 
                 // Atualizar overview
                 if (response.summary) {
@@ -135,8 +171,8 @@ export function useQuotationHistory() {
             ...quotation,
             supplier_name: quotation.suppliers?.name || "N/A",
             ingredient_name: quotation.ingredients?.name || "N/A",
-            // O valor total já vem calculado com conversão de unidades do servidor
-            total_value: quotation.total_value || (quotation.purchase_price * quotation.purchase_quantity),
+            // Para cotações unitárias, o valor total é igual ao preço por unidade
+            total_value: quotation.purchase_price,
         }));
     });
 
@@ -164,12 +200,7 @@ export function useQuotationHistory() {
 
     function getSupplierColor(index: number): string {
         const colors = ["primary", "success", "warning", "error", "info"];
-        return colors[index % colors.length];
-    }
-
-    // Função de formatação de data
-    function formatDate(date: string): string {
-        return new Date(date).toLocaleDateString("pt-BR");
+        return colors[index % colors.length] || "primary";
     }
 
     // Função de exportação
@@ -180,19 +211,21 @@ export function useQuotationHistory() {
                 "Fornecedor",
                 "Data",
                 "Ingrediente",
+                "Preço por Unidade",
+                "Quantidade Unitária",
+                "Unidade",
                 "Preço Unitário",
-                "Quantidade",
-                "Valor Total",
             ].join(","),
             // Dados
             ...quotationsWithCalculations.value.map((quotation: QuotationWithCalculations) =>
                 [
-                    `"${quotation.supplier_name}"`,
-                    `"${formatDate(quotation.created_at)}"`,
-                    `"${quotation.ingredient_name}"`,
+                    `"${quotation.supplier_name || ""}"`,
+                    `"${formatDate(quotation.created_at || "")}"`,
+                    `"${quotation.ingredient_name || ""}"`,
                     quotation.purchase_price,
                     quotation.purchase_quantity,
-                    quotation.total_value,
+                    `"${quotation.units?.name || ""} (${quotation.units?.abbreviation || ""})"`,
+                    quotation.purchase_price, // Preço unitário é igual ao preço por unidade
                 ].join(",")
             ),
         ].join("\n");
@@ -224,9 +257,14 @@ export function useQuotationHistory() {
         quotationsWithCalculations,
         chartData,
 
+        // Paginação
+        page,
+        totalItems,
+        itemsPerPage,
+        activeFilters,
+
         // Métodos
         loadQuotationData,
-        formatDate,
         getSupplierColor,
         handleExport,
     };

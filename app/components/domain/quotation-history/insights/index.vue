@@ -25,7 +25,9 @@ watch(() => props.period, fetchInsights, { deep: true });
 
 <template>
   <v-card elevation="2" class="pa-4 border-sm" rounded="xl" height="470">
-    <h3 class="text-h6 font-weight-bold mb-4">Insights de Cotações</h3>
+    <h3 class="text-h6 font-weight-bold mb-4">
+      Insights de Cotações Unitárias
+    </h3>
 
     <div
       v-if="loading"
@@ -47,9 +49,9 @@ watch(() => props.period, fetchInsights, { deep: true });
         color="success"
       />
 
-      <!-- Valor Médio -->
+      <!-- Preço Médio por Unidade -->
       <Card
-        title="Valor Médio"
+        title="Preço Médio por Unidade"
         :value="formatCurrency(insights.averageQuotationValue)"
         icon="mdi-chart-line"
         color="info"

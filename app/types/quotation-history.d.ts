@@ -73,6 +73,12 @@ export interface QuotationHistorySummary {
 export interface QuotationHistoryResponse {
     data: QuotationHistoryData;
     summary: QuotationHistorySummary;
+    page: {
+        page: number;
+        itemsPerPage: number;
+        totalRows: number;
+        totalPages: number;
+    };
 }
 
 export interface QuotationInsights {

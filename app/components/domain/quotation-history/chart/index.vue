@@ -30,7 +30,7 @@ watch(() => props.period, loadData, { deep: true });
 
 <template>
   <Container
-    title="Análise de Fornecedores"
+    title="Análise de Fornecedores por Valor de Cotações"
     :loading="loading"
     :empty="!chartData.length"
     @export="handleExport"

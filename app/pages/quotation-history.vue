@@ -9,34 +9,31 @@ definePageMeta({
 
 // Composables
 const { currentPeriod, updatePeriod } = usePeriodFilter();
-
-// Componentes
-import ReportsHeader from "~/components/ReportsHeader.vue";
-import QuotationHistoryOverview from "~/components/domain/quotation-history/overview/index.vue";
-import QuotationHistoryChart from "~/components/domain/quotation-history/chart/index.vue";
-import QuotationHistoryTable from "~/components/domain/quotation-history/Table.vue";
-import QuotationHistoryInsights from "~/components/domain/quotation-history/insights/index.vue";
-
-// Breadcrumbs
-const breadcrumbs = [
-  { title: "Dashboard", to: "/dashboard" },
-  { title: "Relatórios", to: "/reports" },
-  { title: "Histórico de Cotações", to: "/reports/quotation-history" },
-];
 </script>
 
 <template>
   <div>
     <!-- Header com filtros -->
     <ReportsHeader
-      title="Histórico de Cotações"
-      description="Análise do histórico de cotações e variação de preços de fornecedores"
-      :breadcrumbs="breadcrumbs"
+      title="Histórico de Cotações Unitárias"
+      description="Análise do histórico de cotações unitárias e variação de preços de fornecedores"
       :period="currentPeriod"
       @update:period="updatePeriod"
     />
 
     <v-container fluid class="py-6">
+      <!-- Aviso sobre Cotações Unitárias -->
+      <v-alert type="info" variant="tonal" class="mb-6" rounded="xl">
+        <template #prepend>
+          <v-icon>mdi-information</v-icon>
+        </template>
+        <div class="text-body-1">
+          <strong>Cotações Unitárias:</strong> Cada cotação representa o preço
+          por unidade de um ingrediente específico. O valor total é igual ao
+          preço por unidade cotado pelo fornecedor.
+        </div>
+      </v-alert>
+
       <!-- Overview Cards -->
       <QuotationHistoryOverview :period="currentPeriod" />
 

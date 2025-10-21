@@ -34,10 +34,10 @@ watch(() => props.period, fetchOverview, { deep: true });
       />
     </v-col>
 
-    <!-- Valor Total -->
+    <!-- Valor Total das Cotações -->
     <v-col cols="12" sm="6" md="3">
       <Card
-        title="Valor Total"
+        title="Valor Total das Cotações"
         :value="formatCurrency(overview.totalValue)"
         icon="mdi-currency-usd"
         color="success"
@@ -45,10 +45,10 @@ watch(() => props.period, fetchOverview, { deep: true });
       />
     </v-col>
 
-    <!-- Valor Médio -->
+    <!-- Preço Médio por Unidade -->
     <v-col cols="12" sm="6" md="3">
       <Card
-        title="Valor Médio"
+        title="Preço Médio por Unidade"
         :value="formatCurrency(overview.averageQuotationValue)"
         icon="mdi-chart-line"
         color="info"
