@@ -32,7 +32,8 @@ export default defineEventHandler(async (event) => {
         }));
 
         const { data, error: upsertError } = await client.rpc('upsert_multiple_event_quotation_drinks', {
-            _event_quotation_drinks: drinksData
+            p_event_quotation_id: id,
+            p_drinks: drinksData
         });
 
         if (upsertError) {

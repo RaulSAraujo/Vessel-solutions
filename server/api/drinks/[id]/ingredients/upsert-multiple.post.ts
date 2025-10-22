@@ -41,7 +41,8 @@ export default defineEventHandler(async (event) => {
         }));
 
         const { data, error: ingredientsError } = await client.rpc('upsert_multiple_drink_ingredients', {
-            p_drink_ingredients_array: ingredients
+            p_drink_id: drinkId,
+            p_ingredients: ingredients
         })
 
 
