@@ -1,11 +1,14 @@
 import { getSupabaseClientAndUser } from '~~/server/utils/supabase';
 import type { FetchError } from "ofetch";
+import type { Tables, TablesInsert } from '~~/server/types/database';
+
+type EventQuotationDrink = Tables<"event_quotation_drinks">;
 
 export default defineEventHandler(async (event) => {
     try {
         const { client } = await getSupabaseClientAndUser(event);
         const id = getRouterParam(event, 'id');
-        const body = await readBody(event);
+        const body = await readBody<TablesInsert<'event_quotation_drinks'>[]>(event);
 
         if (!id) {
             throw createError({
@@ -15,22 +18,8 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        // Deletar drinks existentes
-        const { error: deleteError } = await client
-            .from('event_quotation_drinks')
-            .delete()
-            .eq('event_quotation_id', id);
-
-        if (deleteError) {
-            throw createError({
-                statusCode: 500,
-                statusMessage: 'Failed to delete existing event quotation drinks',
-                message: deleteError.message,
-            });
-        }
-
-        // Inserir novos drinks
-        const drinksData = body.map((drink: any) => ({
+        const drinksData = body.map((drink) => ({
+            id: drink.id, // Incluir ID se disponível para permitir UPDATE
             event_quotation_id: id,
             drink_percentage: drink.drink_percentage,
             drink_name: drink.drink_name,
@@ -42,20 +31,19 @@ export default defineEventHandler(async (event) => {
             drink_profit_margin_percentage: drink.drink_profit_margin_percentage,
         }));
 
-        const { data, error: insertError } = await client
-            .from('event_quotation_drinks')
-            .insert(drinksData)
-            .select();
+        const { data, error: upsertError } = await client.rpc('upsert_multiple_event_quotation_drinks', {
+            _event_quotation_drinks: drinksData
+        });
 
-        if (insertError) {
+        if (upsertError) {
             throw createError({
                 statusCode: 500,
-                statusMessage: 'Failed to insert event quotation drinks',
-                message: insertError.message,
+                statusMessage: 'Failed to upsert event quotation drinks',
+                message: upsertError.message,
             });
         }
 
-        return data;
+        return data as EventQuotationDrink[];
     } catch (error: unknown) {
         const err = error as FetchError;
 

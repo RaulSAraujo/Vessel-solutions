@@ -38,6 +38,7 @@ export type TableDrinks = {
 }
 
 export type FormEventDrinks = {
+    id?: string; // ID opcional para permitir atualização
     drink_percentage: number;
     drink_name: string;
     drink_category_name: string;

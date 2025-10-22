@@ -96,6 +96,7 @@ export type FormEventQuotation = {
 }
 
 export type FormEventQuotationDrink = {
+    id?: string; // ID opcional para permitir atualização
     drink_percentage: number;
     drink_name: string | null;
     drink_category_name: string | null;

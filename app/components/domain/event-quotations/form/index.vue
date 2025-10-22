@@ -28,6 +28,7 @@ const onSubmit = handleSubmit((values) => {
   emit("submit", {
     ...values,
     event_quotation_drinks: drinks.value.map((e) => ({
+      id: e.id, // Incluir ID para permitir atualização
       drink_percentage: e.drink_percentage,
       drink_name: e.drink_name,
       drink_category_name: e.drink_category_name,
@@ -41,6 +42,8 @@ const onSubmit = handleSubmit((values) => {
 });
 
 onMounted(async () => {
+  drinks.value = [];
+
   if (!props.eventQuotation || !props.eventQuotation.id) return;
 
   loadingDrinks.value = true;
@@ -79,7 +82,13 @@ onUnmounted(() => {
 
     <Drinks :event-quotation="eventQuotation" :form="values" />
 
-    <v-btn type="submit" color="primary" block :loading="loading">
+    <v-btn
+      type="submit"
+      color="primary"
+      block
+      :loading="loading"
+      :disabled="eventQuotation?.status === 'converted'"
+    >
       Salvar
     </v-btn>
   </v-form>

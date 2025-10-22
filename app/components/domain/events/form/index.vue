@@ -28,6 +28,7 @@ const onSubmit = handleSubmit((values) => {
   emit("submit", {
     ...values,
     event_drinks: drinks.value.map((e) => ({
+      id: e.id, // Incluir ID para permitir atualização
       drink_percentage: e.drink_percentage,
       drink_name: e.drink_name,
       drink_category_name: e.drink_category_name,
@@ -41,6 +42,8 @@ const onSubmit = handleSubmit((values) => {
 });
 
 onMounted(async () => {
+  drinks.value = [];
+
   if (!props.event || !props.event.id) return;
 
   loadingDrinks.value = true;

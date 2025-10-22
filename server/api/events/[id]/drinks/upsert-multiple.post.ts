@@ -26,7 +26,8 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        const drinks = body.map((drink) => ({
+        const drinksData = body.map((drink) => ({
+            id: drink.id,
             event_id: eventId,
             drink_percentage: drink.drink_percentage,
             drink_name: drink.drink_name,
@@ -38,15 +39,15 @@ export default defineEventHandler(async (event) => {
             drink_profit_margin_percentage: drink.drink_profit_margin_percentage,
         }));
 
-        const { data, error: drinksError } = await client.rpc('upsert_multiple_event_drinks', {
-            _event_drinks: drinks
-        })
+        const { data, error: upsertError } = await client.rpc('upsert_multiple_event_drinks', {
+            _event_drinks: drinksData
+        });
 
-        if (drinksError) {
+        if (upsertError) {
             throw createError({
                 statusCode: 500,
-                statusMessage: "Failed to add drinks",
-                message: drinksError.message,
+                statusMessage: 'Failed to upsert event drinks',
+                message: upsertError.message,
             });
         }
 

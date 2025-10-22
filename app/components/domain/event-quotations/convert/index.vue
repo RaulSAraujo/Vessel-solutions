@@ -44,6 +44,7 @@ async function handleConvert(payload?: FormClient & FormClientAddresses) {
 
     $toast().success("Cotação convertida em evento com sucesso.");
 
+    reset();
     emit("close");
   } finally {
     converting.value = false;
