@@ -1,5 +1,6 @@
 import type { FetchError } from "ofetch";
 import type { TablesUpdate } from "~~/server/types/database";
+import { generatePurchaseListItems } from "~~/server/utils/purchaseListGenerator";
 
 export default defineEventHandler(async (event) => {
     try {
@@ -15,6 +16,13 @@ export default defineEventHandler(async (event) => {
                 message: 'Event ID is required.',
             });
         }
+
+        // Buscar o evento atual para verificar o status anterior
+        const { data: currentEvent } = await client
+            .from('events')
+            .select('status')
+            .eq('id', eventId)
+            .single();
 
         const { data, error } = await client
             .from('events')
@@ -41,7 +49,14 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        return data[0];
+        const updatedEvent = data[0];
+
+        // Verificar se o status foi alterado para 'purchase'
+        if (body.status === 'purchase' && currentEvent?.status !== 'purchase') {
+            await generatePurchaseListItems(client, eventId, updatedEvent);
+        }
+
+        return updatedEvent;
     } catch (error: unknown) {
         const err = error as FetchError;
 

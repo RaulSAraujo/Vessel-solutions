@@ -641,6 +641,67 @@ export type Database = {
         }
         Relationships: []
       }
+      purchase_list: {
+        Row: {
+          created_at: string | null
+          event_id: string
+          id: string
+          ingredient_id: string
+          notes: string | null
+          quantity_needed: number
+          status: string | null
+          unit_id: number
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_id: string
+          id?: string
+          ingredient_id: string
+          notes?: string | null
+          quantity_needed: number
+          status?: string | null
+          unit_id: number
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_id?: string
+          id?: string
+          ingredient_id?: string
+          notes?: string | null
+          quantity_needed?: number
+          status?: string | null
+          unit_id?: number
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchase_list_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchase_list_ingredient_id_fkey"
+            columns: ["ingredient_id"]
+            isOneToOne: false
+            referencedRelation: "ingredients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchase_list_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       units: {
         Row: {
           abbreviation: string
