@@ -42,9 +42,12 @@ async function handleConvert(payload?: FormClient & FormClientAddresses) {
 
     await api.convertToEvent(selectedEventQuotation.value.id, payload);
 
+    store.fetchEventQuotations();
+
     $toast().success("Cotação convertida em evento com sucesso.");
 
     reset();
+
     emit("close");
   } finally {
     converting.value = false;

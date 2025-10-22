@@ -18,7 +18,14 @@ const emit = defineEmits(["close"]);
 const api = useEventQuotationsApi();
 
 const store = useEventQuotationsStore();
-const { selectedEventQuotation, totalPercentageDrinks } = storeToRefs(store);
+const {
+  selectedEventQuotation,
+  totalPercentageDrinks,
+  estimatedQuantity,
+  totalCost,
+  totalRevenue,
+  profitMargin,
+} = storeToRefs(store);
 
 const loading = ref(false);
 
@@ -35,6 +42,10 @@ async function update(eventQuotation: EventQuotationWithDrinks) {
     selectedEventQuotation.value?.id,
     {
       ...eventQuotation,
+      estimated_total_drinks: estimatedQuantity.value,
+      total_cost: totalCost.value,
+      total_revenue: totalRevenue.value,
+      profit_margin: profitMargin.value,
     }
   );
 

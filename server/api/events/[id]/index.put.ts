@@ -1,12 +1,12 @@
 import type { FetchError } from "ofetch";
-import type { Tables, TablesInsert } from "~~/server/types/database";
+import type { TablesUpdate } from "~~/server/types/database";
 
 export default defineEventHandler(async (event) => {
     try {
         const { client } = await getSupabaseClientAndUser(event);
         const eventId = event.context.params?.id;
 
-        const body = await readBody<TablesInsert<"events">>(event);
+        const body = await readBody<TablesUpdate<"events">>(event);
 
         if (!eventId) {
             throw createError({
@@ -41,7 +41,7 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        return data[0] as Tables<"events">;
+        return data[0];
     } catch (error: unknown) {
         const err = error as FetchError;
 
