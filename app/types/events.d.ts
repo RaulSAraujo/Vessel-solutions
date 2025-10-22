@@ -3,6 +3,9 @@ export type Events = {
   page: Page;
 };
 
+export type EventStatus = 'proposal' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'purchase';
+export type AudienceProfile = 'casual' | 'corporate' | 'premium';
+
 export type Datum = {
   id: string;
   client_id: string;
@@ -11,8 +14,8 @@ export type Datum = {
   end_time: Date;
   guest_count: number;
   distance: number;
-  audience_profile: string;
-  status: string | null;
+  audience_profile: AudienceProfile;
+  status: EventStatus | null;
   total_cost: number;
   total_revenue: number;
   profit_margin: number;

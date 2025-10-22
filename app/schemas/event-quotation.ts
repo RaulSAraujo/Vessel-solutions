@@ -38,6 +38,7 @@ export const eventQuotationSchema = yup.object({
         .notRequired(),
     audience_profile: yup
         .string()
+        .oneOf(['casual', 'corporate', 'premium'], 'Perfil de audiência inválido')
         .required('O perfil de audiência é obrigatório'),
     status: yup
         .string()

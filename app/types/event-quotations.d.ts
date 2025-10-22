@@ -10,8 +10,8 @@ export interface EventQuotation {
     end_time: string;
     guest_count: number;
     distance: number;
-    audience_profile: string;
-    status: string | null;
+    audience_profile: AudienceProfile;
+    status: EventQuotationStatus | null;
     total_cost: number;
     total_revenue: number;
     profit_margin: number;
@@ -74,8 +74,8 @@ export type FormEventQuotation = {
     end_time: Date;
     guest_count: number;
     distance: number;
-    audience_profile: string;
-    status: string | null;
+    audience_profile: AudienceProfile;
+    status: EventQuotationStatus | null;
     notes?: string;
     user_id?: string | null;
     estimated_total_drinks: number;
@@ -108,3 +108,4 @@ export type FormEventQuotationDrink = {
 }
 
 export type EventQuotationStatus = 'draft' | 'sent' | 'approved' | 'rejected' | 'converted';
+export type AudienceProfile = 'casual' | 'corporate' | 'premium';

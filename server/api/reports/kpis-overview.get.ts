@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
         let eventsQuery = client
             .from("events")
             .select("total_cost, total_revenue, created_at", { count: "exact" })
-            .eq("status", "Concluído");
+            .eq("status", "completed");
 
         if (startDate && endDate) {
             eventsQuery = eventsQuery

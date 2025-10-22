@@ -54,9 +54,9 @@ const filterDefinitions = ref<FilterDefinition[]>([
     type: "array",
     op: "eq",
     options: [
-      { value: "Casual", text: "Casual" },
-      { value: "Corporativo", text: "Corporativo" },
-      { value: "Premium", text: "Premium" },
+      { value: "casual", text: "Casual" },
+      { value: "corporate", text: "Corporativo" },
+      { value: "premium", text: "Premium" },
     ],
     layout: {
       clearable: true,

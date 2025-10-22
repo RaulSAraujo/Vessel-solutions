@@ -39,7 +39,7 @@ export default defineEventHandler(async (event) => {
                 )
             `
       )
-      .eq("status", "Concluído")
+      .eq("status", "completed")
       .order("event_date", { ascending: false });
 
     if (startDate && endDate) {

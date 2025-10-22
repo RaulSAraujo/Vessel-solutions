@@ -5,16 +5,18 @@ defineProps<{
 
 const getStatusIcon = (status: string) => {
   switch (status) {
-    case "Proposta":
+    case "proposal":
       return "mdi-file-document";
-    case "Confirmado":
+    case "confirmed":
       return "mdi-check-circle";
-    case "Em andamento":
+    case "in_progress":
       return "mdi-progress-clock";
-    case "Concluído":
+    case "completed":
       return "mdi-check-circle-outline";
-    case "Cancelado":
+    case "cancelled":
       return "mdi-cancel";
+    case "purchase":
+      return "mdi-cart";
     default:
       return "mdi-help-circle"; // Ícone padrão para status desconhecido
   }
@@ -22,18 +24,39 @@ const getStatusIcon = (status: string) => {
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "Proposta":
+    case "proposal":
       return "blue";
-    case "Confirmado":
+    case "confirmed":
       return "green";
-    case "Em andamento":
+    case "in_progress":
       return "orange";
-    case "Concluído":
+    case "completed":
       return "cyan";
-    case "Cancelado":
+    case "cancelled":
       return "red";
+    case "purchase":
+      return "purple";
     default:
       return "black"; // Cor padrão para status desconhecido
+  }
+};
+
+const getText = (status: string) => {
+  switch (status) {
+    case "proposal":
+      return "Proposta";
+    case "confirmed":
+      return "Confirmado";
+    case "in_progress":
+      return "Em andamento";
+    case "completed":
+      return "Concluído";
+    case "cancelled":
+      return "Cancelado";
+    case "purchase":
+      return "Comprar";
+    default:
+      return "Desconhecido"; // Texto padrão para status desconhecido
   }
 };
 </script>
@@ -42,6 +65,6 @@ const getStatusColor = (status: string) => {
   <span>
     <v-icon :color="getStatusColor(status)" :icon="getStatusIcon(status)" />
 
-    {{ status }}
+    {{ getText(status) }}
   </span>
 </template>

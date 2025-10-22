@@ -20,11 +20,12 @@ const filterDefinitions = ref<FilterDefinition[]>([
     type: "array",
     op: "eq",
     options: [
-      { value: "Proposta", text: "Proposta" },
-      { value: "Confirmado", text: "Confirmado" },
-      { value: "Em andamento", text: "Em andamento" },
-      { value: "Concluído", text: "Concluído" },
-      { value: "Cancelado", text: "Cancelado" },
+      { value: "proposal", text: "Proposta" },
+      { value: "confirmed", text: "Confirmado" },
+      { value: "in_progress", text: "Em andamento" },
+      { value: "completed", text: "Concluído" },
+      { value: "cancelled", text: "Cancelado" },
+      { value: "purchase", text: "Comprar" },
     ],
     layout: {
       clearable: true,
@@ -36,9 +37,9 @@ const filterDefinitions = ref<FilterDefinition[]>([
     type: "array",
     op: "eq",
     options: [
-      { value: "Casual", text: "Casual" },
-      { value: "Corporativo", text: "Corporativo" },
-      { value: "Premium", text: "Premium" },
+      { value: "casual", text: "Casual" },
+      { value: "corporate", text: "Corporativo" },
+      { value: "premium", text: "Premium" },
     ],
     layout: {
       clearable: true,

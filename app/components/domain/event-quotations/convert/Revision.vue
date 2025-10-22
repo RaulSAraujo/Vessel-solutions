@@ -43,7 +43,7 @@ const { selectedEventQuotation } = storeToRefs(store);
           <li>Um cliente será criado/atualizado</li>
           <li>Um novo evento será criado com os dados da cotação</li>
           <li>Os drinks serão transferidos para o evento</li>
-          <li>Status da cotação será "convertido"</li>
+          <li>Status da cotação será "converted"</li>
         </ul>
       </div>
     </v-alert>

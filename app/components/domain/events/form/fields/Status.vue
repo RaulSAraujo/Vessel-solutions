@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import type { PropType } from "vue";
+import { computed } from "vue";
+
 const props = defineProps({
   modelValue: {
     type: String as PropType<string | null>,
@@ -9,25 +12,28 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue"]);
 
 const items = [
-  "Proposta",
-  "Confirmado",
-  "Em andamento",
-  "Concluído",
-  "Cancelado",
+  { value: "proposal", text: "Proposta" },
+  { value: "confirmed", text: "Confirmado" },
+  { value: "purchase", text: "Comprar" },
+  { value: "in_progress", text: "Em andamento" },
+  { value: "completed", text: "Concluído" },
+  { value: "cancelled", text: "Cancelado" },
 ];
 
 const icon = computed(() => {
   switch (props.modelValue) {
-    case "Proposta":
+    case "proposal":
       return "mdi-file-document";
-    case "Confirmado":
+    case "confirmed":
       return "mdi-check-circle";
-    case "Em andamento":
+    case "in_progress":
       return "mdi-progress-clock";
-    case "Concluído":
+    case "completed":
       return "mdi-check-circle-outline";
-    case "Cancelado":
+    case "cancelled":
       return "mdi-cancel";
+    case "purchase":
+      return "mdi-cart";
     default:
       return "mdi-help-circle";
   }
@@ -44,6 +50,8 @@ const internalValue = computed({
     v-model="internalValue"
     label="Status"
     :items="items"
+    item-title="text"
+    item-value="value"
     hide-details="auto"
   >
     <template #prepend-inner>

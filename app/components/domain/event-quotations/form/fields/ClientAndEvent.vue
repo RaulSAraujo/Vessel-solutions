@@ -157,7 +157,7 @@ onMounted(async () => {
         <UiSelectField
           v-model="audienceProfile"
           label="Perfil"
-          :items="['Casual', 'Corporativo', 'Premium']"
+          :items="['casual', 'corporate', 'premium']"
           :error-messages="errors.audience_profile"
         />
       </v-col>

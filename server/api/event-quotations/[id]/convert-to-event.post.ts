@@ -111,7 +111,7 @@ export default defineEventHandler(async (event) => {
         guest_count: eventQuotation.guest_count,
         distance: eventQuotation.distance,
         audience_profile: eventQuotation.audience_profile,
-        status: "Confirmado", // Status padrão para eventos convertidos
+        status: "confirmed", // Status padrão para eventos convertidos
         notes: eventQuotation.notes,
         estimated_total_drinks: eventQuotation.estimated_total_drinks,
         total_cost: eventQuotation.total_cost,

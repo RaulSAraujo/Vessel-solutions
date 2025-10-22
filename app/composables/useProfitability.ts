@@ -129,7 +129,7 @@ export function useProfitability() {
       }
 
       const filters = {
-        status: { op: "eq", value: "Concluído" }, // Apenas eventos concluídos para análise de lucratividade
+        status: { op: "eq", value: "completed" }, // Apenas eventos concluídos para análise de lucratividade
         start_time: { op: "gte", value: dayjs(period?.startDate).utc().startOf('day').toISOString() },
         end_time: { op: "lte", value: dayjs(period?.endDate).utc().endOf('day').toISOString() },
       };

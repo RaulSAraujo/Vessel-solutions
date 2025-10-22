@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
           )
         `
       )
-      .eq("status", "Concluído");
+      .eq("status", "completed");
 
     if (startDate && endDate) {
       eventsQuery = eventsQuery

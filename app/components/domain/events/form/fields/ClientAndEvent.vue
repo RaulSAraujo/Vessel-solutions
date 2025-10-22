@@ -6,6 +6,7 @@ import type { Datum as Client } from "~/types/clients";
 // components
 import Status from "./Status.vue";
 import FindClient from "./FindClient.vue";
+import AudienceProfile from "./AudienceProfile.vue";
 
 const props = defineProps<{
   event?: Event | null;
@@ -163,10 +164,8 @@ onMounted(async () => {
     </v-col>
 
     <v-col cols="12" md="2">
-      <UiSelectField
+      <AudienceProfile
         v-model="audienceProfile"
-        label="Perfil"
-        :items="['Casual', 'Corporativo', 'Premium']"
         :error-messages="errors.audience_profile"
       />
     </v-col>

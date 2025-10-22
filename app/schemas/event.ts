@@ -40,9 +40,11 @@ export const eventSchema = yup.object({
         .notRequired(),
     audience_profile: yup
         .string()
+        .oneOf(['casual', 'corporate', 'premium'], 'Perfil de audiência inválido')
         .required('O perfil de audiência é obrigatório'),
     status: yup
         .string()
+        .oneOf(['proposal', 'confirmed', 'in_progress', 'completed', 'cancelled', 'purchase'], 'Status inválido')
         .required('O status é obrigatório'),
     notes: yup
         .string()
