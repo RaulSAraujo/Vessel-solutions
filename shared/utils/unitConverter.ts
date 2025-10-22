@@ -3,17 +3,26 @@ import type { Units, IngredientDetails, UnitCategory } from '#shared/types/units
 // --- Fatores de Conversão Hardcoded ---
 // Chave: "abreviação_origem-abreviação_destino"
 const CONVERSION_FACTORS: { [key: string]: number } = {
+    // Conversões de massa
     'kg-g': 1000,
     'g-kg': 0.001,
+
+    // Conversões de volume
     'L-ml': 1000,
     'ml-L': 0.001,
+
     // Conversões entre massa e volume (assumindo densidade da água: 1g = 1ml)
-    // ESTES SÃO VALORES PADRÃO. Se a densidade do ingrediente for diferente,
+    // ATENÇÃO: Estes são valores padrão para água. Para ingredientes com densidades diferentes,
     // você precisará de um campo 'density' no ingrediente ou um mapeamento específico.
-    'g-ml': 1,
-    'ml-g': 1,
-    'kg-L': 1,
-    'L-kg': 1,
+    'g-ml': 1,      // 1g = 1ml (água)
+    'ml-g': 1,      // 1ml = 1g (água)
+    'kg-L': 1,      // 1kg = 1L (água)
+    'L-kg': 1,      // 1L = 1kg (água)
+    'kg-ml': 1000,  // 1kg = 1000ml (água)
+    'ml-kg': 0.001, // 1ml = 0.001kg (água)
+    'g-L': 0.001,   // 1g = 0.001L (água)
+    'L-g': 1000,    // 1L = 1000g (água)
+
     // Adicione mais conversões conforme necessário (ex: 'cup-ml', 'tbsp-ml', etc.)
 };
 
