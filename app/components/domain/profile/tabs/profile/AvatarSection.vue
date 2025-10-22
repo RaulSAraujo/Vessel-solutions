@@ -76,7 +76,7 @@ const imageUrl = computed(() => props.avatarUrl);
 
         <!-- Overlay para upload -->
         <div
-          v-if="!uploadLoading"
+          v-if="!imageUrl && !uploadLoading"
           class="avatar-overlay"
           @click="avatarFileInput?.click()"
         >
