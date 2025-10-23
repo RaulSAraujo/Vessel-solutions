@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useReportsApi } from "~/composables/api/useReportsApi";
 import type { PeriodFilter } from "~/composables/usePeriodFilter";
+import { useDisplay } from "vuetify";
 
 interface ChartDataItem {
   month: string;
@@ -21,6 +22,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const reportsApi = useReportsApi();
+const { mobile } = useDisplay();
 const isLoading = ref(true);
 const chartData = ref<ChartDataItem[]>([]);
 const chartLegendCategories = ref<ChartCategories>({});
@@ -70,33 +72,54 @@ watch(() => props.period, loadMonthlyEventsChart, { deep: true });
 </script>
 
 <template>
-  <v-card elevation="2" class="pa-4 border-sm" rounded="xl" min-height="400">
-    <v-card-title class="d-flex align-center justify-space-between">
-      Eventos por mês
+  <v-card
+    elevation="2"
+    :class="mobile ? 'pa-2' : 'pa-4'"
+    class="border-sm"
+    rounded="xl"
+    :min-height="mobile ? '300' : '400'"
+  >
+    <v-card-title
+      :class="mobile ? 'pa-2' : 'pa-4'"
+      class="d-flex align-center justify-space-between"
+    >
+      <span :class="mobile ? 'text-body-1' : 'text-h6'">Eventos por mês</span>
       <v-btn
         icon="mdi-refresh"
         variant="text"
-        size="small"
+        :size="mobile ? 'x-small' : 'small'"
         @click="loadMonthlyEventsChart"
       />
     </v-card-title>
 
-    <v-card-text>
-      <v-skeleton-loader v-if="isLoading" type="image" height="300" />
+    <v-card-text :class="mobile ? 'pa-2' : 'pa-4'">
+      <v-skeleton-loader
+        v-if="isLoading"
+        type="image"
+        :height="mobile ? 200 : 300"
+      />
 
       <div
         v-else-if="!chartData.length"
         class="d-flex flex-column align-center justify-center"
-        style="height: 300px"
+        :style="mobile ? 'height: 200px' : 'height: 300px'"
       >
         <v-icon
           icon="mdi-calendar-alert"
-          size="64"
+          :size="mobile ? 48 : 64"
           color="grey-lighten-1"
-          class="mb-4"
+          :class="mobile ? 'mb-2' : 'mb-4'"
         />
-        <p class="text-h6 text-medium-emphasis">Nenhum dado disponível</p>
-        <p class="text-body-2 text-medium-emphasis">
+        <p
+          :class="mobile ? 'text-body-1' : 'text-h6'"
+          class="text-medium-emphasis"
+        >
+          Nenhum dado disponível
+        </p>
+        <p
+          :class="mobile ? 'text-caption' : 'text-body-2'"
+          class="text-medium-emphasis"
+        >
           Adicione eventos para ver o gráfico
         </p>
       </div>
@@ -104,16 +127,16 @@ watch(() => props.period, loadMonthlyEventsChart, { deep: true });
       <template v-else>
         <BarChart
           :data="chartData"
-          :height="300"
+          :height="mobile ? 210 : 300"
           :categories="chartLegendCategories"
           :y-axis="['Número de Eventos']"
           :x-num-ticks="chartData.length"
-          :y-num-ticks="10"
-          :radius="10"
+          :y-num-ticks="mobile ? 5 : 10"
+          :radius="mobile ? 5 : 10"
           :y-grid-line="true"
           :x-formatter="xFormatter"
           :y-formatter="yFormatter"
-          :legend-position="LegendPosition.Top"
+          :legend-position="LegendPosition.TopCenter"
           :hide-legend="true"
         />
       </template>

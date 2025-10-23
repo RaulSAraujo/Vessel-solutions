@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useReportsApi } from "~/composables/api/useReportsApi";
 import type { PeriodFilter } from "~/composables/usePeriodFilter";
+import { useDisplay } from "vuetify";
 
 interface EventTrendData {
   month: string;
@@ -15,6 +16,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const reportsApi = useReportsApi();
+const { mobile } = useDisplay();
 const isLoading = ref(true);
 const eventTrendData = ref<EventTrendData[]>([]);
 
@@ -67,37 +69,64 @@ watch(() => props.period, loadEventTrendData, { deep: true });
 </script>
 
 <template>
-  <v-card elevation="2" class="pa-4 border-sm" rounded="xl" height="450">
-    <v-card-title class="d-flex align-center justify-space-between">
+  <v-card
+    elevation="2"
+    :class="mobile ? 'pa-2' : 'pa-4'"
+    class="border-sm"
+    rounded="xl"
+    :height="mobile ? '350' : '470'"
+  >
+    <v-card-title
+      :class="mobile ? 'pa-2' : 'pa-4'"
+      class="d-flex align-center justify-space-between"
+    >
       <div class="d-flex align-center">
-        <v-icon icon="mdi-chart-line" class="mr-2" color="primary" />
-        Tendência de Eventos e Receita
+        <v-icon
+          icon="mdi-chart-line"
+          :class="mobile ? 'mr-1' : 'mr-2'"
+          color="primary"
+        />
+        <span :class="mobile ? 'text-caption' : 'text-h6'"
+          >Tendência de Eventos e Receita</span
+        >
       </div>
       <v-btn
         icon="mdi-refresh"
         variant="text"
-        size="small"
+        :size="mobile ? 'x-small' : 'small'"
         :loading="isLoading"
         @click="loadEventTrendData"
       />
     </v-card-title>
 
-    <v-card-text>
-      <v-skeleton-loader v-if="isLoading" type="image" height="300" />
+    <v-card-text :class="mobile ? 'pa-2' : 'pa-4'">
+      <v-skeleton-loader
+        v-if="isLoading"
+        type="image"
+        :height="mobile ? 200 : 340"
+      />
 
       <div
         v-else-if="!eventTrendData.length"
         class="d-flex flex-column align-center justify-center"
-        style="height: 300px"
+        :style="mobile ? 'height: 200px' : 'height: 300px'"
       >
         <v-icon
           icon="mdi-chart-line-variant"
-          size="64"
+          :size="mobile ? 48 : 64"
           color="grey-lighten-1"
-          class="mb-4"
+          :class="mobile ? 'mb-2' : 'mb-4'"
         />
-        <p class="text-h6 text-medium-emphasis">Nenhum dado disponível</p>
-        <p class="text-body-2 text-medium-emphasis">
+        <p
+          :class="mobile ? 'text-body-1' : 'text-h6'"
+          class="text-medium-emphasis"
+        >
+          Nenhum dado disponível
+        </p>
+        <p
+          :class="mobile ? 'text-caption' : 'text-body-2'"
+          class="text-medium-emphasis"
+        >
           Adicione eventos para ver a tendência
         </p>
       </div>
@@ -105,16 +134,16 @@ watch(() => props.period, loadEventTrendData, { deep: true });
       <template v-else>
         <LineChart
           :data="eventTrendData"
-          :height="300"
+          :height="mobile ? 270 : 340"
           :categories="categories"
           :y-axis="['events', 'revenue']"
           :x-num-ticks="eventTrendData.length"
-          :y-num-ticks="6"
+          :y-num-ticks="mobile ? 4 : 6"
           :y-grid-line="true"
           :x-formatter="xFormatter"
           :y-formatter="yFormatter"
-          :legend-position="LegendPosition.Top"
-          :hide-legend="false"
+          :legend-position="LegendPosition.TopCenter"
+          :hide-legend="mobile"
           x-label="Mês"
           y-label="Quantidade / Valor"
         />

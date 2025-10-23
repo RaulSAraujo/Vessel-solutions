@@ -8,6 +8,8 @@ interface QuickAction {
   route: string;
 }
 
+const { mobile } = useDisplay();
+
 const quickActions = ref<QuickAction[]>([
   {
     id: "1",
@@ -50,29 +52,48 @@ const handleAction = (action: QuickAction) => {
 
 <template>
   <v-card elevation="2" class="border-sm" rounded="xl">
-    <v-card-title class="d-flex align-center">
-      <v-icon icon="mdi-lightning-bolt" class="mr-2" color="primary" />
-      Ações Rápidas
+    <v-card-title :class="mobile ? 'pa-3' : 'pa-4'" class="d-flex align-center">
+      <v-icon
+        icon="mdi-lightning-bolt"
+        :class="mobile ? 'mr-1' : 'mr-2'"
+        color="primary"
+      />
+      <span :class="mobile ? 'text-body-1' : 'text-h6'">Ações Rápidas</span>
     </v-card-title>
 
-    <v-card-text class="pa-2">
-      <v-row>
-        <v-col v-for="action in quickActions" :key="action.id" cols="3">
+    <v-card-text :class="mobile ? 'pa-1' : 'pa-2'">
+      <v-row :dense="mobile">
+        <v-col
+          v-for="action in quickActions"
+          :key="action.id"
+          :cols="mobile ? 6 : 3"
+        >
           <v-card
             variant="flat"
             rounded="xl"
-            class="pa-2 text-center cursor-pointer"
+            :class="['text-center cursor-pointer', mobile ? 'pa-2' : 'pa-3']"
             @click="handleAction(action)"
           >
-            <v-avatar :color="action.color" size="48" class="mb-3">
-              <v-icon size="24" color="white">{{ action.icon }}</v-icon>
+            <v-avatar
+              :color="action.color"
+              :size="mobile ? 36 : 48"
+              :class="mobile ? 'mb-2' : 'mb-3'"
+            >
+              <v-icon :size="mobile ? 18 : 24" color="white">{{
+                action.icon
+              }}</v-icon>
             </v-avatar>
 
-            <div class="text-body-2 font-weight-medium mb-1">
+            <div
+              :class="[
+                'font-weight-medium',
+                mobile ? 'text-caption mb-1' : 'text-body-2 mb-1',
+              ]"
+            >
               {{ action.title }}
             </div>
 
-            <div class="text-caption text-medium-emphasis">
+            <div v-if="!mobile" class="text-caption text-medium-emphasis">
               {{ action.description }}
             </div>
           </v-card>

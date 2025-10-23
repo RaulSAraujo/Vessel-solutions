@@ -16,9 +16,11 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const { mobile } = useDisplay();
 const reportsApi = useReportsApi();
-const topClients = ref<TopClient[]>([]);
+
 const loading = ref(false);
+const topClients = ref<TopClient[]>([]);
 
 async function fetchTopClients() {
   loading.value = true;
@@ -62,27 +64,45 @@ watch(() => props.period, fetchTopClients, { deep: true });
 </script>
 
 <template>
-  <v-card elevation="2" class="border-sm" rounded="xl" height="320">
-    <v-card-title class="d-flex align-center">
-      <v-icon icon="mdi-trophy" class="mr-2" color="primary" />
-      Top Clientes
+  <v-card
+    elevation="2"
+    class="border-sm"
+    rounded="xl"
+    :height="mobile ? '280' : '320'"
+  >
+    <v-card-title :class="mobile ? 'pa-3' : 'pa-4'" class="d-flex align-center">
+      <v-icon
+        icon="mdi-trophy"
+        :class="mobile ? 'mr-1' : 'mr-2'"
+        color="primary"
+      />
+      <span :class="mobile ? 'text-body-1' : 'text-h6'">Top Clientes</span>
     </v-card-title>
 
     <v-card-text class="pa-0">
-      <v-skeleton-loader v-if="loading" type="list-item-avatar-three-line" />
+      <v-skeleton-loader
+        v-if="loading"
+        :type="
+          mobile ? 'list-item-avatar-two-line' : 'list-item-avatar-three-line'
+        "
+      />
 
       <div
         v-else-if="!topClients.length"
-        class="d-flex flex-column align-center justify-center pa-6 text-center"
-        style="height: 250px"
+        class="d-flex flex-column align-center justify-center text-center"
+        :class="mobile ? 'pa-4' : 'pa-6'"
+        :style="mobile ? 'height: 200px' : 'height: 250px'"
       >
         <v-icon
           icon="mdi-account-group-outline"
-          size="48"
+          :size="mobile ? 36 : 48"
           color="grey"
           class="mb-2"
         />
-        <p class="text-body-2 text-medium-emphasis">
+        <p
+          :class="mobile ? 'text-caption' : 'text-body-2'"
+          class="text-medium-emphasis"
+        >
           Nenhum cliente encontrado
         </p>
       </div>
@@ -92,32 +112,41 @@ watch(() => props.period, fetchTopClients, { deep: true });
           v-for="(client, index) in topClients"
           :key="client.id"
           :title="client.name"
-          :subtitle="`${client.events} eventos • R$ ${client.totalValue.toFixed(
-            2
-          )}`"
-          class="px-3 py-3"
+          :subtitle="
+            mobile
+              ? undefined
+              : `${client.events} eventos • R$ ${client.totalValue.toFixed(2)}`
+          "
+          :class="mobile ? 'px-2 py-2' : 'px-3 py-3'"
         >
           <template #prepend>
             <div class="d-flex align-center">
               <!-- Ranking Badge -->
               <v-chip
                 :color="index < 3 ? 'primary' : 'grey'"
-                size="small"
+                :size="mobile ? 'x-small' : 'small'"
                 variant="flat"
-                class="mr-3"
+                :class="mobile ? 'mr-2' : 'mr-3'"
                 :text="`#${index + 1}`"
               />
 
               <!-- Avatar -->
-              <v-avatar color="primary" size="35" class="mr-2">
-                <span class="text-white font-weight-bold">
+              <v-avatar
+                color="primary"
+                :size="mobile ? 28 : 35"
+                :class="mobile ? 'mr-1' : 'mr-2'"
+              >
+                <span
+                  class="text-white font-weight-bold"
+                  :class="mobile ? 'text-caption' : 'text-body-2'"
+                >
                   {{ getInitials(client.name) }}
                 </span>
               </v-avatar>
             </div>
           </template>
 
-          <template #append>
+          <template #append v-if="!mobile">
             <v-chip
               color="green-darken-1"
               size="small"

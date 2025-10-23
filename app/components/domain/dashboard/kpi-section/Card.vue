@@ -8,6 +8,7 @@ interface Props {
   subtitle?: string;
   trend?: number;
   trendLabel?: string;
+  mobile?: boolean;
 }
 
 defineProps<Props>();
@@ -27,18 +28,27 @@ const getTrendIcon = (trend: number) => {
 
 <template>
   <v-card
-    class="pa-6 text-center border-sm position-relative overflow-hidden"
+    :class="[
+      'text-center border-sm position-relative overflow-hidden',
+      mobile ? 'pa-3' : 'pa-6',
+    ]"
     elevation="3"
     rounded="xl"
-    min-height="200"
+    :min-height="mobile ? '140' : '200'"
     :color="color ? `${color}-lighten-5` : 'primary-lighten-5'"
   >
     <!-- Background Pattern -->
     <div
       class="position-absolute"
-      style="top: -20px; right: -20px; opacity: 0.1"
+      :style="
+        mobile
+          ? 'top: -10px; right: -10px; opacity: 0.1'
+          : 'top: -20px; right: -20px; opacity: 0.1'
+      "
     >
-      <v-icon size="120" :color="color || 'primary'">{{ icon }}</v-icon>
+      <v-icon :size="mobile ? 80 : 120" :color="color || 'primary'">{{
+        icon
+      }}</v-icon>
     </div>
 
     <!-- Main Content -->
@@ -46,32 +56,51 @@ const getTrendIcon = (trend: number) => {
       class="position-relative d-flex flex-column justify-center align-center h-100"
     >
       <!-- Icon -->
-      <v-avatar :color="color || 'primary'" size="48" class="mb-3">
-        <v-icon size="24" color="white">{{ icon }}</v-icon>
+      <v-avatar
+        :color="color || 'primary'"
+        :size="mobile ? 36 : 48"
+        :class="mobile ? 'mb-2' : 'mb-3'"
+      >
+        <v-icon :size="mobile ? 18 : 24" color="white">{{ icon }}</v-icon>
       </v-avatar>
 
       <!-- Title -->
-      <div v-if="!loading" class="text-h5 font-weight-bold mb-2">
+      <div
+        v-if="!loading"
+        :class="
+          mobile
+            ? 'text-h6 font-weight-bold mb-1'
+            : 'text-h5 font-weight-bold mb-2'
+        "
+      >
         {{ title }}
       </div>
-      <v-skeleton-loader v-else type="text" class="mb-2" />
+      <v-skeleton-loader v-else :class="mobile ? 'mb-1' : 'mb-2'" type="text" />
 
       <!-- Description -->
-      <div class="text-body-2 text-medium-emphasis mb-2 text-center">
+      <div
+        :class="[
+          'text-medium-emphasis text-center',
+          mobile ? 'text-caption mb-1' : 'text-body-2 mb-2',
+        ]"
+      >
         {{ description }}
       </div>
 
       <!-- Subtitle -->
       <div
         v-if="subtitle"
-        class="text-caption text-medium-emphasis mb-2 text-center"
+        :class="[
+          'text-medium-emphasis text-center',
+          mobile ? 'text-caption mb-1' : 'text-caption mb-2',
+        ]"
       >
         {{ subtitle }}
       </div>
 
       <!-- Trend -->
       <div
-        v-if="trend !== undefined && trendLabel"
+        v-if="trend !== undefined && trendLabel && !mobile"
         class="d-flex align-center justify-center mt-auto"
       >
         <v-chip

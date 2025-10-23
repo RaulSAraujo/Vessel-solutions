@@ -11,6 +11,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const { mobile } = useDisplay();
 const reportsApi = useReportsApi();
 
 const totalEvents = ref(0);
@@ -55,9 +56,9 @@ watch(() => props.period, fetchKPIs, { deep: true });
 </script>
 
 <template>
-  <v-row>
+  <v-row :dense="mobile">
     <!-- Eventos Concluídos -->
-    <v-col cols="12" sm="6" md="3">
+    <v-col cols="6" :sm="mobile ? 6 : 6" :md="3">
       <Card
         color="primary"
         :loading="loading"
@@ -66,11 +67,12 @@ watch(() => props.period, fetchKPIs, { deep: true });
         description="Eventos concluídos"
         :trend="monthlyGrowth"
         trend-label="vs mês anterior"
+        :mobile="mobile"
       />
     </v-col>
 
     <!-- Lucro Total -->
-    <v-col cols="12" sm="6" md="3">
+    <v-col cols="6" :sm="mobile ? 6 : 6" :md="3">
       <Card
         color="success"
         :loading="loading"
@@ -78,28 +80,31 @@ watch(() => props.period, fetchKPIs, { deep: true });
         description="Lucro bruto total"
         :title="`R$ ${totalProfit.toFixed(2)}`"
         :subtitle="`Média: R$ ${averageEventValue.toFixed(2)}`"
+        :mobile="mobile"
       />
     </v-col>
 
     <!-- Clientes -->
-    <v-col cols="12" sm="6" md="3">
+    <v-col cols="6" :sm="mobile ? 6 : 6" :md="3">
       <Card
         color="info"
         :loading="loading"
         :title="totalClients"
         icon="mdi-account-group"
         description="Clientes cadastrados"
+        :mobile="mobile"
       />
     </v-col>
 
     <!-- Bebidas -->
-    <v-col cols="12" sm="6" md="3">
+    <v-col cols="6" :sm="mobile ? 6 : 6" :md="3">
       <Card
         color="warning"
         :loading="loading"
         :title="totalDrinks"
         icon="mdi-glass-cocktail"
         description="Bebidas cadastradas"
+        :mobile="mobile"
       />
     </v-col>
   </v-row>

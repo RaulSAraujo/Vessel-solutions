@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useReportsApi } from "~/composables/api/useReportsApi";
 import type { PeriodFilter } from "~/composables/usePeriodFilter";
+import { useDisplay } from "vuetify";
 
 interface ProfitData {
   date: string;
@@ -16,6 +17,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const reportsApi = useReportsApi();
+const { mobile } = useDisplay();
 const isLoading = ref(true);
 const profitData = ref<ProfitData[]>([]);
 
@@ -51,33 +53,54 @@ watch(() => props.period, loadProfitSummary, { deep: true });
 </script>
 
 <template>
-  <v-card elevation="2" class="pa-4 border-sm" rounded="xl" height="400">
-    <v-card-title class="d-flex align-center justify-space-between">
-      Resumo de Lucros
+  <v-card
+    elevation="2"
+    :class="mobile ? 'pa-2' : 'pa-4'"
+    class="border-sm"
+    rounded="xl"
+    :height="mobile ? '300' : '440'"
+  >
+    <v-card-title
+      :class="mobile ? 'pa-2' : 'pa-4'"
+      class="d-flex align-center justify-space-between"
+    >
+      <span :class="mobile ? 'text-body-1' : 'text-h6'">Resumo de Lucros</span>
       <v-btn
         icon="mdi-refresh"
         variant="text"
-        size="small"
+        :size="mobile ? 'x-small' : 'small'"
         @click="loadProfitSummary"
       />
     </v-card-title>
 
-    <v-card-text>
-      <v-skeleton-loader v-if="isLoading" type="image" height="280" />
+    <v-card-text :class="mobile ? 'pa-2' : 'pa-4'">
+      <v-skeleton-loader
+        v-if="isLoading"
+        type="image"
+        :height="mobile ? 200 : 300"
+      />
 
       <div
         v-else-if="!profitData.length"
         class="d-flex flex-column align-center justify-center"
-        style="height: 280px"
+        :style="mobile ? 'height: 200px' : 'height: 300px'"
       >
         <v-icon
           icon="mdi-chart-areaspline-variant"
-          size="64"
+          :size="mobile ? 48 : 64"
           color="grey-lighten-1"
-          class="mb-4"
+          :class="mobile ? 'mb-2' : 'mb-4'"
         />
-        <p class="text-h6 text-medium-emphasis">Nenhum dado disponível</p>
-        <p class="text-body-2 text-medium-emphasis">
+        <p
+          :class="mobile ? 'text-body-1' : 'text-h6'"
+          class="text-medium-emphasis"
+        >
+          Nenhum dado disponível
+        </p>
+        <p
+          :class="mobile ? 'text-caption' : 'text-body-2'"
+          class="text-medium-emphasis"
+        >
           Complete alguns eventos para ver o gráfico
         </p>
       </div>
@@ -85,7 +108,7 @@ watch(() => props.period, loadProfitSummary, { deep: true });
       <template v-else>
         <AreaChart
           :data="profitData"
-          :height="280"
+          :height="mobile ? 210 : 300"
           :categories="{
             profit: { name: 'Lucro', color: '#4caf50' },
             cost: { name: 'Custo', color: '#f44336' },
@@ -93,9 +116,9 @@ watch(() => props.period, loadProfitSummary, { deep: true });
           }"
           :y-axis="['Valor (R$)']"
           :x-num-ticks="profitData.length"
-          :y-num-ticks="8"
+          :y-num-ticks="mobile ? 5 : 8"
           :y-grid-line="true"
-          :legend-position="LegendPosition.Top"
+          :legend-position="LegendPosition.TopCenter"
         />
       </template>
     </v-card-text>

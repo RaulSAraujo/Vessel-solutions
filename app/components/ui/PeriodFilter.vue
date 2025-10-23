@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
-import { watchDebounced } from "@vueuse/core";
-import dayjs from "dayjs";
-
 interface PeriodOption {
   label: string;
   value: string;
@@ -15,6 +11,8 @@ const emit = defineEmits<{
     period: { startDate: string; endDate: string; label: string }
   ];
 }>();
+
+const dayjs = useDayjs();
 
 const selectedPeriod = ref("this-month");
 
@@ -173,7 +171,7 @@ watch([customStartDate, customEndDate], () => {
       variant="outlined"
       density="compact"
       hide-details
-      style="min-width: 180px"
+      style="min-width: 180px; max-width: 180px"
       class="mr-2"
     >
       <template #prepend-inner>
