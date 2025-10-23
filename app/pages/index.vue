@@ -6,7 +6,7 @@ definePageMeta({
 </script>
 
 <template>
-  <v-container fluid class="pa-0">
+  <v-container fluid :class="$vuetify.display.mobile ? 'pa-0' : 'pa-0'">
     <LandingPageHeroSection />
 
     <LandingPageFeaturesSection />

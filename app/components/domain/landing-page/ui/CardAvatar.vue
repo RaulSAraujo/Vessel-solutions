@@ -8,16 +8,27 @@ defineProps<{
 </script>
 
 <template>
-  <v-card class="pa-6" elevation="2" rounded="lg" max-height="450">
-    <v-avatar size="96" class="mb-4">
+  <v-card
+    elevation="2"
+    rounded="lg"
+    :max-height="$vuetify.display.mobile ? '400' : '450'"
+    :class="$vuetify.display.mobile ? 'pa-4' : 'pa-6'"
+  >
+    <v-avatar :size="$vuetify.display.mobile ? '72' : '96'" class="mb-4">
       <v-img :src="image" :alt="imageAlt" />
     </v-avatar>
 
-    <v-card-text class="text-h6 font-italic">
+    <v-card-text
+      class="font-italic"
+      :class="$vuetify.display.mobile ? 'text-body-1' : 'text-h6'"
+    >
       {{ description }}
     </v-card-text>
 
-    <v-card-subtitle class="font-weight-bold">
+    <v-card-subtitle
+      class="font-weight-bold"
+      :class="$vuetify.display.mobile ? 'text-body-2' : 'text-subtitle-1'"
+    >
       {{ subtitle }}
     </v-card-subtitle>
   </v-card>

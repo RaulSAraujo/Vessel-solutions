@@ -3,9 +3,17 @@ import CardAvatar from "./ui/CardAvatar.vue";
 </script>
 
 <template>
-  <v-row class="testimonials-section py-16 text-center">
+  <v-row
+    class="testimonials-section text-center"
+    :class="$vuetify.display.mobile ? 'py-8' : 'py-16'"
+  >
     <v-container>
-      <h2 class="text-h3 mb-12">O que Nossos Clientes Dizem</h2>
+      <h2
+        class="mb-12"
+        :class="$vuetify.display.mobile ? 'text-h4' : 'text-h3'"
+      >
+        O que Nossos Clientes Dizem
+      </h2>
 
       <v-row justify="center">
         <v-col cols="12" md="6">

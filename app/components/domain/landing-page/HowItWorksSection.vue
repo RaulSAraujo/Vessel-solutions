@@ -3,9 +3,9 @@ import CardIcon from "./ui/CardIcon.vue";
 </script>
 
 <template>
-  <v-row class="how-it-works-section py-16">
+  <v-row class="how-it-works-section py-8 py-md-16">
     <v-container>
-      <h2 class="text-h3 text-center mb-12">
+      <h2 class="text-h4 text-md-h3 text-center mb-12">
         Sua Gestão de Coquetelaria em 3 Passos Simples
       </h2>
 

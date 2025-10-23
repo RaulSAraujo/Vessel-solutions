@@ -3,8 +3,8 @@ import CardIcon from "./ui/CardIcon.vue";
 </script>
 
 <template>
-  <v-container class="py-16">
-    <h2 class="text-h3 text-center mb-12">
+  <v-container class="py-8 py-md-16">
+    <h2 class="text-h4 text-md-h3 text-center mb-12">
       Recursos que Transformam seu Negócio
     </h2>
 

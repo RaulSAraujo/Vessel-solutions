@@ -1,9 +1,14 @@
 <script lang="ts" setup></script>
 
 <template>
-  <v-row class="py-16">
+  <v-row :class="$vuetify.display.mobile ? 'py-8' : 'py-16'">
     <v-container>
-      <h2 class="text-h3 text-center mb-12">Perguntas Frequentes</h2>
+      <h2
+        class="text-center mb-12"
+        :class="$vuetify.display.mobile ? 'text-h4' : 'text-h3'"
+      >
+        Perguntas Frequentes
+      </h2>
 
       <v-expansion-panels variant="popout" class="mb-12">
         <v-expansion-panel>
