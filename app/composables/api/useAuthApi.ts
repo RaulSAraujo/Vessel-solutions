@@ -38,8 +38,6 @@ export function useAuthApi() {
 
             if (error) throw error;
 
-            console.log(data)
-
             return true;
         } catch (error: unknown) {
             const err = error as FetchError;

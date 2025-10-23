@@ -75,7 +75,6 @@ async function loadData() {
 
 const handleExport = () => {
   // TODO: Implementar exportação do gráfico
-  console.log("Exportar gráfico de consumo");
 };
 
 onMounted(loadData);

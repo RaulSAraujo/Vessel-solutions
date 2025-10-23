@@ -40,8 +40,6 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        console.log(`Found ${eventsData?.length || 0} events for trend analysis`);
-
         // Agrupar por mês
         const monthlyData: { [key: string]: { events: number, revenue: number } } = {};
 
@@ -71,9 +69,6 @@ export default defineEventHandler(async (event) => {
                     revenue: Math.round(monthlyData[monthKey].revenue * 100) / 100,
                 };
             });
-
-        console.log(`Generated ${transformedData.length} data points for event trend`);
-        console.log('Transformed data:', transformedData);
 
         return transformedData;
 

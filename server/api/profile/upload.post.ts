@@ -7,10 +7,8 @@ export default defineEventHandler(async (event) => {
 
         // Verificar se é uma requisição multipart/form-data
         const contentType = getHeader(event, 'content-type');
-        console.log('Content-Type recebido:', contentType);
 
         if (!contentType?.includes('multipart/form-data')) {
-            console.log('Content-Type inválido, esperado multipart/form-data');
             throw createError({
                 statusCode: 400,
                 statusMessage: "Content-Type deve ser multipart/form-data"
@@ -19,10 +17,8 @@ export default defineEventHandler(async (event) => {
 
         // Ler o body como FormData
         const formData = await readMultipartFormData(event);
-        console.log('FormData recebido:', formData?.length || 0, 'itens');
 
         if (!formData || formData.length === 0) {
-            console.log('Nenhum arquivo foi enviado');
             throw createError({
                 statusCode: 400,
                 statusMessage: "Nenhum arquivo foi enviado"
@@ -30,14 +26,8 @@ export default defineEventHandler(async (event) => {
         }
 
         const file = formData[0];
-        console.log('Arquivo recebido:', {
-            filename: file.filename,
-            type: file.type,
-            size: file.data?.length || 0
-        });
 
         if (!file.data || !file.filename) {
-            console.log('Arquivo inválido:', { hasData: !!file.data, hasFilename: !!file.filename });
             throw createError({
                 statusCode: 400,
                 statusMessage: "Arquivo inválido"
@@ -67,7 +57,6 @@ export default defineEventHandler(async (event) => {
         if (currentAvatarUrl) {
             const oldFileName = currentAvatarUrl.split('/').pop();
             if (oldFileName) {
-                console.log('Removendo avatar antigo:', oldFileName);
                 const { error: deleteError } = await client.storage
                     .from('avatars')
                     .remove([oldFileName]);
@@ -75,8 +64,6 @@ export default defineEventHandler(async (event) => {
                 if (deleteError) {
                     console.warn('Erro ao remover avatar antigo:', deleteError);
                     // Não falhar se não conseguir remover o arquivo antigo
-                } else {
-                    console.log('Avatar antigo removido com sucesso');
                 }
             }
         }
@@ -86,9 +73,6 @@ export default defineEventHandler(async (event) => {
         const fileName = `${user.id}.${fileExt}`;
         const filePath = `${fileName}`;
 
-        console.log('Fazendo upload para:', filePath);
-        console.log('User ID:', user.id);
-
         // Fazer upload para o Supabase Storage
         const { error: uploadError } = await client.storage
             .from('avatars')
@@ -97,8 +81,6 @@ export default defineEventHandler(async (event) => {
                 upsert: true,
                 contentType: file.type
             });
-
-        console.log('Resultado do upload:', { error: uploadError?.message || 'Sucesso' });
 
         if (uploadError) {
             // Se o bucket não existir, tentar criar

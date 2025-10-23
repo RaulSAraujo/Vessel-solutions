@@ -53,7 +53,6 @@ export async function generatePurchaseListItems(
         }
 
         if (!eventDrinks || eventDrinks.length === 0) {
-            console.log('Nenhum drink encontrado para o evento');
             return;
         }
 
@@ -62,7 +61,6 @@ export async function generatePurchaseListItems(
             await processEventDrink(client, eventDrink, eventData, allUnits as Units[], totalDrinks);
         }
 
-        console.log(`Purchase-list gerada automaticamente para o evento ${eventId}`);
     } catch (error) {
         console.error('Erro ao gerar purchase-list automaticamente:', error);
     }
@@ -111,7 +109,6 @@ export async function generatePurchaseListForNewDrink(
 
         await processEventDrink(client, eventDrink, eventData, allUnits as Units[], totalDrinks);
 
-        console.log(`Purchase-list atualizada para o novo drink ${eventDrink.drink_name} no evento ${eventId}`);
     } catch (error) {
         console.error('Erro ao gerar purchase-list para novo drink:', error);
     }
@@ -149,7 +146,6 @@ export async function recalculatePurchaseListForEvent(
         // Regenerar purchase-list com os novos dados
         await generatePurchaseListItems(client, eventId, eventData);
 
-        console.log(`Purchase-list recalculada para o evento ${eventId}`);
     } catch (error) {
         console.error('Erro ao recalcular purchase-list:', error);
     }
@@ -183,7 +179,6 @@ export async function cleanupPurchaseListAfterDrinkRemoval(
             .single();
 
         if (!drink || !drink.drink_ingredients) {
-            console.log(`Drink ${removedDrinkName} não encontrado ou sem ingredientes`);
             return;
         }
 
@@ -200,7 +195,6 @@ export async function cleanupPurchaseListAfterDrinkRemoval(
                 .delete()
                 .eq('event_id', eventId);
 
-            console.log(`Todos os itens da purchase-list removidos - evento ${eventId} sem drinks`);
             return;
         }
 
@@ -236,11 +230,9 @@ export async function cleanupPurchaseListAfterDrinkRemoval(
                     .eq('ingredient_id', drinkIngredient.ingredient_id)
                     .eq('unit_id', drinkIngredient.unit_id);
 
-                console.log(`Ingrediente ${drinkIngredient.ingredient_id} removido da purchase-list - não usado por outros drinks`);
             }
         }
 
-        console.log(`Purchase-list limpa após remoção do drink ${removedDrinkName} do evento ${eventId}`);
     } catch (error) {
         console.error('Erro ao limpar purchase-list após remoção de drink:', error);
     }
@@ -295,7 +287,6 @@ async function processEventDrink(
         .single();
 
     if (drinkError || !drink) {
-        console.log(`Drink não encontrado: ${eventDrink.drink_name}`);
         return;
     }
 
