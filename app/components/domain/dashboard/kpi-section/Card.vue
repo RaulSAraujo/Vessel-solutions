@@ -28,14 +28,14 @@ const getTrendIcon = (trend: number) => {
 
 <template>
   <v-card
+    rounded="xl"
+    elevation="3"
+    :min-height="mobile ? '150' : '200'"
+    :color="color ? `${color}-lighten-5` : 'primary-lighten-5'"
     :class="[
-      'text-center border-sm position-relative overflow-hidden',
+      'text-center border-sm overflow-hidden position-relative',
       mobile ? 'pa-3' : 'pa-6',
     ]"
-    elevation="3"
-    rounded="xl"
-    :min-height="mobile ? '140' : '200'"
-    :color="color ? `${color}-lighten-5` : 'primary-lighten-5'"
   >
     <!-- Background Pattern -->
     <div
@@ -46,15 +46,13 @@ const getTrendIcon = (trend: number) => {
           : 'top: -20px; right: -20px; opacity: 0.1'
       "
     >
-      <v-icon :size="mobile ? 80 : 120" :color="color || 'primary'">{{
-        icon
-      }}</v-icon>
+      <v-icon :size="mobile ? 80 : 120" :color="color || 'primary'">
+        {{ icon }}
+      </v-icon>
     </div>
 
     <!-- Main Content -->
-    <div
-      class="position-relative d-flex flex-column justify-center align-center h-100"
-    >
+    <div class="d-flex flex-column justify-center align-center">
       <!-- Icon -->
       <v-avatar
         :color="color || 'primary'"
@@ -100,12 +98,12 @@ const getTrendIcon = (trend: number) => {
 
       <!-- Trend -->
       <div
-        v-if="trend !== undefined && trendLabel && !mobile"
+        v-if="trend !== undefined && trendLabel"
         class="d-flex align-center justify-center mt-auto"
       >
         <v-chip
           :color="getTrendColor(trend)"
-          size="small"
+          :size="mobile ? 'x-small' : 'small'"
           variant="flat"
           class="text-caption"
         >
