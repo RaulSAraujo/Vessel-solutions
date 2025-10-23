@@ -118,19 +118,6 @@ export function useReportsApi() {
     }
   };
 
-  const getEventProfitability = async (period?: PeriodParams) => {
-    try {
-      const params = period ? { ...period } : {};
-      const res = await $fetch("/api/reports/event-profitability", {
-        query: params,
-      });
-      return res;
-    } catch (error: unknown) {
-      const err = error as FetchError;
-      $toast().error(err.message || "Failed to fetch event profitability.");
-    }
-  };
-
   return {
     getKpisOverview,
     getMonthlyEvents,
@@ -141,6 +128,5 @@ export function useReportsApi() {
     getTopClients,
     getIngredientConsumption,
     getQuotationHistory,
-    getEventProfitability,
   };
 }
