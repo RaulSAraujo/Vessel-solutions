@@ -20,7 +20,9 @@ const onSubmit = handleSubmit(async (values) => {
   const success: boolean = await login(values.email, values.password);
 
   if (success) {
-    await navigateTo("/dashboard");
+    setTimeout(async () => {
+      await navigateTo("/dashboard");
+    }, 200);
   }
 });
 

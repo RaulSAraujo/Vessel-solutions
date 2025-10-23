@@ -12,27 +12,27 @@
   },
   "dependencies": {
     "@nuxt/eslint": "1.9.0",
-    "@nuxtjs/supabase": "1.6.2",
+    "@nuxtjs/supabase": "2.0.1",
     "@pinia/nuxt": "0.11.2",
     "@vee-validate/nuxt": "^4.15.1",
     "@vee-validate/yup": "^4.15.1",
-    "@vueuse/nuxt": "13.9.0",
+    "@vueuse/nuxt": "14.0.0",
     "dayjs": "^1.11.18",
     "dayjs-nuxt": "2.1.11",
     "dayjs-plugin-utc": "^0.1.2",
-    "eslint": "^9.0.0",
+    "eslint": "9.38.0",
     "maska": "^3.2.0",
-    "nuxt": "^4.1.2",
-    "nuxt-charts": "0.2.4",
+    "nuxt": "4.1.3",
+    "nuxt-charts": "1.0.2",
     "pinia": "^3.0.3",
     "vue": "^3.5.21",
-    "vue-router": "^4.5.1",
+    "vue-router": "4.6.3",
     "vue3-toastify": "^0.2.8",
-    "vuetify-nuxt-module": "0.18.7",
+    "vuetify-nuxt-module": "0.18.8",
     "yup": "^1.7.1"
   },
   "devDependencies": {
-    "typescript": "^5.9.2",
-    "vue-tsc": "^3.1.0"
+    "typescript": "5.9.3",
+    "vue-tsc": "3.1.1"
   }
 }

@@ -17,5 +17,13 @@ export async function getSupabaseClientAndUser(event: H3Event) {
       message: "Authentication required. Please log in.",
     });
   }
-  return { client, user };
+
+  // No v2, o ID do usuário está em user.sub (JWT claims)
+  // Criamos um objeto compatível com o formato anterior
+  const userWithId = {
+    ...user,
+    id: user.sub // user.sub contém o ID do usuário nas JWT claims
+  };
+
+  return { client, user: userWithId };
 }
