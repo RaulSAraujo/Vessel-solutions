@@ -644,6 +644,7 @@ export type Database = {
       purchase_list: {
         Row: {
           created_at: string | null
+          estimated_cost: number | null
           event_id: string
           id: string
           ingredient_id: string
@@ -656,6 +657,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          estimated_cost?: number | null
           event_id: string
           id?: string
           ingredient_id: string
@@ -668,6 +670,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          estimated_cost?: number | null
           event_id?: string
           id?: string
           ingredient_id?: string

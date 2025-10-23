@@ -1,5 +1,4 @@
 import type { FetchError } from "ofetch";
-import type { Tables } from '~~/server/types/database';
 
 export default defineEventHandler(async (event) => {
     try {
@@ -23,16 +22,7 @@ export default defineEventHandler(async (event) => {
                     guest_count,
                     clients!inner (name)
                 ),
-                ingredients!inner (
-                    id,
-                    name,
-                    unit_weight_g,
-                    unit_volume_ml,
-                    wastage_percentage,
-                    real_cost_per_base_unit,
-                    current_quotation_id,
-                    units (name, abbreviation)
-                ),
+                ingredient: ingredients!inner(*),
                 units (id, name, abbreviation)
             `, { count: "exact" });
 
@@ -64,7 +54,7 @@ export default defineEventHandler(async (event) => {
         }
 
         return {
-            data: data as any[],
+            data: data,
             page: {
                 page,
                 itemsPerPage,

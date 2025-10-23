@@ -1,8 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Tables } from "~~/server/types/database";
-import { convertQuantity } from "../../shared/utils/unitConverter";
-import type { Units, IngredientDetails } from "../../shared/types/units";
-
 
 // Tipos para os dados dos drinks do evento
 interface EventDrink {
@@ -134,24 +132,32 @@ async function processEventDrink(
     allUnits: Units[],
     totalDrinks: number
 ) {
-    // Buscar o drink original para obter os ingredientes
+    // Buscar o drink original para obter os ingredientes com quotation completa
     const { data: drink, error: drinkError } = await client
         .from('drinks')
         .select(`
             id,
             name,
             drink_ingredients (
-                ingredient_id,
                 quantity,
                 unit_id,
-                ingredients!inner (
+                ingredient_id,
+                ingredients!inner(
                     id,
                     name,
                     unit_id,
-                    current_quotation_id,
                     unit_weight_g,
                     unit_volume_ml,
-                    units (name, abbreviation)
+                    current_quotation_id,
+                    units (name, abbreviation),
+                    quotation:quotations!current_quotation_id (
+                        id,
+                        purchase_price,
+                        purchase_quantity,
+                        purchase_unit_id,
+                        supplier_id,
+                        quotation_date
+                    )
                 )
             )
         `)
@@ -171,54 +177,20 @@ async function processEventDrink(
     }
 
     // Para cada ingrediente do drink
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    for (const drinkIngredient of drink.drink_ingredients as any[]) {
-        // Verificar se ingredients existe e é um array
-        if (drinkIngredient.ingredients && Array.isArray(drinkIngredient.ingredients)) {
-            // Para cada ingrediente relacionado (pode haver múltiplos)
-            for (const ingredient of drinkIngredient.ingredients) {
-                await processIngredient(
-                    client,
-                    eventDrink,
-                    eventData,
-                    drinkIngredient,
-                    ingredient,
-                    allUnits,
-                    totalDrinks
-                );
-            }
+    for (const drinkIngredient of drink.drink_ingredients) {
+        // A query já retorna o ingrediente com quotation completa
+        if (drinkIngredient.ingredients) {
+            await processIngredient(
+                client,
+                eventDrink,
+                eventData,
+                drinkIngredient,
+                drinkIngredient.ingredients,
+                allUnits,
+                totalDrinks
+            );
         } else {
-            // Se não há ingredientes aninhados, pode ser que a query não trouxe os dados relacionados
-            // Vamos buscar o ingrediente diretamente usando o ingredient_id
-            if (drinkIngredient.ingredient_id) {
-                const { data: ingredient } = await client
-                    .from('ingredients')
-                    .select(`
-                        id,
-                        name,
-                        unit_id,
-                        current_quotation_id,
-                        unit_weight_g,
-                        unit_volume_ml,
-                        units (name, abbreviation)
-                    `)
-                    .eq('id', drinkIngredient.ingredient_id)
-                    .single() as { data: Tables<"ingredients"> | null };
-
-                if (ingredient) {
-                    await processIngredient(
-                        client,
-                        eventDrink,
-                        eventData,
-                        drinkIngredient,
-                        ingredient,
-                        allUnits,
-                        totalDrinks
-                    );
-                }
-            } else {
-                console.warn(`Ingrediente não encontrado para drink ${eventDrink.drink_name}`);
-            }
+            console.warn(`Ingrediente não encontrado para drink ${eventDrink.drink_name}`);
         }
     }
 }
@@ -228,8 +200,8 @@ async function processEventDrink(
  * @param client - Cliente Supabase
  * @param eventDrink - Dados do drink do evento
  * @param eventData - Dados do evento
- * @param drinkIngredient - Dados do ingrediente do drink
- * @param ingredient - Dados do ingrediente
+ * @param drinkIngredient - Dados do ingrediente do drink (com dados aninhados da query)
+ * @param ingredient - Dados do ingrediente com quotation completa
  * @param allUnits - Todas as unidades do sistema
  * @param totalDrinks - Total de drinks estimado para o evento
  */
@@ -237,73 +209,90 @@ async function processIngredient(
     client: SupabaseClient,
     eventDrink: EventDrink,
     eventData: Tables<"events">,
-    drinkIngredient: Tables<"drink_ingredients">,
-    ingredient: Tables<"ingredients">,
+    drinkIngredient: any, // Tipo flexível para incluir dados aninhados da query
+    ingredient: any, // Tipo mais flexível para incluir quotation
     allUnits: Units[],
     totalDrinks: number
 ) {
     // Calcular quantidade necessária do ingrediente na unidade base (da receita)
     const ingredientQuantityInBaseUnit = (eventDrink.drink_percentage / 100.0) * totalDrinks * drinkIngredient.quantity;
 
-    // Determinar a unidade de compra
+    // Usar dados da quotation se disponível, senão usar unidade base
     let purchaseUnitId = drinkIngredient.unit_id; // Unidade base por padrão
     let purchaseQuantity = ingredientQuantityInBaseUnit;
 
-    // Se o ingrediente tem uma cotação ativa, usar a unidade da cotação
-    if (ingredient.current_quotation_id) {
-        const { data: quotation } = await client
-            .from('quotations')
-            .select('purchase_unit_id')
-            .eq('id', ingredient.current_quotation_id)
-            .single();
+    // Se o ingrediente tem uma quotation ativa, usar seus dados
+    if (ingredient.quotation && ingredient.quotation.purchase_unit_id) {
+        purchaseUnitId = ingredient.quotation.purchase_unit_id;
 
-        if (quotation && quotation.purchase_unit_id) {
-            purchaseUnitId = quotation.purchase_unit_id;
+        // Converter da unidade base (receita) para a unidade de compra (cotação)
+        try {
+            const ingredientDetails: IngredientDetails = {
+                unit_weight_g: ingredient.unit_weight_g,
+                unit_volume_ml: ingredient.unit_volume_ml,
+            };
 
-            // Converter da unidade base (receita) para a unidade de compra (cotação)
-            try {
-                const ingredientDetails: IngredientDetails = {
-                    unit_weight_g: ingredient.unit_weight_g,
-                    unit_volume_ml: ingredient.unit_volume_ml,
-                };
+            if (!drinkIngredient.unit_id || !purchaseUnitId) throw new Error('Unidades inválidas');
 
-                if (!drinkIngredient.unit_id || !purchaseUnitId) throw new Error('Unidades inválidas');
+            purchaseQuantity = convertQuantity(
+                ingredientQuantityInBaseUnit,
+                drinkIngredient.unit_id, // Unidade base da receita
+                purchaseUnitId, // Unidade de compra da cotação
+                allUnits,
+                ingredientDetails
+            );
+        } catch (conversionError) {
+            console.warn(`Erro na conversão de unidades para ingrediente ${ingredient.name}:`, conversionError);
+            // Em caso de erro, usar a unidade base
+            purchaseUnitId = drinkIngredient.unit_id;
+            purchaseQuantity = ingredientQuantityInBaseUnit;
+        }
+    }
 
-                purchaseQuantity = convertQuantity(
-                    ingredientQuantityInBaseUnit,
-                    drinkIngredient.unit_id, // Unidade base da receita
-                    purchaseUnitId, // Unidade de compra da cotação
+    // Calcular custo estimado
+    let estimatedCost = null;
+    if (ingredient.quotation && ingredient.quotation.purchase_price && ingredient.quotation.purchase_quantity) {
+        // Calcular custo por unidade de compra
+        const costPerPurchaseUnit = ingredient.quotation.purchase_price / ingredient.quotation.purchase_quantity;
+        estimatedCost = purchaseQuantity * costPerPurchaseUnit;
+    } else if (ingredient.real_cost_per_base_unit) {
+        // Se não há cotação, usar o custo real por unidade base
+        // Converter da unidade de compra para a unidade base para calcular o custo
+        try {
+            const ingredientDetails: IngredientDetails = {
+                unit_weight_g: ingredient.unit_weight_g,
+                unit_volume_ml: ingredient.unit_volume_ml,
+            };
+
+            if (purchaseUnitId && drinkIngredient.unit_id) {
+                const quantityInBaseUnit = convertQuantity(
+                    purchaseQuantity,
+                    purchaseUnitId, // Unidade de compra
+                    drinkIngredient.unit_id, // Unidade base
                     allUnits,
                     ingredientDetails
                 );
-            } catch (conversionError) {
-                console.warn(`Erro na conversão de unidades para ingrediente ${ingredient.name}:`, conversionError);
-                // Em caso de erro, usar a unidade base
-                purchaseUnitId = drinkIngredient.unit_id;
-                purchaseQuantity = ingredientQuantityInBaseUnit;
+                estimatedCost = quantityInBaseUnit * ingredient.real_cost_per_base_unit;
             }
+        } catch (conversionError) {
+            console.warn(`Erro na conversão para calcular custo do ingrediente ${ingredient.name}:`, conversionError);
+            // Em caso de erro, usar quantidade direta (assumindo mesma unidade)
+            estimatedCost = purchaseQuantity * ingredient.real_cost_per_base_unit;
         }
     }
 
     // Verificar se já existe um item na purchase-list para este ingrediente na mesma unidade
     const { data: existingItem } = await client
         .from('purchase_list')
-        .select('id, quantity_needed')
+        .select('id, quantity_needed, estimated_cost')
         .eq('event_id', eventData.id)
         .eq('ingredient_id', drinkIngredient.ingredient_id)
         .eq('unit_id', purchaseUnitId)
         .single();
 
-    if (existingItem) {
-        // Atualizar quantidade existente
-        await client
-            .from('purchase_list')
-            .update({
-                quantity_needed: existingItem.quantity_needed + purchaseQuantity,
-                notes: `Gerado automaticamente para o evento: ${eventData.location} (${new Date(eventData.start_time).toLocaleDateString('pt-BR')})`
-            })
-            .eq('id', existingItem.id);
-    } else {
+    const eventNotes = `Gerado automaticamente para o evento: ${eventData.location} (${new Date(eventData.start_time).toLocaleDateString('pt-BR')})`;
+
+    if (!existingItem) {
         // Inserir novo item na purchase-list
         await client
             .from('purchase_list')
@@ -313,7 +302,9 @@ async function processIngredient(
                 quantity_needed: purchaseQuantity,
                 unit_id: purchaseUnitId,
                 status: 'pending',
-                notes: `Gerado automaticamente para o evento: ${eventData.location} (${new Date(eventData.start_time).toLocaleDateString('pt-BR')})`
+                notes: eventNotes,
+                estimated_cost: estimatedCost,
+                user_id: eventData.user_id,
             });
     }
 }

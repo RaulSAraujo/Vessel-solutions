@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { usePurchaseListApi } from '~/composables/api/usePurchaseListApi';
+import type { EmittedFilters } from "~/types/filter";
 import type { VDataTableServerOptions } from "~/types/data-table";
 import type { Datum, PurchaseListSummary } from '~/types/purchase-list';
 
@@ -13,6 +14,9 @@ export const usePurchaseListStore = defineStore('purchase-list', () => {
     const items = ref<Datum[]>([])
     const selectedItems = ref<Datum[]>([]);
     const itemsPerPage = ref<10 | 25 | 50>(10);
+
+    // Filtros
+    const activeFilters = ref<EmittedFilters>({});
 
     // Actions
     const fetchPurchaseList = async (props?: VDataTableServerOptions) => {
@@ -28,7 +32,7 @@ export const usePurchaseListStore = defineStore('purchase-list', () => {
             };
         }
 
-        const res = await usePurchaseListApi().getPurchaseList(props);
+        const res = await usePurchaseListApi().getPurchaseList(props, activeFilters.value);
 
         if (res) {
             items.value = res.data;
@@ -41,7 +45,6 @@ export const usePurchaseListStore = defineStore('purchase-list', () => {
 
     const fetchSummary = async (eventId?: string) => {
         loading.value = true;
-
 
         const data = await usePurchaseListApi().getPurchaseListSummary(eventId);
 
@@ -87,6 +90,7 @@ export const usePurchaseListStore = defineStore('purchase-list', () => {
         itemsPerPage,
         totalItems,
         selectedItems,
+        activeFilters,
 
         // Actions
         fetchPurchaseList,

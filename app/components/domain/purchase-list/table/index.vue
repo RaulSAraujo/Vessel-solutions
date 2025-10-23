@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import Status from "./Status.vue";
+import EstimatedCost from "./EstimatedCost.vue";
+
 defineEmits(["openFilter", "openBulkActions"]);
 
 // Usar store diretamente
@@ -10,59 +13,13 @@ const headers = [
   { title: "Evento", key: "events.location", minWidth: 200 },
   { title: "Data do Evento", key: "events.start_time", minWidth: 150 },
   { title: "Cliente", key: "events.clients.name", minWidth: 150 },
-  { title: "Ingrediente", key: "ingredients.name", minWidth: 200 },
+  { title: "Ingrediente", key: "ingredient.name", minWidth: 200 },
   { title: "Quantidade", key: "quantity_needed", minWidth: 120 },
   { title: "Status", key: "status", minWidth: 120 },
   { title: "Custo Est.", key: "estimated_cost", minWidth: 120 },
-  { title: "Observações", key: "notes", minWidth: 200 },
+  { title: "Observações", key: "notes", maxWidth: 200 },
   { title: "Criado em", key: "created_at", minWidth: 150 },
 ];
-
-// Computed para calcular custo estimado
-// const itemsWithEstimatedCost = computed(() => {
-//   return purchaseList.value.map((item) => {
-//     const ingredient = item.ingredients;
-//     let estimatedCost = 0;
-
-//     // Usar o custo real por unidade base
-//     if (ingredient.real_cost_per_base_unit) {
-//       estimatedCost = item.quantity_needed * ingredient.real_cost_per_base_unit;
-//     }
-
-//     return {
-//       ...item,
-//       estimated_cost: estimatedCost,
-//       // Mostrar a unidade da purchase-list (que pode ser diferente da unidade base)
-//       display_unit: item.units,
-//     };
-//   });
-// });
-
-function getStatusColor(status: string) {
-  switch (status) {
-    case "pending":
-      return "warning";
-    case "purchased":
-      return "success";
-    case "cancelled":
-      return "error";
-    default:
-      return "grey";
-  }
-}
-
-function getStatusText(status: string) {
-  switch (status) {
-    case "pending":
-      return "Pendente";
-    case "purchased":
-      return "Comprado";
-    case "cancelled":
-      return "Cancelado";
-    default:
-      return status;
-  }
-}
 </script>
 
 <template>
@@ -126,48 +83,22 @@ function getStatusText(status: string) {
       {{ formatDate(item.events.start_time) }}
     </template>
 
-    <template #item.events.clients.name="{ item }">
-      {{ item.events.clients.name }}
-    </template>
-
-    <template #item.ingredients.name="{ item }">
-      <div>
-        <div class="font-weight-medium">{{ item.ingredients.name }}</div>
-        <div class="text-caption text-grey">
-          {{ item.ingredients.units.name }} ({{
-            item.ingredients.units.abbreviation
-          }})
-        </div>
-      </div>
-    </template>
-
     <template #item.quantity_needed="{ item }">
       <div>
-        {{ item.quantity_needed.toFixed(3) }}
+        <span>{{ item.quantity_needed }}</span>
+
+        <span class="text-caption text-grey">
+          ({{ item.units.abbreviation }})
+        </span>
       </div>
     </template>
 
     <template #item.status="{ item }">
-      <v-chip
-        :color="getStatusColor(item.status)"
-        size="small"
-        variant="flat"
-        class="text-white"
-      >
-        {{ getStatusText(item.status) }}
-      </v-chip>
-    </template>
-
-    <template #item.estimated_cost="{ item }">
-      <div class="text-right">
-        {{ formatCurrency(item.estimated_cost) }}
-      </div>
+      <Status :status="item.status" />
     </template>
 
     <template #item.notes="{ item }">
-      <div class="text-truncate" style="max-width: 200px">
-        {{ item.notes || "-" }}
-      </div>
+      <UiTextWithTooltip :text="item.notes" />
     </template>
 
     <template #item.created_at="{ item }">

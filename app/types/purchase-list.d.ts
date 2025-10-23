@@ -11,6 +11,7 @@ export type Datum = {
     unit_id: number;
     status: PurchaseStatus;
     notes: string | null;
+    estimated_cost: number | null;
     created_at: string | null;
     updated_at: string | null;
     user_id: string | null;
@@ -62,6 +63,7 @@ export type FormPurchaseListItem = {
     unit_id: number;
     status?: PurchaseStatus;
     notes?: string | null;
+    estimated_cost?: number | null;
 };
 
 export type PurchaseListFilters = {
