@@ -1,4 +1,5 @@
 import { getSupabaseClientAndUser } from '~~/server/utils/supabase';
+import { cleanupPurchaseListAfterDrinkRemoval } from "~~/server/utils/purchaseListGenerator";
 import type { FetchError } from "ofetch";
 
 export default defineEventHandler(async (event) => {
@@ -15,6 +16,25 @@ export default defineEventHandler(async (event) => {
             });
         }
 
+        // Buscar o event_drink antes de deletar para obter informações
+        const { data: eventDrink, error: selectError } = await client
+            .from('event_drinks')
+            .select(`
+                drink_name,
+                events!inner (user_id)
+            `)
+            .eq('id', eventDrinkId)
+            .eq('event_id', eventId)
+            .single();
+
+        if (selectError) {
+            throw createError({
+                statusCode: 500,
+                statusMessage: 'Failed to fetch event drink',
+                message: selectError.message,
+            });
+        }
+
         const { error } = await client
             .from('event_drinks')
             .delete()
@@ -27,6 +47,11 @@ export default defineEventHandler(async (event) => {
                 statusMessage: 'Failed to delete drink',
                 message: error.message,
             });
+        }
+
+        // Limpar itens da purchase-list que não são mais necessários
+        if (eventDrink.drink_name && eventDrink.events.user_id) {
+            await cleanupPurchaseListAfterDrinkRemoval(client, eventId, eventDrink.drink_name, eventDrink.events.user_id);
         }
 
         return { message: `Event drink deleted successfully.` };

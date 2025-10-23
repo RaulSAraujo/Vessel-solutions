@@ -1,4 +1,5 @@
 import { getSupabaseClientAndUser } from '~~/server/utils/supabase';
+import { recalculatePurchaseListForEvent } from "~~/server/utils/purchaseListGenerator";
 import type { FetchError } from "ofetch";
 import type { Tables, TablesInsert } from '~~/server/types/database';
 
@@ -26,6 +27,12 @@ export default defineEventHandler(async (event) => {
             });
         }
 
+        // Buscar drinks atuais para comparar mudanças
+        const { data: currentEventDrinks } = await client
+            .from('event_drinks')
+            .select('drink_name, drink_percentage')
+            .eq('event_id', eventId);
+
         const drinksData = body.map((drink) => ({
             id: drink.id,
             event_id: eventId,
@@ -50,6 +57,31 @@ export default defineEventHandler(async (event) => {
                 statusMessage: 'Failed to upsert event drinks',
                 message: upsertError.message,
             });
+        }
+
+        // Verificar se houve mudanças nas porcentagens dos drinks
+        let hasPercentageChanges = false;
+
+        if (currentEventDrinks && currentEventDrinks.length > 0) {
+            // Comparar porcentagens dos drinks
+            for (const newDrink of body) {
+                const currentDrink = currentEventDrinks.find(
+                    cd => cd.drink_name === newDrink.drink_name
+                );
+
+                if (currentDrink && currentDrink.drink_percentage !== newDrink.drink_percentage) {
+                    hasPercentageChanges = true;
+                    break;
+                }
+            }
+        } else {
+            // Se não havia drinks antes, considerar como mudança
+            hasPercentageChanges = true;
+        }
+
+        // Recalcular purchase-list se houve mudanças nas porcentagens
+        if (hasPercentageChanges) {
+            await recalculatePurchaseListForEvent(client, eventId);
         }
 
         return data as EventDrink[];

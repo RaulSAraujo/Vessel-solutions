@@ -1,6 +1,6 @@
 import type { FetchError } from "ofetch";
 import type { TablesUpdate } from "~~/server/types/database";
-import { generatePurchaseListItems } from "~~/server/utils/purchaseListGenerator";
+import { generatePurchaseListItems, recalculatePurchaseListForEvent } from "~~/server/utils/purchaseListGenerator";
 
 export default defineEventHandler(async (event) => {
     try {
@@ -17,10 +17,10 @@ export default defineEventHandler(async (event) => {
             });
         }
 
-        // Buscar o evento atual para verificar o status anterior
+        // Buscar o evento atual para verificar mudanças
         const { data: currentEvent } = await client
             .from('events')
-            .select('status')
+            .select('status, estimated_total_drinks')
             .eq('id', eventId)
             .single();
 
@@ -54,6 +54,13 @@ export default defineEventHandler(async (event) => {
         // Verificar se o status foi alterado para 'purchase'
         if (body.status === 'purchase' && currentEvent?.status !== 'purchase') {
             await generatePurchaseListItems(client, eventId, updatedEvent);
+        }
+
+        // Verificar se a quantidade estimada de drinks foi alterada
+        if (body.estimated_total_drinks !== undefined &&
+            body.estimated_total_drinks !== currentEvent?.estimated_total_drinks) {
+            // Recalcular purchase-list se já existe
+            await recalculatePurchaseListForEvent(client, eventId);
         }
 
         return updatedEvent;

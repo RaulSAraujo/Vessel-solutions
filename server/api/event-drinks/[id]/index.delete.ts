@@ -1,5 +1,5 @@
+import { cleanupPurchaseListAfterDrinkRemoval } from "~~/server/utils/purchaseListGenerator";
 import type { FetchError } from "ofetch";
-import type { SupabaseClient } from "@supabase/supabase-js";
 
 export default defineEventHandler(async (event) => {
     try {
@@ -48,7 +48,9 @@ export default defineEventHandler(async (event) => {
         }
 
         // Limpar itens da purchase-list que não são mais necessários
-        await cleanupPurchaseListItems(client, eventDrink.event_id, eventDrink.drink_name, eventDrink.events.user_id);
+        if (eventDrink.drink_name && eventDrink.events.user_id) {
+            await cleanupPurchaseListAfterDrinkRemoval(client, eventDrink.event_id, eventDrink.drink_name, eventDrink.events.user_id);
+        }
 
         return { message: `Event drink ${eventDrinkId} deleted successfully.` };
     } catch (error: unknown) {
@@ -61,78 +63,3 @@ export default defineEventHandler(async (event) => {
         });
     }
 });
-
-// Função para limpar itens da purchase-list quando um drink é removido
-async function cleanupPurchaseListItems(client: SupabaseClient, eventId: string, removedDrinkName: string, userId: string) {
-    try {
-        // Buscar o drink removido para obter seus ingredientes
-        const { data: drink } = await client
-            .from('drinks')
-            .select(`
-                drink_ingredients (
-                    ingredient_id,
-                    unit_id
-                )
-            `)
-            .eq('name', removedDrinkName)
-            .eq('user_id', userId)
-            .single();
-
-        if (!drink || !drink.drink_ingredients) {
-            return;
-        }
-
-        // Para cada ingrediente do drink removido
-        for (const drinkIngredient of drink.drink_ingredients) {
-            // Verificar se este ingrediente ainda é usado por outros drinks do evento
-            const { data: eventDrinks } = await client
-                .from('event_drinks')
-                .select('drink_name')
-                .eq('event_id', eventId);
-
-            if (!eventDrinks || eventDrinks.length === 0) {
-                // Se não há mais drinks no evento, remover todos os itens da purchase-list
-                await client
-                    .from('purchase_list')
-                    .delete()
-                    .eq('event_id', eventId);
-                return;
-            }
-
-            // Verificar se o ingrediente ainda é usado por outros drinks
-            let ingredientStillUsed = false;
-
-            for (const eventDrink of eventDrinks) {
-                const { data: otherDrink } = await client
-                    .from('drinks')
-                    .select(`
-                        drink_ingredients!inner (
-                            ingredient_id
-                        )
-                    `)
-                    .eq('name', eventDrink.drink_name)
-                    .eq('user_id', userId)
-                    .single();
-
-                if (otherDrink && otherDrink.drink_ingredients.some((di: any) => di.ingredient_id === drinkIngredient.ingredient_id)) {
-                    ingredientStillUsed = true;
-                    break;
-                }
-            }
-
-            // Se o ingrediente não é mais usado, remover da purchase-list
-            if (!ingredientStillUsed) {
-                await client
-                    .from('purchase_list')
-                    .delete()
-                    .eq('event_id', eventId)
-                    .eq('ingredient_id', drinkIngredient.ingredient_id)
-                    .eq('unit_id', drinkIngredient.unit_id);
-            }
-        }
-
-        console.log(`Purchase-list limpa após remoção do drink ${removedDrinkName} do evento ${eventId}`);
-    } catch (error) {
-        console.error('Erro ao limpar purchase-list:', error);
-    }
-}
