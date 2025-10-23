@@ -107,6 +107,10 @@ const props = defineProps({
     type: String,
     default: "Nome da tabela",
   },
+  returnObject: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // Define os eventos que o componente pode emitir
@@ -182,7 +186,7 @@ const handleUpdateOptions = (options: VDataTableServerOptions) => {
     </v-toolbar>
 
     <v-data-table-server
-      v-model:selected="internalSelected"
+      v-model="internalSelected"
       v-model:expanded="internalExpanded"
       :headers="headers"
       :items="items"
@@ -196,6 +200,7 @@ const handleUpdateOptions = (options: VDataTableServerOptions) => {
       :show-select="showSelect"
       :multi-sort="multiSort"
       :row-props="rowProps"
+      :return-object="returnObject"
       density="compact"
       mobile-breakpoint="sm"
       class="rounded-b-xl border-sm pt-2 elevation-2"

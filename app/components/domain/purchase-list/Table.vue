@@ -12,7 +12,6 @@ const headers = [
   { title: "Cliente", key: "events.clients.name", minWidth: 150 },
   { title: "Ingrediente", key: "ingredients.name", minWidth: 200 },
   { title: "Quantidade", key: "quantity_needed", minWidth: 120 },
-  { title: "Unidade", key: "units.abbreviation", minWidth: 100 },
   { title: "Status", key: "status", minWidth: 120 },
   { title: "Custo Est.", key: "estimated_cost", minWidth: 120 },
   { title: "Observações", key: "notes", minWidth: 200 },
@@ -69,16 +68,18 @@ function getStatusText(status: string) {
 <template>
   <UiTable
     v-model:page="page"
-    v-model:items-per-page="itemsPerPage"
     v-model:selected="selectedItems"
+    v-model:items-per-page="itemsPerPage"
     title="Lista de Compras"
     :items="items"
     item-value="id"
     :multi-sort="true"
     :headers="headers"
     :loading="loading"
+    :show-select="true"
+    select-strategy="all"
+    :return-object="true"
     :total-items="totalItems"
-    show-select
     class="rounded-b-lg rounded-t-xl"
     @update:options="store.fetchPurchaseList"
   >
@@ -133,25 +134,26 @@ function getStatusText(status: string) {
       <div>
         <div class="font-weight-medium">{{ item.ingredients.name }}</div>
         <div class="text-caption text-grey">
-          {{ item.ingredients.units.name }}
+          {{ item.ingredients.units.name }} ({{
+            item.ingredients.units.abbreviation
+          }})
         </div>
       </div>
     </template>
 
     <template #item.quantity_needed="{ item }">
-      <div class="text-right">
+      <div>
         {{ item.quantity_needed.toFixed(3) }}
       </div>
     </template>
 
-    <template #item.units.abbreviation="{ item }">
-      <v-chip size="small" variant="outlined">
-        {{ item.units.abbreviation }}
-      </v-chip>
-    </template>
-
     <template #item.status="{ item }">
-      <v-chip :color="getStatusColor(item.status)" size="small" variant="flat">
+      <v-chip
+        :color="getStatusColor(item.status)"
+        size="small"
+        variant="flat"
+        class="text-white"
+      >
         {{ getStatusText(item.status) }}
       </v-chip>
     </template>

@@ -1,16 +1,9 @@
 <script lang="ts" setup>
-import type { PurchaseListSummary } from "../../../types/purchase-list";
+import type { PurchaseListSummary } from "~/types/purchase-list";
 
 const props = defineProps<{
   summary: PurchaseListSummary;
 }>();
-
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(value);
-}
 
 function getProgressPercentage() {
   if (props.summary.total_items === 0) return 0;
@@ -74,17 +67,18 @@ function getProgressPercentage() {
 
     <!-- Progresso Geral -->
     <v-col cols="12">
-      <v-card>
+      <v-card rounded="lg" class="border-sm">
         <v-card-title>
           <v-icon class="mr-2" icon="mdi-progress-check" />
           Progresso das Compras
         </v-card-title>
+
         <v-card-text>
           <div class="d-flex align-center mb-2">
             <span class="text-subtitle-1 mr-2">Completude:</span>
-            <span class="text-h6 font-weight-bold"
-              >{{ getProgressPercentage() }}%</span
-            >
+            <span class="text-h6 font-weight-bold">
+              {{ getProgressPercentage() }}%
+            </span>
           </div>
 
           <v-progress-linear
@@ -99,10 +93,11 @@ function getProgressPercentage() {
           </v-progress-linear>
 
           <div class="d-flex justify-space-between mt-2 text-caption">
-            <span
-              >{{ summary.purchased_items }} de {{ summary.total_items }} itens
-              comprados</span
-            >
+            <span>
+              {{ summary.purchased_items }} de {{ summary.total_items }} itens
+              comprados
+            </span>
+
             <span v-if="summary.cancelled_items > 0" class="text-warning">
               {{ summary.cancelled_items }} cancelados
             </span>

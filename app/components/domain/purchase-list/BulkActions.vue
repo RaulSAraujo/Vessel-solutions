@@ -1,15 +1,5 @@
 <script lang="ts" setup>
-import { ref } from "vue";
-import { storeToRefs } from "pinia";
-
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-const emit = defineEmits(["update:modelValue", "close"]);
+const emit = defineEmits(["close"]);
 
 // Usar store diretamente
 const store = usePurchaseListStore();
@@ -20,10 +10,9 @@ const action = ref<"updateStatus" | null>(null);
 const newStatus = ref<"pending" | "purchased" | "cancelled">("pending");
 
 function close() {
-  emit("update:modelValue", false);
-  emit("close");
   action.value = null;
   newStatus.value = "pending";
+  emit("close");
 }
 
 async function executeAction() {
@@ -38,16 +27,18 @@ async function executeAction() {
         return;
       }
 
-      const updatePromises = selectedItems.value.map((item) =>
-        store.updateItemStatus(item.id, newStatus.value)
-      );
-      await Promise.all(updatePromises);
+      // const updatePromises = selectedItems.value.map((item) =>
+      //   store.updateItemStatus(item.id, newStatus.value)
+      // );
+
+      // await Promise.all(updatePromises);
       $toast().success(
         `Status de ${selectedItems.value.length} item(ns) atualizado(s) para ${newStatus.value}`
       );
       selectedItems.value = [];
+
+      close();
     }
-    close();
   } catch (error) {
     console.error("Erro ao executar ação em lote:", error);
     $toast().error("Erro ao atualizar status dos itens");
@@ -84,11 +75,7 @@ function getStatusColor(status: string) {
 </script>
 
 <template>
-  <v-bottom-sheet
-    :model-value="modelValue"
-    content-class="rounded-t-xl"
-    @update:model-value="emit('update:modelValue', $event)"
-  >
+  <v-bottom-sheet content-class="rounded-t-xl">
     <v-card
       rounded="t-xl"
       title="Ações em Lote"
@@ -103,10 +90,11 @@ function getStatusColor(status: string) {
         </div>
 
         <!-- Lista dos itens selecionados -->
-        <v-card variant="outlined" class="mb-4">
+        <v-card class="mb-4 border-sm">
           <v-card-title class="text-subtitle-1">
             Itens Selecionados
           </v-card-title>
+
           <v-card-text>
             <v-list density="compact">
               <v-list-item
