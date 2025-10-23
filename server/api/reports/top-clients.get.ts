@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
                 )
             `)
             .eq('user_id', user.id)
-            .eq('events.status', 'Concluído');
+            .eq('events.status', 'completed');
 
         if (error) {
             throw createError({
