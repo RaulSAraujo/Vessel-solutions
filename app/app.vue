@@ -1,3 +1,9 @@
+<script setup>
+const { applySavedTheme } = useThemePersistence();
+
+applySavedTheme();
+</script>
+
 <template>
   <NuxtLoadingIndicator />
 

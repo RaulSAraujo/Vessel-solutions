@@ -4,7 +4,6 @@ export function useThemePersistence() {
     const theme = useTheme();
     const user = useSupabaseUser();
 
-
     // Função para aplicar o tema salvo
     const applySavedTheme = () => {
         let savedTheme: 'dark' | 'light' | null = null;
@@ -40,7 +39,7 @@ export function useThemePersistence() {
         if (newUser) {
             applySavedTheme();
         }
-    }, { immediate: true });
+    });
 
     return {
         applySavedTheme,
