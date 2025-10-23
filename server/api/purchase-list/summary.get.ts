@@ -4,61 +4,49 @@ export default defineEventHandler(async (event) => {
     try {
         const { client } = await getSupabaseClientAndUser(event);
 
-        const query = getQuery(event);
-        const eventId = query.event_id as string;
+        // Executar queries paralelas para melhor performance
+        const [
+            { count: totalItems, error: totalError },
+            { count: pendingItems, error: pendingError },
+            { count: purchasedItems, error: purchasedError },
+            { count: cancelledItems, error: cancelledError },
+            { data: pendingCostData, error: costError }
+        ] = await Promise.all([
+            // Total de itens
+            client.from("purchase_list").select('id', { count: 'exact', head: true }),
 
-        let supabaseQuery = client
-            .from("purchase_list")
-            .select(`
-                id,
-                status,
-                quantity_needed,
-                unit_id,
-                estimated_cost,
-                ingredients!inner (
-                    id,
-                    name,
-                    unit_id,
-                    current_quotation_id,
-                    unit_weight_g,
-                    unit_volume_ml,
-                    real_cost_per_base_unit
-                ),
-                units!inner (
-                    id,
-                    name,
-                    abbreviation
-                )
-            `);
+            // Itens pendentes
+            client.from("purchase_list").select('id', { count: 'exact', head: true }).eq('status', 'pending'),
 
-        if (eventId) {
-            supabaseQuery = supabaseQuery.eq('event_id', eventId);
-        }
+            // Itens comprados
+            client.from("purchase_list").select('id', { count: 'exact', head: true }).eq('status', 'purchased'),
 
-        const { data, error } = await supabaseQuery;
+            // Itens cancelados
+            client.from("purchase_list").select('id', { count: 'exact', head: true }).eq('status', 'cancelled'),
 
-        if (error) {
+            // Custo estimado apenas dos pendentes
+            client.from("purchase_list").select('estimated_cost').eq('status', 'pending')
+        ]);
+
+        // Verificar erros
+        if (totalError || pendingError || purchasedError || cancelledError || costError) {
             throw createError({
                 statusCode: 500,
                 statusMessage: 'Failed to fetch purchase list summary',
-                message: error.message,
+                message: totalError?.message || pendingError?.message || purchasedError?.message || cancelledError?.message || costError?.message,
             });
         }
 
-        const summary = {
-            total_items: data?.length || 0,
-            pending_items: data?.filter(item => item.status === 'pending').length || 0,
-            purchased_items: data?.filter(item => item.status === 'purchased').length || 0,
-            cancelled_items: data?.filter(item => item.status === 'cancelled').length || 0,
-            total_estimated_cost: 0,
-        };
+        // Calcular custo total estimado dos pendentes
+        const totalEstimatedCost = pendingCostData?.reduce((total, item) => total + (item.estimated_cost || 0), 0) || 0;
 
-        // Calcular custo total estimado usando o campo estimated_cost
-        if (data) {
-            summary.total_estimated_cost = data.reduce((total, item) => {
-                return total + (item.estimated_cost || 0);
-            }, 0);
-        }
+        const summary = {
+            total_items: totalItems || 0,
+            pending_items: pendingItems || 0,
+            purchased_items: purchasedItems || 0,
+            cancelled_items: cancelledItems || 0,
+            total_estimated_cost: totalEstimatedCost,
+        };
 
         return summary;
     } catch (error: unknown) {

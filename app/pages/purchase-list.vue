@@ -15,7 +15,7 @@ const { summary } = storeToRefs(store);
 
 // Carregar dados iniciais
 onMounted(async () => {
-  await Promise.all([store.fetchSummary()]);
+  await store.fetchSummary();
 });
 </script>
 
@@ -31,17 +31,6 @@ onMounted(async () => {
       <strong>Informação:</strong> Os itens da lista de compras são gerados
       automaticamente quando um evento é alterado para status "Purchase". Você
       pode apenas alterar o status dos itens (Pendente, Comprado, Cancelado).
-
-      <template #append>
-        <v-btn
-          color="primary"
-          size="small"
-          variant="outlined"
-          prepend-icon="mdi-broom"
-        >
-          Limpar Órfãos
-        </v-btn>
-      </template>
     </v-alert>
 
     <!-- Resumo -->

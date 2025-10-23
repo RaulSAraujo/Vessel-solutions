@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import Status from "./Status.vue";
-import EstimatedCost from "./EstimatedCost.vue";
 
 defineEmits(["openFilter", "openBulkActions"]);
 
@@ -13,7 +12,7 @@ const headers = [
   { title: "Evento", key: "events.location", minWidth: 200 },
   { title: "Data do Evento", key: "events.start_time", minWidth: 150 },
   { title: "Cliente", key: "events.clients.name", minWidth: 150 },
-  { title: "Ingrediente", key: "ingredient.name", minWidth: 200 },
+  { title: "Ingrediente", key: "ingredients.name", minWidth: 200 },
   { title: "Quantidade", key: "quantity_needed", minWidth: 120 },
   { title: "Status", key: "status", minWidth: 120 },
   { title: "Custo Est.", key: "estimated_cost", minWidth: 120 },
@@ -91,6 +90,10 @@ const headers = [
           ({{ item.units.abbreviation }})
         </span>
       </div>
+    </template>
+
+    <template #item.estimated_cost="{ item }">
+      {{ formatCurrency(item.estimated_cost) }}
     </template>
 
     <template #item.status="{ item }">

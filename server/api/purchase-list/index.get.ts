@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
                     guest_count,
                     clients!inner (name)
                 ),
-                ingredient: ingredients!inner(*),
+                ingredients!inner(*),
                 units (id, name, abbreviation)
             `, { count: "exact" });
 

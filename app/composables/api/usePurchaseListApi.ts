@@ -20,7 +20,7 @@ export const usePurchaseListApi = () => {
         }
     };
 
-    const updatePurchaseListItem = async (id: string, data: FormPurchaseListItem) => {
+    const updatePurchaseListItem = async (id: string, data: Partial<FormPurchaseListItem>) => {
         try {
             const res = await $fetch<Datum>(`/api/purchase-list/${id}`, {
                 method: 'PUT',
@@ -50,19 +50,9 @@ export const usePurchaseListApi = () => {
         }
     };
 
-    const cleanupPurchaseList = async (eventId?: string) => {
-        await $fetch('/api/purchase-list/cleanup', {
-            method: 'POST',
-            body: { event_id: eventId },
-        });
-
-        return true
-    };
-
     return {
         getPurchaseList,
         updatePurchaseListItem,
-        getPurchaseListSummary,
-        cleanupPurchaseList,
+        getPurchaseListSummary
     };
 };

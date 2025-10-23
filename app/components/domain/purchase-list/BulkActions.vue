@@ -1,7 +1,10 @@
 <script lang="ts" setup>
+import { usePurchaseListApi } from "~/composables/api/usePurchaseListApi";
+
 const emit = defineEmits(["close"]);
 
-// Usar store diretamente
+const api = usePurchaseListApi();
+
 const store = usePurchaseListStore();
 const { selectedItems } = storeToRefs(store);
 
@@ -27,14 +30,27 @@ async function executeAction() {
         return;
       }
 
-      // const updatePromises = selectedItems.value.map((item) =>
-      //   store.updateItemStatus(item.id, newStatus.value)
-      // );
+      const updatePromises = selectedItems.value.map((item) =>
+        api.updatePurchaseListItem(item.id, { status: newStatus.value })
+      );
 
-      // await Promise.all(updatePromises);
+      const responses = await Promise.all(updatePromises);
+
       $toast().success(
         `Status de ${selectedItems.value.length} item(ns) atualizado(s) para ${newStatus.value}`
       );
+
+      if (!responses) return;
+
+      // Atualizar os itens na store
+      for (const item of responses) {
+        if (!item) continue;
+
+        store.updateItem(item);
+      }
+
+      store.fetchSummary();
+
       selectedItems.value = [];
 
       close();
@@ -90,7 +106,7 @@ function getStatusColor(status: string) {
         </div>
 
         <!-- Lista dos itens selecionados -->
-        <v-card class="mb-4 border-sm">
+        <v-card rounded="lg" class="mb-4 border-sm">
           <v-card-title class="text-subtitle-1">
             Itens Selecionados
           </v-card-title>
@@ -121,6 +137,7 @@ function getStatusColor(status: string) {
                     :color="getStatusColor(item.status)"
                     size="small"
                     variant="flat"
+                    class="text-white"
                   >
                     {{ getStatusText(item.status) }}
                   </v-chip>
