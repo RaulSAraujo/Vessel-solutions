@@ -37,7 +37,8 @@ export default defineNuxtConfig({
       include: undefined,
       exclude: [],
       saveRedirectToCookie: false,
-    }
+    },
+    types: '~~/server/types/database.d.ts',
   },
 
   components: [
