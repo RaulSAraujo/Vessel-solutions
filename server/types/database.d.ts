@@ -769,7 +769,7 @@ export type Database = {
         }
       }
       upsert_multiple_drink_ingredients: {
-        Args: { p_drink_ingredients_array: Json }
+        Args: { p_drink_id: string; p_ingredients: Json[] }
         Returns: {
           created_at: string | null
           drink_id: string
@@ -780,7 +780,7 @@ export type Database = {
         }[]
       }
       upsert_multiple_event_drinks: {
-        Args: { _event_drinks: Json[] }
+        Args: { p_event_id: string; p_drinks: Json[] }
         Returns: {
           created_at: string
           drink_calculated_cost: number
