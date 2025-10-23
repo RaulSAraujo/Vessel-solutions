@@ -98,12 +98,38 @@ export function useAuthApi() {
         }
     }
 
+    async function updateUserMetadata(metadata: Record<string, unknown>) {
+        try {
+            loading.value = true;
+            errorMessage.value = null;
+
+            const supabase = useSupabaseClient();
+
+            const { error } = await supabase.auth.updateUser({
+                data: metadata
+            });
+
+            if (error) throw error;
+
+            return true;
+        } catch (error: unknown) {
+            const err = error as FetchError;
+
+            errorMessage.value = err.message;
+
+            return false;
+        } finally {
+            loading.value = false;
+        }
+    }
+
     return {
         loading,
         errorMessage,
         login,
         loginWithGoogle,
         register,
-        logout
+        logout,
+        updateUserMetadata
     }
 }

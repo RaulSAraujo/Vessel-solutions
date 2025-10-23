@@ -5,10 +5,22 @@ import LogoVessel from "~/assets/images/logo-vessel.png";
 const theme = useTheme();
 const useAuth = useAuthApi();
 const user = useSupabaseUser();
+const { saveThemePreference } = useThemePersistence();
 
 const logout = async () => {
   await useAuth.logout();
   await navigateTo("/");
+};
+
+const handleThemeChange = async () => {
+  // Alterna o tema
+  theme.cycle();
+
+  // Salva a preferência no user metadata se o usuário estiver logado
+  if (user.value) {
+    const currentTheme = theme.current.value.dark ? "dark" : "light";
+    await saveThemePreference(currentTheme);
+  }
 };
 </script>
 
@@ -30,7 +42,7 @@ const logout = async () => {
         <v-list-item
           title="Alterar tema"
           prepend-icon="mdi-theme-light-dark"
-          @click="theme.cycle()"
+          @click="handleThemeChange"
         />
 
         <v-divider />
