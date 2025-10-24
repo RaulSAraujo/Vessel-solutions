@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import customParseFormat from "dayjs/plugin/customParseFormat";
+import utc from "dayjs/plugin/utc.js";
+import customParseFormat from "dayjs/plugin/customParseFormat.js";
 import type { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
 dayjs.extend(utc)
