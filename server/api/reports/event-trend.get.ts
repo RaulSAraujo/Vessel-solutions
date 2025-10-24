@@ -1,8 +1,7 @@
 import { getSupabaseClientAndUser } from '../../utils/supabase';
-import { CACHE_CONFIGS, generateCacheKey } from '../../utils/cache';
 import type { FetchError } from 'ofetch';
 
-export default cachedEventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
     try {
         const { client, user } = await getSupabaseClientAndUser(event);
 
@@ -91,20 +90,5 @@ export default cachedEventHandler(async (event) => {
             statusMessage: err.statusMessage || 'Internal Server Error',
             message: err.message,
         });
-    }
-}, {
-    maxAge: CACHE_CONFIGS.REPORTS.maxAge,
-    name: 'event-trend',
-    getKey: async (event) => {
-        try {
-            const { user } = await getSupabaseClientAndUser(event);
-            const query = getQuery(event);
-            return generateCacheKey(event, 'event-trend', user, {
-                start_date: query.start_date,
-                end_date: query.end_date
-            });
-        } catch {
-            return `event-trend-error-${Date.now()}`;
-        }
     }
 });
