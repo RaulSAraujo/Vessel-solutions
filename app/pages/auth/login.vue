@@ -26,11 +26,12 @@ const onSubmit = handleSubmit(async (values) => {
   }
 });
 
-const singInWithGoogle = async () => {
-  const success: boolean = await loginWithGoogle();
-
-  if (success) {
-    await navigateTo("/dashboard");
+const signInWithGoogle = async () => {
+  try {
+    await loginWithGoogle();
+    // O redirecionamento é automático com OAuth
+  } catch (error) {
+    console.error("Erro no login Google:", error);
   }
 };
 </script>
@@ -81,10 +82,12 @@ const singInWithGoogle = async () => {
       block
       class="mb-4"
       rounded="lg"
-      variant="plain"
-      @click="singInWithGoogle"
+      variant="outlined"
+      color="primary"
+      :loading="loading"
+      @click="signInWithGoogle"
     >
-      <v-icon left class="mr-2 text-red">mdi-google-plus</v-icon>
+      <v-icon left class="mr-2">mdi-google</v-icon>
       Continue com Google
     </v-btn>
 
