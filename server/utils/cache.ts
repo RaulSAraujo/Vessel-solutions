@@ -79,20 +79,3 @@ export function createCachedHandler(
     })
 }
 
-/**
- * Invalida cache por tags (placeholder para futuras implementações)
- */
-export async function invalidateCacheByTags(tags: string[]) {
-    // Com cachedEventHandler, o cache é gerenciado automaticamente pelo Nitro
-    // Esta função é um placeholder para futuras implementações
-    console.log(`Cache invalidation requested for tags: ${tags.join(', ')}`)
-}
-
-/**
- * Invalida cache por usuário (placeholder para futuras implementações)
- */
-export async function invalidateUserCache(userId: string) {
-    // Com cachedEventHandler, o cache é gerenciado automaticamente pelo Nitro
-    // Esta função é um placeholder para futuras implementações
-    console.log(`Cache invalidation requested for user: ${userId}`)
-}
