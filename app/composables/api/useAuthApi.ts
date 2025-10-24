@@ -34,10 +34,19 @@ export function useAuthApi() {
 
             const supabase = useSupabaseClient();
 
+            // Determina a URL base baseada no ambiente
+            const getBaseUrl = () => {
+                if (import.meta.client) {
+                    return window.location.origin;
+                }
+                // Fallback para produção
+                return 'https://vessel-solutions.vercel.app';
+            };
+
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: `${window.location.origin}/dashboard`
+                    redirectTo: `${getBaseUrl()}/dashboard`
                 }
             });
 
