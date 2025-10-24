@@ -30,13 +30,13 @@ export default defineNuxtConfig({
   ],
 
   supabase: {
-    redirect: false,
+    redirect: true, // Habilita redirecionamento automático
     redirectOptions: {
       login: '/auth/login',
-      callback: '/',
+      callback: '/dashboard',
       include: undefined,
-      exclude: [],
-      saveRedirectToCookie: false,
+      exclude: ['/', '/auth/login', '/auth/register'],
+      saveRedirectToCookie: true, // Salva rota original para redirecionar após login
     },
     types: '~~/server/types/database.d.ts',
   },
