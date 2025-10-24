@@ -113,5 +113,23 @@ export default defineNuxtConfig({
     },
   },
 
-  sourcemap: true
+  sourcemap: true,
+
+  // Configurações de cache para rotas
+  routeRules: {
+    // Dashboard - cache com SWR (stale-while-revalidate) por 5 minutos
+    '/dashboard': { swr: 300 },
+
+    // Páginas estáticas que podem ser pré-renderizadas
+    '/': { prerender: true },
+    '/auth/login': { prerender: true },
+    '/auth/register': { prerender: true },
+
+    // APIs públicas
+    '/api/units/**': {
+      headers: {
+        'cache-control': 's-maxage=3600'
+      }
+    },
+  }
 })
