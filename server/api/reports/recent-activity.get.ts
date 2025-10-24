@@ -20,9 +20,18 @@ interface ActivityItem {
     color: string;
 }
 
-export default defineEventHandler(async (event) => {
+export default cachedEventHandler(async (event) => {
     try {
         const { client, user } = await getSupabaseClientAndUser(event);
+
+        // Verificar autenticação primeiro
+        if (!user) {
+            throw createError({
+                statusCode: 401,
+                statusMessage: "Unauthorized",
+                message: "Authentication required. Please log in.",
+            });
+        }
 
         // Obter parâmetros de período da query
         const query = getQuery(event);
@@ -38,7 +47,7 @@ export default defineEventHandler(async (event) => {
         }
 
         // Buscar eventos recentes com dados do cliente
-        const eventsQuery = client
+        let eventsQuery = client
             .from('events')
             .select(`
                 id, 
@@ -49,6 +58,12 @@ export default defineEventHandler(async (event) => {
             .eq('user_id', user.id)
             .order('created_at', { ascending: false })
             .limit(2);
+
+        if (startDate && endDate) {
+            eventsQuery = eventsQuery
+                .gte('created_at', startDate)
+                .lte('created_at', endDate);
+        }
 
         const { data: recentEvents, error: eventsError } = await eventsQuery as { data: EventWithClient[] | null; error: FetchError };
 
@@ -185,6 +200,22 @@ export default defineEventHandler(async (event) => {
             statusMessage: err.statusMessage || 'Internal Server Error',
             message: err.message,
         });
+    }
+}, {
+    maxAge: 5 * 60, // 5 minutos (dados mais dinâmicos)
+    name: 'recent-activity',
+    getKey: async (event) => {
+        try {
+            const { user } = await getSupabaseClientAndUser(event);
+            if (!user) return 'recent-activity-no-auth'; // Fallback para não autenticado
+
+            const query = getQuery(event);
+            const startDate = query.start_date as string;
+            const endDate = query.end_date as string;
+            return `recent-activity-${user.id}-${startDate || 'all'}-${endDate || 'all'}`;
+        } catch {
+            return 'recent-activity-error'; // Fallback para erro de autenticação
+        }
     }
 });
 

@@ -1,9 +1,18 @@
 import { getSupabaseClientAndUser } from '../../utils/supabase';
 import type { FetchError } from 'ofetch';
 
-export default defineEventHandler(async (event) => {
+export default cachedEventHandler(async (event) => {
     try {
         const { client, user } = await getSupabaseClientAndUser(event);
+
+        // Verificar autenticação primeiro
+        if (!user) {
+            throw createError({
+                statusCode: 401,
+                statusMessage: "Unauthorized",
+                message: "Authentication required. Please log in.",
+            });
+        }
 
         // Obter parâmetros de período da query
         const query = getQuery(event);
@@ -81,5 +90,19 @@ export default defineEventHandler(async (event) => {
             statusMessage: err.statusMessage || 'Internal Server Error',
             message: err.message,
         });
+    }
+}, {
+    maxAge: 10 * 60, // 10 minutos
+    name: 'event-trend',
+    getKey: async (event) => {
+        try {
+            const { user } = await getSupabaseClientAndUser(event);
+            const query = getQuery(event);
+            const startDate = query.start_date as string;
+            const endDate = query.end_date as string;
+            return `event-trend-${user?.id || 'anonymous'}-${startDate || 'all'}-${endDate || 'all'}`;
+        } catch {
+            return `event-trend-error-${Date.now()}`;
+        }
     }
 });

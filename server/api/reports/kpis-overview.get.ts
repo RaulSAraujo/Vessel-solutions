@@ -1,19 +1,36 @@
 import { getSupabaseClientAndUser } from "~~/server/utils/supabase";
 import type { FetchError } from "ofetch";
 
-export default defineEventHandler(async (event) => {
+export default cachedEventHandler(async (event) => {
     try {
-        const { client } = await getSupabaseClientAndUser(event);
+        const { client, user } = await getSupabaseClientAndUser(event);
+
+        // Verificar autenticação primeiro
+        if (!user) {
+            throw createError({
+                statusCode: 401,
+                statusMessage: "Unauthorized",
+                message: "Authentication required. Please log in.",
+            });
+        }
 
         // Obter parâmetros de período da query
         const query = getQuery(event);
         const startDate = query.start_date as string;
         const endDate = query.end_date as string;
 
-        // Buscar dados de clientes
-        const { count: totalClients, error: clientsError } = await client
+        // Buscar dados de clientes com filtro de período
+        let clientsQuery = client
             .from("clients")
             .select("*", { count: "exact", head: true });
+
+        if (startDate && endDate) {
+            clientsQuery = clientsQuery
+                .gte("created_at", startDate)
+                .lte("created_at", endDate);
+        }
+
+        const { count: totalClients, error: clientsError } = await clientsQuery;
 
         // Buscar dados de eventos com filtro de período
         let eventsQuery = client
@@ -29,10 +46,18 @@ export default defineEventHandler(async (event) => {
 
         const { data: events, error: eventsError, count: totalEvents } = await eventsQuery;
 
-        // Buscar dados de bebidas
-        const { count: totalDrinks, error: drinksError } = await client
+        // Buscar dados de bebidas com filtro de período
+        let drinksQuery = client
             .from("drinks")
             .select("*", { count: "exact", head: true });
+
+        if (startDate && endDate) {
+            drinksQuery = drinksQuery
+                .gte("created_at", startDate)
+                .lte("created_at", endDate);
+        }
+
+        const { count: totalDrinks, error: drinksError } = await drinksQuery;
 
         // Calcular crescimento mensal
         const currentMonth = new Date().getMonth();
@@ -86,5 +111,19 @@ export default defineEventHandler(async (event) => {
             statusMessage: err.statusMessage || "Internal Server Error",
             message: err.message,
         });
+    }
+}, {
+    maxAge: 10 * 60, // 10 minutos
+    name: 'kpis-overview',
+    getKey: async (event) => {
+        try {
+            const { user } = await getSupabaseClientAndUser(event);
+            const query = getQuery(event);
+            const startDate = query.start_date as string;
+            const endDate = query.end_date as string;
+            return `kpis-overview-${user?.id || 'anonymous'}-${startDate || 'all'}-${endDate || 'all'}`;
+        } catch {
+            return `kpis-overview-error-${Date.now()}`;
+        }
     }
 });
