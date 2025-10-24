@@ -21,14 +21,6 @@ export default cachedEventHandler(async (event) => {
         const startDate = query.start_date as string;
         const endDate = query.end_date as string;
 
-        // 1. Validação de autenticação
-        if (!user) {
-            throw createError({
-                statusCode: 401,
-                statusMessage: 'Unauthorized',
-                message: 'User not authenticated.',
-            });
-        }
 
         // 2. Busca de eventos para o usuário autenticado com filtro de período
         let eventsQuery = client

@@ -23,7 +23,8 @@ export default cachedEventHandler(async (event) => {
         // Buscar dados de clientes com filtro de período
         let clientsQuery = client
             .from("clients")
-            .select("*", { count: "exact", head: true });
+            .select("*", { count: "exact", head: true })
+            .eq("user_id", user.id);
 
         if (startDate && endDate) {
             clientsQuery = clientsQuery
@@ -37,6 +38,7 @@ export default cachedEventHandler(async (event) => {
         let eventsQuery = client
             .from("events")
             .select("total_cost, total_revenue, created_at", { count: "exact" })
+            .eq("user_id", user.id)
             .eq("status", "completed");
 
         if (startDate && endDate) {
@@ -50,7 +52,8 @@ export default cachedEventHandler(async (event) => {
         // Buscar dados de bebidas com filtro de período
         let drinksQuery = client
             .from("drinks")
-            .select("*", { count: "exact", head: true });
+            .select("*", { count: "exact", head: true })
+            .eq("user_id", user.id);
 
         if (startDate && endDate) {
             drinksQuery = drinksQuery

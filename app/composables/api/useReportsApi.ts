@@ -54,18 +54,6 @@ export function useReportsApi() {
     }
   };
 
-  const getDrinkCostDistribution = async (period?: PeriodParams) => {
-    try {
-      const params = period ? { ...period } : {};
-      const res = await $fetch("/api/reports/drink-cost-distribution", {
-        query: params,
-      });
-      return res;
-    } catch (error: unknown) {
-      const err = error as FetchError;
-      $toast().error(err.message || "Failed to fetch drink cost distribution.");
-    }
-  };
 
   const getRecentActivity = async (period?: PeriodParams) => {
     try {
@@ -123,7 +111,6 @@ export function useReportsApi() {
     getMonthlyEvents,
     getProfitSummary,
     getEventTrend,
-    getDrinkCostDistribution,
     getRecentActivity,
     getTopClients,
     getIngredientConsumption,

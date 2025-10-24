@@ -20,13 +20,6 @@ export default cachedEventHandler(async (event) => {
         const startDate = query.start_date as string;
         const endDate = query.end_date as string;
 
-        if (!user) {
-            throw createError({
-                statusCode: 401,
-                statusMessage: 'Unauthorized',
-                message: 'User not authenticated.',
-            });
-        }
 
         // Buscar clientes com seus eventos e valores
         const { data: clientsData, error } = await client

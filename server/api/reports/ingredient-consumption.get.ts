@@ -14,7 +14,16 @@ interface DrinkIngredient {
 
 export default defineEventHandler(async (event) => {
   try {
-    const { client } = await getSupabaseClientAndUser(event);
+    const { client, user } = await getSupabaseClientAndUser(event);
+
+    // Verificar autenticação primeiro
+    if (!user) {
+      throw createError({
+        statusCode: 401,
+        statusMessage: "Unauthorized",
+        message: "Authentication required. Please log in.",
+      });
+    }
 
     // Obter parâmetros de período da query
     const query = getQuery(event);
@@ -38,6 +47,7 @@ export default defineEventHandler(async (event) => {
           )
         `
       )
+      .eq("user_id", user.id)
       .eq("status", "completed");
 
     if (startDate && endDate) {
@@ -75,7 +85,8 @@ export default defineEventHandler(async (event) => {
             )
           )
         `
-      );
+      )
+      .eq("user_id", user.id);
 
     if (drinksError) {
       throw createError({
