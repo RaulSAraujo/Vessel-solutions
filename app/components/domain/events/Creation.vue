@@ -10,6 +10,7 @@ type EventWithDrinks = FormEvent & { event_drinks: FormEventDrinks[] };
 const emit = defineEmits(["close"]);
 
 const api = useEventsApi();
+const { mobile } = useDisplay();
 
 const store = useEventsStore();
 const {
@@ -62,8 +63,21 @@ async function creation(events: EventWithDrinks) {
 </script>
 
 <template>
-  <v-bottom-sheet content-class="rounded-t-xl">
-    <v-card title="Novo evento" rounded="t-xl" prepend-icon="mdi-calendar">
+  <v-bottom-sheet :fullscreen="mobile" content-class="rounded-t-xl">
+    <v-card
+      title="Novo evento"
+      :rounded="!mobile && 't-xl'"
+      prepend-icon="mdi-calendar"
+    >
+      <template v-if="mobile" #append>
+        <v-btn
+          icon="mdi-close"
+          variant="plain"
+          density="comfortable"
+          @click="emit('close')"
+        />
+      </template>
+
       <v-card-text>
         <Form :loading="loading" @submit="creation" />
       </v-card-text>

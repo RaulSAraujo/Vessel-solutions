@@ -15,6 +15,8 @@ const props = defineProps<{
 
 const dayjs = useDayjs();
 const api = useClientsApi();
+const { mdAndUp } = useDisplay();
+
 const store = useEventsStore();
 const { eventDurationHours } = storeToRefs(store);
 
@@ -128,7 +130,11 @@ onMounted(async () => {
     </v-col>
 
     <v-col cols="12" md="4">
-      <div class="d-flex align-center ga-2">
+      <div
+        :class="
+          mdAndUp ? 'd-flex align-center ga-2' : 'd-flex flex-column ga-2'
+        "
+      >
         <UiTextField
           v-model="startTime"
           v-maska="'##/##/#### ##:##'"

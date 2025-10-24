@@ -6,6 +6,8 @@ const props = defineProps<{
   errors: Partial<Record<string, string | undefined>>;
 }>();
 
+const { smAndDown, mdAndUp } = useDisplay();
+
 const store = useEventsStore();
 const { eventDurationHours, staffCost, fuelCost } = storeToRefs(store);
 
@@ -71,7 +73,11 @@ onMounted(async () => {
 <template>
   <v-row dense>
     <v-col cols="12" md="4">
-      <div class="d-flex align-center ga-2">
+      <div
+        :class="
+          mdAndUp ? 'd-flex align-center ga-2' : 'd-flex flex-column ga-2'
+        "
+      >
         <UiNumberField
           v-model="numBartenders"
           label="Número de Bartenders"
@@ -89,7 +95,7 @@ onMounted(async () => {
           :error-messages="errors.bartender_hourly_rate"
         />
 
-        <div class="d-flex flex-column align-center">
+        <div v-if="mdAndUp" class="d-flex flex-column align-center">
           <span class="text-caption mr-1">Total:</span>
           <span class="text-caption font-weight-bold text-primary">
             {{ formatCurrency(bartenderCost) }}
@@ -99,7 +105,11 @@ onMounted(async () => {
     </v-col>
 
     <v-col cols="12" md="4">
-      <div class="d-flex align-center ga-2">
+      <div
+        :class="
+          mdAndUp ? 'd-flex align-center ga-2' : 'd-flex flex-column ga-2'
+        "
+      >
         <UiNumberField
           v-model="numHelpers"
           label="Número de Ajudantes"
@@ -117,8 +127,26 @@ onMounted(async () => {
           :error-messages="errors.helper_hourly_rate"
         />
 
-        <div class="d-flex flex-column align-center">
+        <div v-if="mdAndUp" class="d-flex flex-column align-center">
           <span class="text-caption mr-1">Total:</span>
+          <span class="text-caption font-weight-bold text-primary">
+            {{ formatCurrency(helperCost) }}
+          </span>
+        </div>
+      </div>
+    </v-col>
+
+    <v-col v-if="smAndDown" cols="12">
+      <div class="d-flex align-center justify-center ga-2">
+        <div class="d-flex flex-column align-center">
+          <span class="text-caption mr-1">Bartenders total:</span>
+          <span class="text-caption font-weight-bold text-primary">
+            {{ formatCurrency(bartenderCost) }}
+          </span>
+        </div>
+
+        <div class="d-flex flex-column align-center">
+          <span class="text-caption mr-1">Ajudantes total:</span>
           <span class="text-caption font-weight-bold text-primary">
             {{ formatCurrency(helperCost) }}
           </span>
