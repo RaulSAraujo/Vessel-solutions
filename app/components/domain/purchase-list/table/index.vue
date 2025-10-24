@@ -16,7 +16,6 @@ const headers = [
   { title: "Quantidade", key: "quantity_needed", minWidth: 120 },
   { title: "Status", key: "status", minWidth: 120 },
   { title: "Custo Est.", key: "estimated_cost", minWidth: 120 },
-  { title: "Observações", key: "notes", maxWidth: 200 },
   { title: "Criado em", key: "created_at", minWidth: 150 },
 ];
 </script>

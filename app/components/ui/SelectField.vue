@@ -132,6 +132,7 @@ const internalValue = computed({
     :density="density"
     :rounded="rounded"
     :variant="variant"
+    autocomplete="off"
     :multiple="multiple"
     :clearable="clearable"
     :item-title="itemTitle"

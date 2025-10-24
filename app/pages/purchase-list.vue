@@ -28,9 +28,10 @@ onMounted(async () => {
 
     <!-- Informação sobre geração automática -->
     <v-alert type="info" variant="tonal" class="mb-4">
-      <strong>Informação:</strong> Os itens da lista de compras são gerados
-      automaticamente quando um evento é alterado para status "Purchase". Você
-      pode apenas alterar o status dos itens (Pendente, Comprado, Cancelado).
+      <strong>Informação:</strong> Os itens da lista de compras são
+      gerados/atualizados automaticamente quando um evento é alterado para
+      status "Comprar". Você pode apenas alterar o status dos itens (Pendente,
+      Comprado, Cancelado).
     </v-alert>
 
     <!-- Resumo -->

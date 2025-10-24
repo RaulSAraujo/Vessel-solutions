@@ -34,10 +34,10 @@ const filterDefinitions = ref<FilterDefinition[]>([
     label: "Quantidade",
     type: "currency",
     op: "between",
+    defaultValue: [0, 1000],
     layout: {
       min: 0,
       max: 1000,
-      step: 0.001,
     },
   },
   {
@@ -45,9 +45,10 @@ const filterDefinitions = ref<FilterDefinition[]>([
     label: "Custo Estimado",
     type: "currency",
     op: "between",
+    defaultValue: [0, 10000],
     layout: {
       min: 0,
-      max: 1000,
+      max: 10000,
       step: 0.01,
     },
   },
