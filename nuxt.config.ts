@@ -33,7 +33,7 @@ export default defineNuxtConfig({
     redirect: false,
     redirectOptions: {
       login: '/auth/login',
-      callback: '/confirm',
+      callback: '/',
       include: undefined,
       exclude: [],
       saveRedirectToCookie: false,

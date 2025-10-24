@@ -5,7 +5,7 @@ import LogoVessel from "~/assets/images/logo-vessel.png";
 const theme = useTheme();
 const useAuth = useAuthApi();
 const user = useSupabaseUser();
-const { saveThemePreference } = useThemePersistence();
+const themeStore = useThemeStore();
 
 const logout = async () => {
   await useAuth.logout();
@@ -16,11 +16,9 @@ const handleThemeChange = async () => {
   // Alterna o tema
   theme.cycle();
 
-  // Salva a preferência no user metadata se o usuário estiver logado
-  if (user.value) {
-    const currentTheme = theme.current.value.dark ? "dark" : "light";
-    await saveThemePreference(currentTheme);
-  }
+  // Salva a preferência usando o Pinia store
+  const currentTheme = theme.current.value.dark ? "dark" : "light";
+  await themeStore.saveTheme(currentTheme, user);
 };
 </script>
 
