@@ -1,5 +1,6 @@
 // api/reports/profit-summary.ts
 import { getSupabaseClientAndUser } from '../../utils/supabase';
+import { CACHE_CONFIGS, generateCacheKey } from '../../utils/cache';
 import type { FetchError } from 'ofetch';
 
 export default cachedEventHandler(async (event) => {
@@ -103,19 +104,18 @@ export default cachedEventHandler(async (event) => {
         });
     }
 }, {
-    maxAge: 10 * 60, // 10 minutos
+    maxAge: CACHE_CONFIGS.REPORTS.maxAge,
     name: 'profit-summary',
     getKey: async (event) => {
         try {
             const { user } = await getSupabaseClientAndUser(event);
-            if (!user) return 'profit-summary-no-auth'; // Fallback para não autenticado
-
             const query = getQuery(event);
-            const startDate = query.start_date as string;
-            const endDate = query.end_date as string;
-            return `profit-summary-${user.id}-${startDate || 'all'}-${endDate || 'all'}`;
+            return generateCacheKey(event, 'profit-summary', user, {
+                start_date: query.start_date,
+                end_date: query.end_date
+            });
         } catch {
-            return 'profit-summary-error'; // Fallback para erro de autenticação
+            return `profit-summary-error-${Date.now()}`;
         }
     }
 });

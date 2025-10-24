@@ -1,4 +1,5 @@
 import { getSupabaseClientAndUser } from '../../utils/supabase';
+import { CACHE_CONFIGS, generateCacheKey } from '../../utils/cache';
 import type { FetchError } from 'ofetch';
 
 export default cachedEventHandler(async (event) => {
@@ -91,19 +92,18 @@ export default cachedEventHandler(async (event) => {
         });
     }
 }, {
-    maxAge: 10 * 60, // 10 minutos
+    maxAge: CACHE_CONFIGS.REPORTS.maxAge,
     name: 'top-clients',
     getKey: async (event) => {
         try {
             const { user } = await getSupabaseClientAndUser(event);
-            if (!user) return 'top-clients-no-auth'; // Fallback para não autenticado
-
             const query = getQuery(event);
-            const startDate = query.start_date as string;
-            const endDate = query.end_date as string;
-            return `top-clients-${user.id}-${startDate || 'all'}-${endDate || 'all'}`;
+            return generateCacheKey(event, 'top-clients', user, {
+                start_date: query.start_date,
+                end_date: query.end_date
+            });
         } catch {
-            return 'top-clients-error'; // Fallback para erro de autenticação
+            return `top-clients-error-${Date.now()}`;
         }
     }
 });

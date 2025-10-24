@@ -124,12 +124,5 @@ export default defineNuxtConfig({
     '/': { prerender: true },
     '/auth/login': { prerender: true },
     '/auth/register': { prerender: true },
-
-    // APIs públicas
-    '/api/units/**': {
-      headers: {
-        'cache-control': 's-maxage=3600'
-      }
-    },
   }
 })

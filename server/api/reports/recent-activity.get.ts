@@ -1,4 +1,5 @@
 import { getSupabaseClientAndUser } from '../../utils/supabase';
+import { CACHE_CONFIGS, generateCacheKey } from '../../utils/cache';
 import type { FetchError } from 'ofetch';
 import type { Tables } from '../../types/database';
 
@@ -202,19 +203,18 @@ export default cachedEventHandler(async (event) => {
         });
     }
 }, {
-    maxAge: 5 * 60, // 5 minutos (dados mais dinâmicos)
+    maxAge: CACHE_CONFIGS.DYNAMIC.maxAge,
     name: 'recent-activity',
     getKey: async (event) => {
         try {
             const { user } = await getSupabaseClientAndUser(event);
-            if (!user) return 'recent-activity-no-auth'; // Fallback para não autenticado
-
             const query = getQuery(event);
-            const startDate = query.start_date as string;
-            const endDate = query.end_date as string;
-            return `recent-activity-${user.id}-${startDate || 'all'}-${endDate || 'all'}`;
+            return generateCacheKey(event, 'recent-activity', user, {
+                start_date: query.start_date,
+                end_date: query.end_date
+            });
         } catch {
-            return 'recent-activity-error'; // Fallback para erro de autenticação
+            return `recent-activity-error-${Date.now()}`;
         }
     }
 });

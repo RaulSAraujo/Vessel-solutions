@@ -1,4 +1,5 @@
 import { getSupabaseClientAndUser } from '../../utils/supabase';
+import { CACHE_CONFIGS, generateCacheKey } from '../../utils/cache';
 import type { FetchError } from 'ofetch'
 
 export default cachedEventHandler(async (event) => {
@@ -90,19 +91,18 @@ export default cachedEventHandler(async (event) => {
         });
     }
 }, {
-    maxAge: 10 * 60, // 10 minutos
+    maxAge: CACHE_CONFIGS.REPORTS.maxAge,
     name: 'monthly-events',
     getKey: async (event) => {
         try {
             const { user } = await getSupabaseClientAndUser(event);
-            if (!user) return 'monthly-events-no-auth'; // Fallback para não autenticado
-
             const query = getQuery(event);
-            const startDate = query.start_date as string;
-            const endDate = query.end_date as string;
-            return `monthly-events-${user.id}-${startDate || 'all'}-${endDate || 'all'}`;
+            return generateCacheKey(event, 'monthly-events', user, {
+                start_date: query.start_date,
+                end_date: query.end_date
+            });
         } catch {
-            return 'monthly-events-error'; // Fallback para erro de autenticação
+            return `monthly-events-error-${Date.now()}`;
         }
     }
 });
