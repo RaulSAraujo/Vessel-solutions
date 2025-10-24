@@ -7,7 +7,8 @@ definePageMeta({
   middleware: ["auth"],
 });
 
-const { loading, errorMessage, login, loginWithGoogle } = useAuthApi();
+const { loading, errorMessage, login, loginWithGoogle, loadingWithGoogle } =
+  useAuthApi();
 
 const { handleSubmit, isSubmitting, meta, errors } = useForm({
   validationSchema: authSchema,
@@ -82,7 +83,7 @@ const signInWithGoogle = async () => {
       rounded="lg"
       variant="outlined"
       color="primary"
-      :loading="loading"
+      :loading="loadingWithGoogle"
       @click="signInWithGoogle"
     >
       <v-icon left class="mr-2">mdi-google</v-icon>

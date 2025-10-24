@@ -2,6 +2,7 @@ import type { FetchError } from 'ofetch'
 
 export function useAuthApi() {
     const loading = ref(false);
+    const loadingWithGoogle = ref(false);
     const errorMessage = ref<string | null>(null);
 
     async function login(email: string, password: string) {
@@ -29,7 +30,7 @@ export function useAuthApi() {
 
     async function loginWithGoogle() {
         try {
-            loading.value = true;
+            loadingWithGoogle.value = true;
             errorMessage.value = null;
 
             const supabase = useSupabaseClient();
@@ -60,7 +61,7 @@ export function useAuthApi() {
 
             return false;
         } finally {
-            loading.value = false;
+            loadingWithGoogle.value = false;
         }
     }
 
@@ -140,6 +141,7 @@ export function useAuthApi() {
         errorMessage,
         login,
         loginWithGoogle,
+        loadingWithGoogle,
         register,
         logout,
         updateUserMetadata

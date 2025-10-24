@@ -76,7 +76,7 @@ export default defineEventHandler(async (event) => {
                     count: totalDrinks || 0
                 },
                 monthly_growth: Math.round(monthlyGrowth * 100) / 100
-            },
+            }
         };
     } catch (error: unknown) {
         const err = error as FetchError;
