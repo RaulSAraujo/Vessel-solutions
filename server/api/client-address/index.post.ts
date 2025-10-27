@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
 
         const body = await readBody<TablesInsert<"clients"> & TablesInsert<"client_addresses">>(event);
 
-        if (!body.name || !body.email || !body.phone) {
+        if (!body.name || !body.document || !body.email || !body.phone) {
             throw createError({
                 statusCode: 400,
                 statusMessage: "Bad Request",
@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
             p_name: body.name,
             p_email: body.email,
             p_phone: body.phone,
-            p_phone_optional: body.phone_optional || "",
+            p_phone_optional: body.phone_optional || null,
             p_user_id: user.id,
             p_zip_code: body.zip_code,
             p_city: body.city,
@@ -37,7 +37,8 @@ export default defineEventHandler(async (event) => {
             p_neighborhood: body.neighborhood,
             p_street: body.street,
             p_number: body.number,
-            p_additional_info: body.additional_info || "",
+            p_document: body.document,
+            p_additional_info: body.additional_info || null,
         })
 
         if (error) {

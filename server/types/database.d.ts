@@ -334,7 +334,7 @@ export type Database = {
           client_name: string
           client_phone: string
           created_at: string | null
-          distance: number
+          distance: number | null
           end_time: string
           estimated_total_drinks: number | null
           fuel_cost_per_km: number | null
@@ -347,35 +347,37 @@ export type Database = {
           num_helpers: number | null
           profit_margin: number | null
           start_time: string
-          status: string | null
+          status: string
           total_cost: number | null
           total_revenue: number | null
+          total_value: number
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
-          audience_profile: string
+          audience_profile?: string
           bartender_hourly_rate?: number | null
           client_email?: string | null
           client_name: string
           client_phone: string
           created_at?: string | null
-          distance: number
-          end_time: string
+          distance?: number | null
+          end_time?: string
           estimated_total_drinks?: number | null
           fuel_cost_per_km?: number | null
           guest_count: number
           helper_hourly_rate?: number | null
           id?: string
-          location: string
+          location?: string
           notes?: string | null
           num_bartenders?: number | null
           num_helpers?: number | null
           profit_margin?: number | null
-          start_time: string
-          status?: string | null
+          start_time?: string
+          status?: string
           total_cost?: number | null
           total_revenue?: number | null
+          total_value?: number
           updated_at?: string | null
           user_id?: string | null
         }
@@ -386,7 +388,7 @@ export type Database = {
           client_name?: string
           client_phone?: string
           created_at?: string | null
-          distance?: number
+          distance?: number | null
           end_time?: string
           estimated_total_drinks?: number | null
           fuel_cost_per_km?: number | null
@@ -399,9 +401,10 @@ export type Database = {
           num_helpers?: number | null
           profit_margin?: number | null
           start_time?: string
-          status?: string | null
+          status?: string
           total_cost?: number | null
           total_revenue?: number | null
+          total_value?: number
           updated_at?: string | null
           user_id?: string | null
         }
@@ -547,6 +550,70 @@ export type Database = {
           },
         ]
       }
+      purchase_list: {
+        Row: {
+          created_at: string | null
+          estimated_cost: number | null
+          event_id: string
+          id: string
+          ingredient_id: string
+          notes: string | null
+          quantity_needed: number
+          status: string | null
+          unit_id: number
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          estimated_cost?: number | null
+          event_id: string
+          id?: string
+          ingredient_id: string
+          notes?: string | null
+          quantity_needed: number
+          status?: string | null
+          unit_id: number
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          estimated_cost?: number | null
+          event_id?: string
+          id?: string
+          ingredient_id?: string
+          notes?: string | null
+          quantity_needed?: number
+          status?: string | null
+          unit_id?: number
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchase_list_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchase_list_ingredient_id_fkey"
+            columns: ["ingredient_id"]
+            isOneToOne: false
+            referencedRelation: "ingredients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchase_list_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       quotations: {
         Row: {
           created_at: string | null
@@ -641,70 +708,6 @@ export type Database = {
         }
         Relationships: []
       }
-      purchase_list: {
-        Row: {
-          created_at: string | null
-          estimated_cost: number | null
-          event_id: string
-          id: string
-          ingredient_id: string
-          notes: string | null
-          quantity_needed: number
-          status: string | null
-          unit_id: number
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          estimated_cost?: number | null
-          event_id: string
-          id?: string
-          ingredient_id: string
-          notes?: string | null
-          quantity_needed: number
-          status?: string | null
-          unit_id: number
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          estimated_cost?: number | null
-          event_id?: string
-          id?: string
-          ingredient_id?: string
-          notes?: string | null
-          quantity_needed?: number
-          status?: string | null
-          unit_id?: number
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "purchase_list_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "purchase_list_ingredient_id_fkey"
-            columns: ["ingredient_id"]
-            isOneToOne: false
-            referencedRelation: "ingredients"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "purchase_list_unit_id_fkey"
-            columns: ["unit_id"]
-            isOneToOne: false
-            referencedRelation: "units"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       units: {
         Row: {
           abbreviation: string
@@ -730,57 +733,59 @@ export type Database = {
     Functions: {
       insertion_client_and_address: {
         Args: {
-          p_additional_info: string
+          p_additional_info?: string | null
           p_city: string
+          p_document: string
           p_email: string
           p_name: string
           p_neighborhood: string
           p_number: string
           p_phone: string
-          p_phone_optional: string
+          p_phone_optional?: string | null
           p_state: string
           p_street: string
           p_user_id: string
           p_zip_code: string
         }
         Returns: {
-          client: Tables["clients"]
-          address: Tables["client_addresses"]
+          client: Tables<'clients'>
+          address: Tables<'client_addresses'>
         }
       }
       update_client_and_address: {
         Args: {
-          p_additional_info: string
+          p_additional_info?: string | null
           p_city: string
           p_client_id: string
+          p_document: string
           p_email: string
           p_name: string
           p_neighborhood: string
           p_number: string
           p_phone: string
-          p_phone_optional: string
+          p_phone_optional?: string | null
           p_state: string
           p_street: string
           p_zip_code: string
         }
         Returns: {
-          client: Tables["clients"]
-          address: Tables["client_addresses"]
+          client: Tables<'clients'>
+          address: Tables<'client_addresses'>
         }
       }
       upsert_multiple_drink_ingredients: {
-        Args: { p_drink_id: string; p_ingredients: Json[] }
+        Args: { p_drink_id: string; p_ingredients: Json }
         Returns: {
-          created_at: string | null
+          created_at: string
           drink_id: string
           ingredient_id: string
           quantity: number
-          unit_id: number | null
-          updated_at: string | null
+          unit_id: number
+          updated_at: string
         }[]
       }
       upsert_multiple_event_drinks: {
-        Args: { p_event_id: string; p_drinks: Json[] }
+        Args: { p_drinks: Json; p_event_id: string }
         Returns: {
           created_at: string
           drink_calculated_cost: number
@@ -792,6 +797,23 @@ export type Database = {
           drink_profit_margin_percentage: number
           drink_selling_price: number
           event_id: string
+          id: string
+          updated_at: string
+        }[]
+      }
+      upsert_multiple_event_quotation_drinks: {
+        Args: { p_drinks: Json; p_event_quotation_id: string }
+        Returns: {
+          created_at: string
+          drink_calculated_cost: number
+          drink_category_name: string
+          drink_description: string
+          drink_image_url: string
+          drink_name: string
+          drink_percentage: number
+          drink_profit_margin_percentage: number
+          drink_selling_price: number
+          event_quotation_id: string
           id: string
           updated_at: string
         }[]
