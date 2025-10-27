@@ -17,6 +17,9 @@ const { handleSubmit, isSubmitting, meta, errors } = useForm({
 const { value: email } = useField<string>("email");
 const { value: password } = useField<string>("password");
 
+// Estado para controlar a visibilidade da senha
+const showPassword = ref(false);
+
 const onSubmit = handleSubmit(async (values) => {
   const success: boolean = await login(values.email, values.password);
 
@@ -53,9 +56,22 @@ const signInWithGoogle = async () => {
         <UiTextField
           v-model="password"
           label="Senha"
-          type="password"
+          :type="showPassword ? 'text' : 'password'"
           :error-messages="errors.password"
-        />
+        >
+          <template #append-inner>
+            <v-btn
+              icon
+              variant="text"
+              size="small"
+              @click="showPassword = !showPassword"
+            >
+              <v-icon>
+                {{ showPassword ? "mdi-eye-off" : "mdi-eye" }}
+              </v-icon>
+            </v-btn>
+          </template>
+        </UiTextField>
       </v-col>
     </v-row>
 
