@@ -15,7 +15,6 @@ const { page, itemsPerPage, items, totalItems, loading, selectedDrink } =
 const headers = [
   { title: "Ações", key: "actions", sortable: false },
   { title: "Nome", key: "name", minWidth: 200 },
-  { title: "Categoria", key: "drink_categories.name", minWidth: 200 },
   { title: "Descrição", key: "description", maxWidth: 150 },
   { title: "Custo", key: "calculated_cost" },
   { title: "Preço venda", key: "selling_price", minWidth: 140 },

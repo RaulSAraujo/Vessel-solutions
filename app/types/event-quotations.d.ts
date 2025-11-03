@@ -36,7 +36,6 @@ export interface EventQuotationDrink {
     event_quotation_id: string;
     drink_percentage: number;
     drink_name: string | null;
-    drink_category_name: string | null;
     drink_description: string | null;
     drink_image_url: string | null;
     drink_calculated_cost: number | null;
@@ -51,13 +50,6 @@ export interface Drinks {
     id: string;
     name: string;
     description?: string;
-    category_id: string;
-    drink_categories: DrinkCategories;
-}
-
-export interface DrinkCategories {
-    id: string;
-    name: string;
 }
 
 export type Page = {
@@ -99,7 +91,6 @@ export type FormEventQuotationDrink = {
     id?: string; // ID opcional para permitir atualização
     drink_percentage: number;
     drink_name: string | null;
-    drink_category_name: string | null;
     drink_description: string | null;
     drink_image_url: string | null;
     drink_calculated_cost: number | null;

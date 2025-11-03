@@ -3,12 +3,10 @@ import { drinkSchema } from "~/schemas/drink";
 
 import type { Datum as Drink } from "~/types/drinks";
 import type { Datum as Ingredient } from "~/types/ingredients";
-import type { DrinkCategories } from "~/types/drink-categories";
 import type { TableDrinkIngredients } from "~/types/drink-ingredient";
 
 // components
 import Table from "./Table.vue";
-import CategoryId from "./CategoryId.vue";
 import FindIngredient from "./FindIngredient.vue";
 import { useDrinksApi } from "~/composables/api/useDrinksApi";
 
@@ -16,7 +14,6 @@ const props = defineProps<{
   units: Units[];
   loading: boolean;
   drink?: Drink | null;
-  categories: DrinkCategories[];
 }>();
 
 const emit = defineEmits(["submit", "calculatedCost", "sellingPrice"]);
@@ -33,7 +30,6 @@ const { handleSubmit, errors } = useForm({
 
 const { value: name } = useField<string>("name");
 const { value: imageUrl } = useField<string>("image_url");
-const { value: categoryId } = useField<string | null>("category_id");
 const { value: description } = useField<string | null>("description");
 const { value: profitMarginPercentage } = useField<number>(
   "profit_margin_percentage"
@@ -89,7 +85,6 @@ onMounted(async () => {
   if (props.drink) {
     name.value = props.drink.name;
     description.value = props.drink.description;
-    categoryId.value = props.drink.category_id;
     imageUrl.value = props.drink.image_url || "";
     profitMarginPercentage.value = props.drink.profit_margin_percentage || 0;
 
@@ -170,15 +165,7 @@ function calculeCostUnit(item: TableDrinkIngredients) {
         />
       </v-col>
 
-      <v-col cols="12" md="3">
-        <CategoryId
-          v-model="categoryId"
-          :categories="categories"
-          :error-messages="errors.category_id"
-        />
-      </v-col>
-
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="6">
         <UiTextField
           v-model="description"
           v-maska="'Ax'"
@@ -188,7 +175,7 @@ function calculeCostUnit(item: TableDrinkIngredients) {
         />
       </v-col>
 
-      <v-col cols="12" md="2">
+      <v-col cols="12" md="3">
         <UiTextField
           v-model="imageUrl"
           label="Url da Imagem"

@@ -31,7 +31,6 @@ const onSubmit = handleSubmit((values) => {
       id: e.id, // Incluir ID para permitir atualização
       drink_percentage: e.drink_percentage,
       drink_name: e.drink_name,
-      drink_category_name: e.drink_category_name,
       drink_description: e.drink_description,
       drink_image_url: e.drink_image_url,
       drink_calculated_cost: e.drink_calculated_cost,
@@ -54,7 +53,6 @@ onMounted(async () => {
       drinks.value.push({
         id: drink.id,
         drink_name: drink.drink_name || "",
-        drink_category_name: drink.drink_category_name || "",
         drink_description: drink.drink_description,
         drink_image_url: drink.drink_image_url,
         drink_calculated_cost: drink.drink_calculated_cost || 0,

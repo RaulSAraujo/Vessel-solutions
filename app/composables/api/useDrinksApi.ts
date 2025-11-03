@@ -2,7 +2,6 @@ import type { FetchError } from 'ofetch'
 import type { Options } from '~/types/use-fetch'
 import type { EmittedFilters } from "~/types/filter";
 import type { Drinks, Datum, FormDrink } from "~/types/drinks";
-import type { DrinkCategories } from '~/types/drink-categories'
 import type { VDataTableServerOptions } from '~/types/data-table';
 import type { Datum as Ingredient } from '~/types/ingredients';
 import type { FormDrinkIngredients, Datum as DrinkIngredient } from '~/types/drink-ingredient';
@@ -45,7 +44,6 @@ export function useDrinksApi() {
                 body: {
                     name: data.name,
                     image_url: data.image_url,
-                    category_id: data.category_id,
                     description: data.description,
                     selling_price: data.selling_price,
                     calculated_cost: data.calculated_cost,
@@ -67,7 +65,6 @@ export function useDrinksApi() {
                 body: {
                     name: data.name,
                     image_url: data.image_url,
-                    category_id: data.category_id,
                     description: data.description,
                     selling_price: data.selling_price,
                     calculated_cost: data.calculated_cost,
@@ -143,25 +140,5 @@ export function useDrinksApi() {
         getDrinkIngredients,
         upsertDrinkIngredients,
         deleteDrinkIngredient
-    }
-}
-
-export const useFetchDrinkCategories = (options: Options) => {
-    const { server = true, immediate = true, lazy = false } = options
-
-    const { data, status, error, refresh, execute } = useFetch<DrinkCategories[]>('/api/drinks/categories', {
-        lazy,
-        server,
-        immediate,
-        key: 'drink_categories',
-        getCachedData: (key, nuxtApp) => (nuxtApp.payload.data[key] || nuxtApp.static.data[key])
-    });
-
-    return {
-        refresh,
-        execute,
-        error: readonly(error),
-        status: readonly(status),
-        data: data as unknown as Ref<DrinkCategories[]>,
     }
 }

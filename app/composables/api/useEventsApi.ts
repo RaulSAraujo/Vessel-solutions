@@ -5,7 +5,7 @@ import type { Events, Datum, FormEvent } from "~/types/events";
 import type { VDataTableServerOptions } from '~/types/data-table';
 import type { Datum as EventDrink, FormEventDrinks } from '~/types/event-drinks';
 
-type EventDrinksWithRelations = EventDrink & { drinks: Drink & { drink_categories: { name: string } } }
+type EventDrinksWithRelations = EventDrink & { drinks: Drink }
 
 export function useEventsApi() {
     const getEvents = async (props?: VDataTableServerOptions, filters?: EmittedFilters) => {

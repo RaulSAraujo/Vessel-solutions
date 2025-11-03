@@ -8,7 +8,6 @@ export type Datum = {
     event_id: string;
     drink_percentage: number;
     drink_name: string;
-    drink_category_name: string;
     drink_description: string | null;
     drink_image_url: string | null;
     drink_calculated_cost: number | null;
@@ -28,7 +27,6 @@ export type Page = {
 export type TableDrinks = {
     id: string;
     drink_name: string;
-    drink_category_name: string;
     drink_description: string | null;
     drink_image_url: string | null;
     drink_calculated_cost: number | null;
@@ -41,7 +39,6 @@ export type FormEventDrinks = {
     id?: string; // ID opcional para permitir atualização
     drink_percentage: number;
     drink_name: string;
-    drink_category_name: string;
     drink_description?: string | null;
     drink_image_url?: string | null;
     drink_calculated_cost?: number | null;

@@ -10,12 +10,7 @@
     item-value="name"
     search-field="name"
     prepend-inner-icon="mdi-glass-cocktail"
-    :select-query="`
-      *,
-      drink_categories (
-        name
-      )
-    `"
+    :select-query="`*`"
   >
     <template #item="{ props, item }">
       <v-list-item

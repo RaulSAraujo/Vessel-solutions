@@ -38,7 +38,6 @@ export default defineEventHandler(async (event) => {
             event_id: eventId,
             drink_percentage: drink.drink_percentage,
             drink_name: drink.drink_name,
-            drink_category_name: drink.drink_category_name,
             drink_description: drink.drink_description,
             drink_image_url: drink.drink_image_url,
             drink_calculated_cost: drink.drink_calculated_cost,

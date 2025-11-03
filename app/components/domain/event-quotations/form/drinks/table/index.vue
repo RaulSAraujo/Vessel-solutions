@@ -27,7 +27,6 @@ const loadingDelete = ref(false);
 const headers = [
   { title: "Ações", key: "actions", maxWidth: 60 },
   { title: "Nome", key: "drink_name", minWidth: 200 },
-  { title: "Categoria", key: "drink_category_name", minWidth: 200 },
   { title: "Custo", key: "drink_calculated_cost", minWidth: 140 },
   { title: "Preço venda", key: "drink_selling_price", minWidth: 140 },
   {

@@ -8,7 +8,6 @@ export type Datum = {
     name: string
     user_id: string;
     calculated_cost: number | null
-    category_id: string | null
     description: string | null
     image_url: string | null
     profit_margin_percentage: number | null
@@ -27,7 +26,6 @@ export type Page = {
 export type FormDrink = {
     id?: string
     name: string
-    category_id: string
     image_url?: string | null
     description?: string | null
     selling_price?: number | null

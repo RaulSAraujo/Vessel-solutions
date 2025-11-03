@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useFetchUnits } from "~/composables/api/useUnitsApi";
-import { useFetchDrinkCategories } from "~/composables/api/useDrinksApi";
 
 definePageMeta({
   middleware: ["auth"],
@@ -12,10 +11,6 @@ const dialogUpdate = ref(false);
 const dialogDelete = ref(false);
 
 const { data: units, status: unitsStatus } = useFetchUnits({ lazy: true });
-
-const { data: categories, status: categoriesStatus } = useFetchDrinkCategories({
-  lazy: true,
-});
 </script>
 
 <template>
@@ -25,11 +20,7 @@ const { data: categories, status: categoriesStatus } = useFetchDrinkCategories({
       <span class="text-h5">Bebidas</span>
     </div>
 
-    <DrinksFilter
-      v-if="categoriesStatus === 'success'"
-      v-model="filterDrawer"
-      :categories="categories"
-    />
+    <DrinksFilter v-model="filterDrawer" />
 
     <DrinksTable
       @open-creation="dialogCreation = true"
@@ -39,18 +30,16 @@ const { data: categories, status: categoriesStatus } = useFetchDrinkCategories({
     />
 
     <DrinksCreation
-      v-if="unitsStatus === 'success' && categoriesStatus === 'success'"
+      v-if="unitsStatus === 'success'"
       v-model="dialogCreation"
       :units="units"
-      :categories="categories"
       @close="dialogCreation = false"
     />
 
     <DrinksUpdate
-      v-if="unitsStatus === 'success' && categoriesStatus === 'success'"
+      v-if="unitsStatus === 'success'"
       v-model="dialogUpdate"
       :units="units"
-      :categories="categories"
       @close="dialogUpdate = false"
     />
 

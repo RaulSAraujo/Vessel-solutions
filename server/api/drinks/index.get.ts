@@ -13,10 +13,7 @@ export default defineEventHandler(async (event) => {
 
         let supabaseQuery = client
             .from("drinks")
-            .select(`
-                *,
-                drink_categories!inner (name)
-            `, { count: "exact" });
+            .select("*", { count: "exact" });
 
         if (query.filters && typeof query.filters === "string") {
             try {

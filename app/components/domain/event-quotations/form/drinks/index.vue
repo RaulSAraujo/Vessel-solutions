@@ -9,7 +9,7 @@ import type {
 import Table from "./table/index.vue";
 import FindDrink from "./FindDrink.vue";
 
-type SelectedDrink = Drink & { drink_categories: { name: string } };
+type SelectedDrink = Drink;
 
 const props = defineProps<{
   form: Partial<FormEventQuotation>;

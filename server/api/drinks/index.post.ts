@@ -12,8 +12,7 @@ export default defineEventHandler(async (event) => {
     if (!body.name ||
       !body.calculated_cost ||
       !body.selling_price ||
-      !body.profit_margin_percentage ||
-      !body.category_id) {
+      !body.profit_margin_percentage) {
       throw createError({
         statusCode: 400,
         statusMessage: "Bad Request",
@@ -28,10 +27,7 @@ export default defineEventHandler(async (event) => {
         ...body,
         user_id: user.id,
       })
-      .select(`
-        *,
-        drink_categories (name)
-      `)
+      .select("*")
 
     if (error) {
       throw createError({

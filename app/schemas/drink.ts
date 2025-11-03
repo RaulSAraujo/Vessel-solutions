@@ -5,10 +5,6 @@ export const drinkSchema = yup.object({
         .string()
         .required('O nome é obrigatório'),
 
-    category_id: yup
-        .string()
-        .required('A categoria é obrigatória'),
-
     profit_margin_percentage: yup
         .number()
         .positive('A margem de lucro deve ser maior que zero')

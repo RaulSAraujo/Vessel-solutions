@@ -1,10 +1,5 @@
 <script lang="ts" setup>
 import type { FilterDefinition } from "~/types/filter";
-import type { DrinkCategories } from "~/types/drink-categories";
-
-const props = defineProps<{
-  categories: DrinkCategories[];
-}>();
 
 const store = useDrinksStore();
 const { activeFilters } = storeToRefs(store);
@@ -15,16 +10,6 @@ const filterDefinitions = ref<FilterDefinition[]>([
     label: "Nome",
     type: "string",
     op: "ilike",
-    layout: {
-      clearable: true,
-    },
-  },
-  {
-    key: "drink_categories.name",
-    label: "Categoria",
-    type: "array",
-    op: "eq",
-    options: props.categories?.map((u) => ({ text: u.name, value: u.name })),
     layout: {
       clearable: true,
     },

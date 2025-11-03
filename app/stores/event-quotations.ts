@@ -6,7 +6,7 @@ import type { VDataTableServerOptions } from "~/types/data-table";
 import type { TableDrinks } from "~/types/event-drinks";
 import type { Datum as Drink } from "~/types/drinks";
 
-type SelectedDrink = Drink & { drink_categories: { name: string } };
+type SelectedDrink = Drink;
 
 export const useEventQuotationsStore = defineStore('eventQuotations', () => {
     // Tabela
@@ -122,7 +122,6 @@ export const useEventQuotationsStore = defineStore('eventQuotations', () => {
         drinks.value.push({
             id: crypto.randomUUID(), // Gerar ID temporário para novos drinks
             drink_name: selectedDrink.name,
-            drink_category_name: selectedDrink.drink_categories.name,
             drink_description: selectedDrink.description,
             drink_image_url: selectedDrink.image_url,
             drink_calculated_cost: selectedDrink.calculated_cost || 0,

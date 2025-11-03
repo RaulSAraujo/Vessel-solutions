@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useDrinksApi } from "~/composables/api/useDrinksApi";
 import type { FormDrink } from "~/types/drinks";
-import type { DrinkCategories } from "~/types/drink-categories";
 import type { FormDrinkIngredients } from "~/types/drink-ingredient";
 // components
 import Form from "./form/index.vue";
@@ -12,7 +11,6 @@ type DrinkWithIngredients = FormDrink & {
 
 defineProps<{
   units: Units[];
-  categories: DrinkCategories[];
 }>();
 
 const emit = defineEmits(["close"]);
@@ -64,7 +62,6 @@ async function creation(events: DrinkWithIngredients) {
         <Form
           :loading="loading"
           :units="units"
-          :categories="categories"
           @submit="creation"
         />
       </v-card-text>

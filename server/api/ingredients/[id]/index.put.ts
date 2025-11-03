@@ -31,6 +31,14 @@ export default defineEventHandler(async (event) => {
             `);
 
         if (error) {
+            if (error.code === '23505') {
+                throw createError({
+                    statusCode: 400,
+                    statusMessage: 'Bad Request',
+                    message: 'Erro: Ingrediente já cadastrado.',
+                });
+            }
+
             throw createError({
                 statusCode: 500,
                 statusMessage: 'Failed to update ingredient',
