@@ -52,13 +52,17 @@ export const useQuotationsStore = defineStore('quotations', () => {
 
     function updateItem(item: Datum) {
         const index = items.value.findIndex((i) => i.id === item.id);
-        items.value[index] = item;
+        if (index !== -1) {
+            items.value[index] = item;
+        }
     }
 
     function deleteItem(item: Datum) {
         const index = items.value.findIndex((i) => i.id === item.id);
-        items.value.splice(index, 1);
-        totalItems.value -= 1;
+        if (index !== -1) {
+            items.value.splice(index, 1);
+            totalItems.value -= 1;
+        }
     }
 
     return {

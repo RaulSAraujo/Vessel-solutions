@@ -11,6 +11,7 @@ const filterDrawer = ref(false);
 const dialogCreation = ref(false);
 const dialogUpdate = ref(false);
 const dialogDelete = ref(false);
+const dialogLinkToIngredient = ref(false);
 
 const { data: units, status: unitsStatus } = useFetchUnits({ lazy: true });
 const { data: suppliers, status: suppliersStatus } = useFetchSuppliers({
@@ -19,6 +20,11 @@ const { data: suppliers, status: suppliersStatus } = useFetchSuppliers({
 const { data: ingredients, status: ingredientsStatus } = useFetchIngredients({
   lazy: true,
 });
+
+function handleOpenLinkToIngredient() {
+  dialogCreation.value = false;
+  dialogLinkToIngredient.value = true;
+}
 </script>
 
 <template>
@@ -57,7 +63,12 @@ const { data: ingredients, status: ingredientsStatus } = useFetchIngredients({
       :units="units"
       :suppliers="suppliers"
       :ingredients="ingredients"
-      @close="dialogCreation = false"
+      @close="handleOpenLinkToIngredient"
+    />
+
+    <QuotationsLinkToIngredient
+      v-model="dialogLinkToIngredient"
+      @close="dialogLinkToIngredient = false"
     />
 
     <QuotationsUpdate

@@ -54,7 +54,9 @@ export function useQuotationsApi() {
     const updateQuotation = async (id: string, data: FormQuotations) => {
         try {
             const newData = { ...data };
-            newData.quotation_date = dayjs(newData.quotation_date, 'DD/MM/YYYY').format('YYYY-MM-DD');
+            if (newData.quotation_date) {
+                newData.quotation_date = dayjs(newData.quotation_date, 'DD/MM/YYYY').format('YYYY-MM-DD');
+            }
 
             const res = await $fetch<Datum>(`/api/quotations/${id}`, {
                 method: 'PUT',
@@ -64,7 +66,7 @@ export function useQuotationsApi() {
             return res;
         } catch (error: unknown) {
             const err = error as FetchError;
-            $toast().error(err.data.message || `Failed to update Quotation with ID ${id}.`);
+            $toast().error(err.data?.message || err.message || `Failed to update Quotation with ID ${id}.`);
         }
     };
 
@@ -77,13 +79,14 @@ export function useQuotationsApi() {
             return true;
         } catch (error: unknown) {
             const err = error as FetchError;
-            if (err.data.message.includes('foreign key')) {
+            const errorMessage = err.data?.message || err.message || '';
+            if (errorMessage.includes('foreign key')) {
                 $toast().error('Não é possível excluir uma cotação que esteja vinculada a um ingrediente.');
 
                 return;
             }
 
-            $toast().error(err.data.message || `Failed to delete Quotation with ID ${id}.`);
+            $toast().error(errorMessage || `Failed to delete Quotation with ID ${id}.`);
         }
     };
 

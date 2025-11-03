@@ -6,5 +6,5 @@ export const quotationSchema = yup.object({
     purchase_price: yup.number().required('O preço de compra é obrigatório'),
     purchase_quantity: yup.number().required('A quantidade de compra é obrigatória'),
     purchase_unit_id: yup.number().required('A unidade de compra é obrigatória'),
-    quotation_date: yup.date().nullable().default(null),
+    quotation_date: yup.string().nullable().default(null).notRequired()
 });

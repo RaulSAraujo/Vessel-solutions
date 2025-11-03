@@ -16,6 +16,9 @@ const emit = defineEmits(["close"]);
 
 const api = useQuotationsApi();
 
+const store = useQuotationsStore();
+const { selectedQuotation } = storeToRefs(store);
+
 const loading = ref(false);
 
 async function creation(events: FormQuotations) {
@@ -28,7 +31,9 @@ async function creation(events: FormQuotations) {
     return;
   }
 
-  useQuotationsStore().addItem(res);
+  selectedQuotation.value = res;
+
+  store.addItem(res);
 
   emit("close");
 

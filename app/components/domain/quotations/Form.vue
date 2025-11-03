@@ -49,70 +49,30 @@ onMounted(async () => {
   <v-form @submit.prevent="onSubmit">
     <v-row dense>
       <v-col cols="12">
-        <UiAutocompleteField
-          v-model="supplierId"
-          :items="suppliers"
-          item-value="id"
-          item-title="name"
-          label="Fornecedor"
-          prepend-inner-icon="mdi-account"
-          :error-messages="errors.supplier_id"
-        />
+        <UiAutocompleteField v-model="supplierId" :items="suppliers" item-value="id" item-title="name"
+          label="Fornecedor" prepend-inner-icon="mdi-account" :error-messages="errors.supplier_id" />
       </v-col>
 
       <v-col cols="12">
-        <UiAutocompleteField
-          v-model="ingredientId"
-          :items="ingredients"
-          item-value="id"
-          item-title="name"
-          label="Ingrediente"
-          prepend-inner-icon="mdi-food-variant"
-          :error-messages="errors.ingredient_id"
-        />
+        <UiAutocompleteField v-model="ingredientId" :items="ingredients" item-value="id" item-title="name"
+          label="Ingrediente" prepend-inner-icon="mdi-food-variant" :error-messages="errors.ingredient_id" />
       </v-col>
 
       <v-col cols="12">
-        <UiNumberField
-          v-model="purchasePrice"
-          :min="0"
-          :step="0.01"
-          :precision="2"
-          hide-details="auto"
-          label="Preço de compra"
-          :error-messages="errors.purchase_price"
-        />
+        <UiNumberField v-model="purchasePrice" :min="0" :step="0.01" :precision="2" hide-details="auto"
+          label="Preço de compra" :error-messages="errors.purchase_price" />
       </v-col>
 
       <v-col cols="12">
-        <UiNumberField
-          v-model="purchaseQuantity"
-          :min="0"
-          :step="0.01"
-          :precision="2"
-          label="Quantidade"
-          hide-details="auto"
-          :error-messages="errors.purchase_quantity"
-        />
+        <UiNumberField v-model="purchaseQuantity" :min="0" :step="0.01" :precision="2" label="Quantidade"
+          hide-details="auto" :error-messages="errors.purchase_quantity" />
       </v-col>
 
       <v-col cols="12">
-        <UiAutocompleteField
-          v-model="purchaseUnitId"
-          :items="units || []"
-          item-value="id"
-          item-title="name"
-          label="Unidade"
-          prepend-inner-icon="mdi-ruler"
-          :error-messages="errors.purchase_unit_id"
-        >
+        <UiAutocompleteField v-model="purchaseUnitId" :items="units || []" item-value="id" item-title="name"
+          label="Unidade" prepend-inner-icon="mdi-ruler" :error-messages="errors.purchase_unit_id">
           <template #item="{ props: bind, item }">
-            <v-list-item
-              lines="one"
-              v-bind="bind"
-              elevation="0"
-              :title="item.raw.name"
-            >
+            <v-list-item lines="one" v-bind="bind" elevation="0" :title="item.raw.name">
               <template #append>
                 <span class="text-caption">({{ item.raw.abbreviation }})</span>
               </template>
@@ -122,12 +82,8 @@ onMounted(async () => {
       </v-col>
 
       <v-col cols="12">
-        <UiDateField
-          v-model="quotationDate"
-          label="Data da cotação"
-          :error-messages="errors.quotationDate"
-          @save="quotationDate = $event"
-        />
+        <UiDateField v-model="quotationDate" label="Data da cotação" hide-details="auto"
+          :error-messages="errors.quotation_date" @save="quotationDate = $event" />
       </v-col>
 
       <v-col cols="12" class="d-flex justify-center">

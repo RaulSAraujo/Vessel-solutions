@@ -4,7 +4,7 @@ import type { Tables, TablesUpdate } from '~~/server/types/database';
 
 export default defineEventHandler(async (event) => {
     try {
-        const { client } = await getSupabaseClientAndUser(event);
+        const { client, user } = await getSupabaseClientAndUser(event);
         const quotationId = event.context.params?.id;
         const body = await readBody<TablesUpdate<'quotations'>>(event);
 
@@ -20,7 +20,10 @@ export default defineEventHandler(async (event) => {
 
         const { data, error } = await client
             .from('quotations')
-            .update(updatedFields)
+            .update({
+                ...updatedFields,
+                user_id: user.id,
+            })
             .eq('id', quotationId)
             .select(`
                 *,
