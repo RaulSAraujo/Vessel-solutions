@@ -50,6 +50,7 @@ function handleOpenDelete(drink: Datum) {
   >
     <template #buttons>
       <v-btn
+        id="tutorial-drinks-btn-filter"
         rounded="xl"
         color="grey"
         variant="text"
@@ -59,6 +60,7 @@ function handleOpenDelete(drink: Datum) {
       />
 
       <v-btn
+        id="tutorial-drinks-btn-refresh"
         rounded="xl"
         color="grey"
         variant="text"
@@ -68,6 +70,7 @@ function handleOpenDelete(drink: Datum) {
       />
 
       <v-btn
+        id="tutorial-drinks-btn-create"
         rounded="xl"
         color="grey"
         icon="mdi-plus"
@@ -79,6 +82,7 @@ function handleOpenDelete(drink: Datum) {
 
     <template #item.actions="{ item }">
       <UiTableActions
+        :tutorial-id="item.id === items[0]?.id ? 'tutorial-drinks' : ''"
         @edit="handleOpenUpdate(item)"
         @delete="handleOpenDelete(item)"
       />

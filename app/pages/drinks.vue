@@ -15,19 +15,21 @@ const { data: units, status: unitsStatus } = useFetchUnits({ lazy: true });
 
 <template>
   <v-container fluid>
-    <div class="d-flex flex-row align-center mb-4 text-primary">
+    <div id="tutorial-drinks-header" class="d-flex flex-row align-center mb-4 text-primary">
       <v-icon size="28" class="mr-2" icon="mdi-glass-cocktail" />
       <span class="text-h5">Bebidas</span>
     </div>
 
     <DrinksFilter v-model="filterDrawer" />
 
-    <DrinksTable
-      @open-creation="dialogCreation = true"
-      @open-update="dialogUpdate = true"
-      @open-filter="filterDrawer = true"
-      @open-delete="dialogDelete = true"
-    />
+    <div id="tutorial-drinks-table">
+      <DrinksTable
+        @open-creation="dialogCreation = true"
+        @open-update="dialogUpdate = true"
+        @open-filter="filterDrawer = true"
+        @open-delete="dialogDelete = true"
+      />
+    </div>
 
     <DrinksCreation
       v-if="unitsStatus === 'success'"

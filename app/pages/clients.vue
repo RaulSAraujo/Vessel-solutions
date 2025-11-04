@@ -11,19 +11,21 @@ const dialogDelete = ref(false);
 
 <template>
   <v-container fluid>
-    <div class="d-flex flex-row align-center mb-4 text-primary">
+    <div id="tutorial-clients-header" class="d-flex flex-row align-center mb-4 text-primary">
       <v-icon size="28" class="mr-2" icon="mdi-account-group" />
       <span class="text-h5">Clientes</span>
     </div>
 
     <ClientsFilter v-model="filterDrawer" />
 
-    <ClientsTable
-      @open-creation="dialogCreation = true"
-      @open-update="dialogUpdate = true"
-      @open-filter="filterDrawer = true"
-      @open-delete="dialogDelete = true"
-    />
+    <div id="tutorial-clients-table">
+      <ClientsTable
+        @open-creation="dialogCreation = true"
+        @open-update="dialogUpdate = true"
+        @open-filter="filterDrawer = true"
+        @open-delete="dialogDelete = true"
+      />
+    </div>
 
     <ClientsCreation v-model="dialogCreation" @close="dialogCreation = false" />
 

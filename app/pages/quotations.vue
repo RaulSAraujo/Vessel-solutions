@@ -29,7 +29,7 @@ function handleOpenLinkToIngredient() {
 
 <template>
   <v-container fluid>
-    <div class="d-flex flex-row align-center mb-4 text-primary">
+    <div id="tutorial-quotations-header" class="d-flex flex-row align-center mb-4 text-primary">
       <v-icon size="28" class="mr-2" icon="mdi-handshake" />
       <span class="text-h5">Cotações</span>
     </div>
@@ -46,12 +46,14 @@ function handleOpenLinkToIngredient() {
       :suppliers="suppliers"
     />
 
-    <QuotationsTable
-      @open-creation="dialogCreation = true"
-      @open-update="dialogUpdate = true"
-      @open-filter="filterDrawer = true"
-      @open-delete="dialogDelete = true"
-    />
+    <div id="tutorial-quotations-table">
+      <QuotationsTable
+        @open-creation="dialogCreation = true"
+        @open-update="dialogUpdate = true"
+        @open-filter="filterDrawer = true"
+        @open-delete="dialogDelete = true"
+      />
+    </div>
 
     <QuotationsCreation
       v-if="

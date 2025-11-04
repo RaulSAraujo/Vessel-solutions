@@ -70,6 +70,7 @@ function handleOpenQuotation(ingredient: Datum) {
       </v-tooltip>
 
       <v-btn
+        id="tutorial-ingredients-btn-filter"
         rounded="xl"
         color="grey"
         variant="text"
@@ -79,6 +80,7 @@ function handleOpenQuotation(ingredient: Datum) {
       />
 
       <v-btn
+        id="tutorial-ingredients-btn-refresh"
         rounded="xl"
         color="grey"
         variant="text"
@@ -88,6 +90,7 @@ function handleOpenQuotation(ingredient: Datum) {
       />
 
       <v-btn
+        id="tutorial-ingredients-btn-create"
         rounded="xl"
         color="grey"
         icon="mdi-plus"
@@ -99,6 +102,7 @@ function handleOpenQuotation(ingredient: Datum) {
 
     <template #item.actions="{ item }">
       <UiTableActions
+        :tutorial-id="item.id === items[0]?.id ? 'tutorial-ingredients' : ''"
         @edit="handleOpenUpdate(item)"
         @delete="handleOpenDelete(item)"
       >

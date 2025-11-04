@@ -1,11 +1,24 @@
 <script lang="ts" setup>
+const props = defineProps({
+  tutorialId: {
+    type: String,
+    default: "",
+  },
+});
+
 defineEmits(["edit", "delete"]);
 </script>
 
 <template>
   <v-menu location="end center">
-    <template #activator="{ props }">
-      <v-icon icon="mdi-dots-vertical" small class="mr-2" v-bind="props" />
+    <template #activator="{ props: menuProps }">
+      <v-icon
+        :id="tutorialId ? `${tutorialId}-actions-icon` : undefined"
+        icon="mdi-dots-vertical"
+        small
+        class="mr-2 tutorial-actions-icon"
+        v-bind="menuProps"
+      />
     </template>
 
     <v-list
@@ -15,7 +28,13 @@ defineEmits(["edit", "delete"]);
       border="sm"
       variant="plain"
     >
-      <v-list-item title="Editar" base-color="primary" @click="$emit('edit')">
+      <v-list-item
+        :id="tutorialId ? `${tutorialId}-actions-edit` : undefined"
+        title="Editar"
+        base-color="primary"
+        class="tutorial-actions-edit"
+        @click="$emit('edit')"
+      >
         <template #prepend>
           <v-icon size="small" start icon="mdi-pencil" />
         </template>
@@ -23,7 +42,13 @@ defineEmits(["edit", "delete"]);
 
       <v-divider />
 
-      <v-list-item title="Excluir" base-color="error" @click="$emit('delete')">
+      <v-list-item
+        :id="tutorialId ? `${tutorialId}-actions-delete` : undefined"
+        title="Excluir"
+        base-color="error"
+        class="tutorial-actions-delete"
+        @click="$emit('delete')"
+      >
         <template #prepend>
           <v-icon size="small" start icon="mdi-delete" />
         </template>

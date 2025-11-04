@@ -21,13 +21,13 @@ onMounted(async () => {
 
 <template>
   <v-container fluid>
-    <div class="d-flex flex-row align-center mb-4 text-primary">
+    <div id="tutorial-purchase-list-header" class="d-flex flex-row align-center mb-4 text-primary">
       <v-icon size="28" class="mr-2" icon="mdi-cart" />
       <span class="text-h5">Lista de Compras</span>
     </div>
 
     <!-- Informação sobre geração automática -->
-    <v-alert type="info" variant="tonal" class="mb-4">
+    <v-alert id="tutorial-purchase-list-info" type="info" variant="tonal" class="mb-4">
       <strong>Informação:</strong> Os itens da lista de compras são
       gerados/atualizados automaticamente quando um evento é alterado para
       status "Comprar". Você pode apenas alterar o status dos itens (Pendente,
@@ -35,16 +35,20 @@ onMounted(async () => {
     </v-alert>
 
     <!-- Resumo -->
-    <PurchaseListSummary v-if="summary" :summary="summary" class="mb-4" />
+    <div id="tutorial-purchase-list-summary">
+      <PurchaseListSummary v-if="summary" :summary="summary" class="mb-4" />
+    </div>
 
     <!-- Filtros -->
     <PurchaseListFilter v-model="filterDrawer" />
 
     <!-- Tabela -->
-    <PurchaseListTable
-      @open-filter="filterDrawer = true"
-      @open-bulk-actions="dialogBulkActions = true"
-    />
+    <div id="tutorial-purchase-list-table">
+      <PurchaseListTable
+        @open-filter="filterDrawer = true"
+        @open-bulk-actions="dialogBulkActions = true"
+      />
+    </div>
 
     <!-- Diálogos -->
     <PurchaseListBulkActions

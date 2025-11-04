@@ -16,7 +16,7 @@ const { data: units, status } = useFetchUnits({ lazy: true });
 
 <template>
   <v-container fluid>
-    <div class="d-flex flex-row align-center mb-4 text-primary">
+    <div id="tutorial-ingredients-header" class="d-flex flex-row align-center mb-4 text-primary">
       <v-icon size="28" class="mr-2" icon="mdi-food-variant" />
       <span class="text-h5">Ingredientes</span>
     </div>
@@ -27,15 +27,17 @@ const { data: units, status } = useFetchUnits({ lazy: true });
       :units="units"
     />
 
-    <IngredientsTable
-      v-if="status === 'success'"
-      :units="units"
-      @open-creation="dialogCreation = true"
-      @open-update="dialogUpdate = true"
-      @open-filter="filterDrawer = true"
-      @open-delete="dialogDelete = true"
-      @open-quotation="dialogQuotation = true"
-    />
+    <div id="tutorial-ingredients-table">
+      <IngredientsTable
+        v-if="status === 'success'"
+        :units="units"
+        @open-creation="dialogCreation = true"
+        @open-update="dialogUpdate = true"
+        @open-filter="filterDrawer = true"
+        @open-delete="dialogDelete = true"
+        @open-quotation="dialogQuotation = true"
+      />
+    </div>
 
     <IngredientsCreation
       v-if="status === 'success'"

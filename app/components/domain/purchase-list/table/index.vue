@@ -49,6 +49,7 @@ const headers = [
       />
 
       <v-btn
+        id="tutorial-purchase-list-btn-bulk-actions"
         v-if="selectedItems.length > 0"
         rounded="xl"
         color="grey"

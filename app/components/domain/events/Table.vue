@@ -66,6 +66,7 @@ function handleOpenDelete(event: Datum) {
   >
     <template #buttons>
       <v-btn
+        id="tutorial-events-btn-filter"
         rounded="xl"
         color="grey"
         variant="text"
@@ -75,6 +76,7 @@ function handleOpenDelete(event: Datum) {
       />
 
       <v-btn
+        id="tutorial-events-btn-refresh"
         rounded="xl"
         color="grey"
         variant="text"
@@ -84,6 +86,7 @@ function handleOpenDelete(event: Datum) {
       />
 
       <v-btn
+        id="tutorial-events-btn-create"
         rounded="xl"
         color="grey"
         icon="mdi-plus"
@@ -95,6 +98,7 @@ function handleOpenDelete(event: Datum) {
 
     <template #item.actions="{ item }">
       <UiTableActions
+        :tutorial-id="item.id === items[0]?.id ? 'tutorial-events' : ''"
         @edit="handleOpenUpdate(item)"
         @delete="handleOpenDelete(item)"
       />

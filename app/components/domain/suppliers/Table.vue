@@ -49,6 +49,7 @@ function handleOpenDelete(supplier: Datum) {
   >
     <template #buttons>
       <v-btn
+        id="tutorial-suppliers-btn-filter"
         rounded="xl"
         color="grey"
         variant="text"
@@ -58,6 +59,7 @@ function handleOpenDelete(supplier: Datum) {
       />
 
       <v-btn
+        id="tutorial-suppliers-btn-refresh"
         rounded="xl"
         color="grey"
         variant="text"
@@ -67,6 +69,7 @@ function handleOpenDelete(supplier: Datum) {
       />
 
       <v-btn
+        id="tutorial-suppliers-btn-create"
         rounded="xl"
         color="grey"
         icon="mdi-plus"
@@ -78,6 +81,7 @@ function handleOpenDelete(supplier: Datum) {
 
     <template #item.actions="{ item }">
       <UiTableActions
+        :tutorial-id="item.id === items[0]?.id ? 'tutorial-suppliers' : ''"
         @edit="handleOpenUpdate(item)"
         @delete="handleOpenDelete(item)"
       />

@@ -15,6 +15,7 @@ const { currentPeriod, updatePeriod } = usePeriodFilter();
   <div>
     <!-- Header com filtros -->
     <HeaderPeriod
+      id="tutorial-ingredient-consumption-header"
       title="Consumo de Ingredientes"
       description="Análise do consumo e utilização de ingredientes nos eventos"
       :period="currentPeriod"
@@ -23,24 +24,32 @@ const { currentPeriod, updatePeriod } = usePeriodFilter();
 
     <v-container fluid class="py-6">
       <!-- Overview Cards -->
-      <IngredientConsumptionOverview :period="currentPeriod" />
+      <div id="tutorial-ingredient-consumption-overview">
+        <IngredientConsumptionOverview :period="currentPeriod" />
+      </div>
 
       <v-row class="mt-6">
         <!-- Gráfico de Consumo -->
         <v-col cols="12" lg="8">
-          <IngredientConsumptionChart :period="currentPeriod" />
+          <div id="tutorial-ingredient-consumption-chart">
+            <IngredientConsumptionChart :period="currentPeriod" />
+          </div>
         </v-col>
 
         <!-- Insights -->
         <v-col cols="12" lg="4">
-          <IngredientConsumptionInsights :period="currentPeriod" />
+          <div id="tutorial-ingredient-consumption-insights">
+            <IngredientConsumptionInsights :period="currentPeriod" />
+          </div>
         </v-col>
       </v-row>
 
       <!-- Tabela Detalhada -->
       <v-row class="mt-6">
         <v-col cols="12">
-          <IngredientConsumptionTable :period="currentPeriod" />
+          <div id="tutorial-ingredient-consumption-table">
+            <IngredientConsumptionTable :period="currentPeriod" />
+          </div>
         </v-col>
       </v-row>
     </v-container>

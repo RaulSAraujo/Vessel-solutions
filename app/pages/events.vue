@@ -11,19 +11,21 @@ const dialogDelete = ref(false);
 
 <template>
   <v-container fluid>
-    <div class="d-flex flex-row align-center mb-4 text-primary">
+    <div id="tutorial-events-header" class="d-flex flex-row align-center mb-4 text-primary">
       <v-icon size="28" class="mr-2" icon="mdi-calendar-check" />
       <span class="text-h5">Gerenciamento de eventos</span>
     </div>
 
     <EventsFilter v-model="filterDrawer" />
 
-    <EventsTable
-      @open-creation="dialogCreation = true"
-      @open-update="dialogUpdate = true"
-      @open-filter="filterDrawer = true"
-      @open-delete="dialogDelete = true"
-    />
+    <div id="tutorial-events-table">
+      <EventsTable
+        @open-creation="dialogCreation = true"
+        @open-update="dialogUpdate = true"
+        @open-filter="filterDrawer = true"
+        @open-delete="dialogDelete = true"
+      />
+    </div>
 
     <EventsCreation v-model="dialogCreation" @close="dialogCreation = false" />
 

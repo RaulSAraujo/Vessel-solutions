@@ -78,6 +78,7 @@ function handleOpenConvert(eventQuotation: EventQuotation) {
   >
     <template #buttons>
       <v-btn
+        id="tutorial-event-quotations-btn-filter"
         rounded="xl"
         color="grey"
         variant="text"
@@ -87,6 +88,7 @@ function handleOpenConvert(eventQuotation: EventQuotation) {
       />
 
       <v-btn
+        id="tutorial-event-quotations-btn-refresh"
         rounded="xl"
         color="grey"
         variant="text"
@@ -96,6 +98,7 @@ function handleOpenConvert(eventQuotation: EventQuotation) {
       />
 
       <v-btn
+        id="tutorial-event-quotations-btn-create"
         rounded="xl"
         color="grey"
         icon="mdi-plus"
@@ -107,6 +110,7 @@ function handleOpenConvert(eventQuotation: EventQuotation) {
 
     <template #item.actions="{ item }">
       <UiTableActions
+        :tutorial-id="item.id === items[0]?.id ? 'tutorial-event-quotations' : ''"
         @edit="handleOpenUpdate(item)"
         @delete="handleOpenDelete(item)"
       >

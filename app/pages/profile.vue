@@ -10,12 +10,16 @@ const user = useSupabaseUser();
 <template>
   <div class="profile-page">
     <!-- Header com gradiente -->
-    <ProfileHeader v-if="user" :user="user" />
+    <div id="tutorial-profile-header">
+      <ProfileHeader v-if="user" :user="user" />
+    </div>
 
     <!-- Conteúdo principal -->
     <v-container fluid class="pa-6">
       <v-card elevation="2" class="profile-card">
-        <ProfileTabs v-if="user" :user="user" />
+        <div id="tutorial-profile-tabs">
+          <ProfileTabs v-if="user" :user="user" />
+        </div>
       </v-card>
     </v-container>
   </div>
