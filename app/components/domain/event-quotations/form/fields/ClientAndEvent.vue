@@ -67,7 +67,7 @@ onMounted(async () => {
 <template>
   <div>
     <v-row dense>
-      <v-col cols="12" md="3">
+      <v-col id="tutorial-event-quotations-form-client-name" cols="12" md="3">
         <UiTextField
           v-model="clientName"
           label="Nome do Cliente"
@@ -76,7 +76,7 @@ onMounted(async () => {
         />
       </v-col>
 
-      <v-col cols="12" md="3">
+      <v-col id="tutorial-event-quotations-form-client-email" cols="12" md="3">
         <UiTextField
           v-model="clientEmail"
           label="Email do Cliente"
@@ -85,7 +85,7 @@ onMounted(async () => {
         />
       </v-col>
 
-      <v-col cols="12" md="3">
+      <v-col id="tutorial-event-quotations-form-client-phone" cols="12" md="3">
         <UiTextField
           v-model="clientPhone"
           v-maska="'(##) #####-####'"
@@ -96,13 +96,13 @@ onMounted(async () => {
         />
       </v-col>
 
-      <v-col cols="12" md="3">
+      <v-col id="tutorial-event-quotations-form-status" cols="12" md="3">
         <Status v-model="status" :error-messages="errors.status" />
       </v-col>
     </v-row>
 
     <v-row dense justify="center">
-      <v-col cols="12" md="4">
+      <v-col id="tutorial-event-quotations-form-location" cols="12" md="4">
         <UiTextField
           v-model="location"
           label="Endereço completo"
@@ -113,7 +113,7 @@ onMounted(async () => {
 
       <v-col cols="12" md="4">
         <v-row dense>
-          <v-col>
+          <v-col id="tutorial-event-quotations-form-start-time">
             <UiTextField
               v-model="startTime"
               v-maska="'##/##/#### ##:##'"
@@ -123,7 +123,7 @@ onMounted(async () => {
             />
           </v-col>
 
-          <v-col>
+          <v-col id="tutorial-event-quotations-form-end-time">
             <UiTextField
               v-model="endTime"
               v-maska="'##/##/#### ##:##'"
@@ -144,7 +144,7 @@ onMounted(async () => {
         </v-row>
       </v-col>
 
-      <v-col cols="12" md="2">
+      <v-col id="tutorial-event-quotations-form-guests" cols="12" md="2">
         <UiTextField
           v-model="guestCount"
           label="Número de Convidados"
@@ -153,7 +153,7 @@ onMounted(async () => {
         />
       </v-col>
 
-      <v-col cols="12" md="2">
+      <v-col id="tutorial-event-quotations-form-audience" cols="12" md="2">
         <UiSelectField
           v-model="audienceProfile"
           label="Perfil"
@@ -162,7 +162,7 @@ onMounted(async () => {
         />
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-event-quotations-form-notes" cols="12">
         <UiTextField
           v-model="notes"
           label="Observação"

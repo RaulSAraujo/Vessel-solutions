@@ -37,21 +37,21 @@ const { currentPeriod, updatePeriod } = usePeriodFilter();
 
       <!-- Overview Cards -->
       <div id="tutorial-quotation-history-overview">
-        <QuotationHistoryOverview :period="currentPeriod" />
+      <QuotationHistoryOverview :period="currentPeriod" />
       </div>
 
       <v-row class="mt-6">
         <!-- Gráfico de Tendência de Preços -->
         <v-col cols="12" lg="8">
           <div id="tutorial-quotation-history-chart">
-            <QuotationHistoryChart :period="currentPeriod" />
+          <QuotationHistoryChart :period="currentPeriod" />
           </div>
         </v-col>
 
         <!-- Insights -->
         <v-col cols="12" lg="4">
           <div id="tutorial-quotation-history-insights">
-            <QuotationHistoryInsights :period="currentPeriod" />
+          <QuotationHistoryInsights :period="currentPeriod" />
           </div>
         </v-col>
       </v-row>
@@ -60,7 +60,7 @@ const { currentPeriod, updatePeriod } = usePeriodFilter();
       <v-row class="mt-6">
         <v-col cols="12">
           <div id="tutorial-quotation-history-table">
-            <QuotationHistoryTable :period="currentPeriod" />
+          <QuotationHistoryTable :period="currentPeriod" />
           </div>
         </v-col>
       </v-row>

@@ -36,7 +36,7 @@ onMounted(async () => {
 
     <!-- Resumo -->
     <div id="tutorial-purchase-list-summary">
-      <PurchaseListSummary v-if="summary" :summary="summary" class="mb-4" />
+    <PurchaseListSummary v-if="summary" :summary="summary" class="mb-4" />
     </div>
 
     <!-- Filtros -->
@@ -44,10 +44,10 @@ onMounted(async () => {
 
     <!-- Tabela -->
     <div id="tutorial-purchase-list-table">
-      <PurchaseListTable
-        @open-filter="filterDrawer = true"
-        @open-bulk-actions="dialogBulkActions = true"
-      />
+    <PurchaseListTable
+      @open-filter="filterDrawer = true"
+      @open-bulk-actions="dialogBulkActions = true"
+    />
     </div>
 
     <!-- Diálogos -->

@@ -72,6 +72,7 @@ async function creation(eventQuotation: EventQuotationWithDrinks) {
 <template>
   <v-bottom-sheet content-class="rounded-t-xl">
     <v-card
+      id="tutorial-event-quotations-form"
       title="Nova proposta/orçamento"
       rounded="t-xl"
       prepend-icon="mdi-file-document-multiple"

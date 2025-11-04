@@ -25,21 +25,21 @@ const { currentPeriod, updatePeriod } = usePeriodFilter();
     <v-container fluid class="py-6">
       <!-- Overview Cards -->
       <div id="tutorial-profitability-overview">
-        <ProfitabilityOverview :period="currentPeriod" />
+      <ProfitabilityOverview :period="currentPeriod" />
       </div>
 
       <v-row class="mt-6">
         <!-- Gráfico de Tendência -->
         <v-col cols="12" lg="8">
           <div id="tutorial-profitability-chart">
-            <ProfitabilityChart :period="currentPeriod" />
+          <ProfitabilityChart :period="currentPeriod" />
           </div>
         </v-col>
 
         <!-- Insights -->
         <v-col cols="12" lg="4">
           <div id="tutorial-profitability-insights">
-            <ProfitabilityInsights :period="currentPeriod" />
+          <ProfitabilityInsights :period="currentPeriod" />
           </div>
         </v-col>
       </v-row>
@@ -48,7 +48,7 @@ const { currentPeriod, updatePeriod } = usePeriodFilter();
       <v-row class="mt-6">
         <v-col cols="12">
           <div id="tutorial-profitability-table">
-            <ProfitabilityTable :period="currentPeriod" />
+          <ProfitabilityTable :period="currentPeriod" />
           </div>
         </v-col>
       </v-row>

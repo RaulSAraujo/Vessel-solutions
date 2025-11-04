@@ -42,6 +42,86 @@ export const quotationsTutorialSteps = (isMobile: boolean): TutorialStep[] => [
     },
   },
   {
+    element: "#tutorial-quotations-form",
+    popover: {
+      title: "Formulário de Criação de Cotação",
+      description:
+        "Este é o formulário para cadastrar uma nova cotação unitária. Vamos percorrer cada campo passo a passo.",
+      side: "bottom",
+      align: "center",
+    },
+  },
+  {
+    element: "#tutorial-quotations-form-supplier",
+    popover: {
+      title: "Selecionar Fornecedor",
+      description:
+        "Selecione o fornecedor que está oferecendo esta cotação. O fornecedor deve estar cadastrado no sistema. Este campo é obrigatório.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-quotations-form-ingredient",
+    popover: {
+      title: "Selecionar Ingrediente",
+      description:
+        "Selecione o ingrediente para o qual esta cotação se refere. O ingrediente deve estar cadastrado no sistema. Este campo é obrigatório.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-quotations-form-price",
+    popover: {
+      title: "Preço de Compra",
+      description:
+        "Informe o preço de compra unitário do ingrediente oferecido pelo fornecedor. Este valor será usado para calcular o custo real por unidade base (C.R.U.B) quando a cotação for vinculada ao ingrediente. Este campo é obrigatório.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-quotations-form-quantity",
+    popover: {
+      title: "Quantidade",
+      description:
+        "Informe a quantidade que está sendo cotada. Esta quantidade deve corresponder à unidade de medida selecionada. Este campo é obrigatório.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-quotations-form-unit",
+    popover: {
+      title: "Unidade de Medida",
+      description:
+        "Selecione a unidade de medida da quantidade cotada (ex: litro, quilo, unidade). A unidade deve estar cadastrada no sistema. Este campo é obrigatório.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-quotations-form-date",
+    popover: {
+      title: "Data da Cotação",
+      description:
+        "Selecione a data em que esta cotação foi obtida. Isso ajuda a rastrear a validade e a atualidade das cotações. Este campo é obrigatório.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-quotations-form-submit",
+    popover: {
+      title: "Botão Salvar",
+      description:
+        "Após preencher todos os campos obrigatórios (Fornecedor, Ingrediente, Preço, Quantidade, Unidade e Data), clique neste botão para salvar a cotação. Após criar, você pode vinculá-la diretamente a um ingrediente para atualizar seu custo real.",
+      side: "top",
+      align: "center",
+    },
+  },
+  {
     element: "#tutorial-quotations-table",
     popover: {
       title: "Tabela de Cotações",

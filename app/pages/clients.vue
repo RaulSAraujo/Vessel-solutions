@@ -19,12 +19,12 @@ const dialogDelete = ref(false);
     <ClientsFilter v-model="filterDrawer" />
 
     <div id="tutorial-clients-table">
-      <ClientsTable
-        @open-creation="dialogCreation = true"
-        @open-update="dialogUpdate = true"
-        @open-filter="filterDrawer = true"
-        @open-delete="dialogDelete = true"
-      />
+    <ClientsTable
+      @open-creation="dialogCreation = true"
+      @open-update="dialogUpdate = true"
+      @open-filter="filterDrawer = true"
+      @open-delete="dialogDelete = true"
+    />
     </div>
 
     <ClientsCreation v-model="dialogCreation" @close="dialogCreation = false" />

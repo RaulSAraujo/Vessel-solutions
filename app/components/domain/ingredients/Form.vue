@@ -37,7 +37,7 @@ if (myProps.ingredient) {
 <template>
   <v-form @submit.prevent="onSubmit">
     <v-row dense>
-      <v-col cols="12">
+      <v-col id="tutorial-ingredients-form-name" cols="12">
         <UiTextField
           v-model="name"
           v-maska="'Ax'"
@@ -47,7 +47,7 @@ if (myProps.ingredient) {
         />
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-ingredients-form-unit" cols="12">
         <UiAutocompleteField
           v-model="unitId"
           :items="units || []"
@@ -72,7 +72,7 @@ if (myProps.ingredient) {
         </UiAutocompleteField>
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-ingredients-form-volume" cols="12">
         <UiTextField
           v-model="unitVolumeMl"
           v-maska="'####'"
@@ -82,7 +82,7 @@ if (myProps.ingredient) {
         />
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-ingredients-form-weight" cols="12">
         <UiTextField
           v-model="unitWeightG"
           v-maska="'####'"
@@ -92,7 +92,7 @@ if (myProps.ingredient) {
         />
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-ingredients-form-wastage" cols="12">
         <UiNumberField
           v-model="wastagePercentage"
           :min="0"
@@ -105,7 +105,7 @@ if (myProps.ingredient) {
         />
       </v-col>
 
-      <v-col cols="12" class="d-flex justify-center">
+      <v-col id="tutorial-ingredients-form-submit" cols="12" class="d-flex justify-center">
         <v-btn type="submit" color="primary" block :loading="loading">
           Salvar
         </v-btn>

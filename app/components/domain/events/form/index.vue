@@ -80,7 +80,13 @@ onUnmounted(() => {
 
     <Drinks :event="event" :form="values" />
 
-    <v-btn type="submit" color="primary" block :loading="loading">
+    <v-btn
+      id="tutorial-events-form-submit"
+      type="submit"
+      color="primary"
+      block
+      :loading="loading"
+    >
       Salvar
     </v-btn>
   </v-form>

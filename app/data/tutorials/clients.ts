@@ -42,6 +42,146 @@ export const clientsTutorialSteps = (isMobile: boolean): TutorialStep[] => [
     },
   },
   {
+    element: "#tutorial-clients-form",
+    popover: {
+      title: "Formulário de Criação de Cliente",
+      description:
+        "Este é o formulário para cadastrar um novo cliente. Vamos percorrer cada campo passo a passo.",
+      side: "bottom",
+      align: "center",
+    },
+  },
+  {
+    element: "#tutorial-clients-form-name",
+    popover: {
+      title: "Nome Completo",
+      description:
+        "Digite o nome completo do cliente. Este campo é obrigatório e será usado para identificar o cliente no sistema.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-clients-form-email",
+    popover: {
+      title: "E-mail",
+      description:
+        "Informe o e-mail de contato do cliente. Este campo é obrigatório e será usado para comunicação e envio de informações.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-clients-form-document",
+    popover: {
+      title: "CPF/CNPJ",
+      description:
+        "Digite o CPF (para pessoa física) ou CNPJ (para pessoa jurídica) do cliente. O sistema aplicará a máscara automaticamente. Este campo é obrigatório.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-clients-form-phone",
+    popover: {
+      title: "Telefone",
+      description:
+        "Informe o número de telefone principal do cliente. O formato será aplicado automaticamente (XX) XXXXX-XXXX. Este campo é obrigatório.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-clients-form-phone-optional",
+    popover: {
+      title: "Telefone Opcional",
+      description:
+        "Informe um telefone adicional para contato, se houver. Este campo é opcional e pode ser deixado em branco.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-clients-form-zipcode",
+    popover: {
+      title: "CEP",
+      description:
+        "Digite o CEP do endereço do cliente. Ao preencher, o sistema buscará automaticamente e preencherá os campos de Cidade, Estado, Bairro e Rua. Este campo é obrigatório.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-clients-form-city",
+    popover: {
+      title: "Cidade",
+      description:
+        "A cidade será preenchida automaticamente quando você informar o CEP. Caso necessário, você pode editar manualmente.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-clients-form-state",
+    popover: {
+      title: "Estado (UF)",
+      description:
+        "O estado será preenchido automaticamente quando você informar o CEP. Caso necessário, você pode editar manualmente.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-clients-form-neighborhood",
+    popover: {
+      title: "Bairro",
+      description:
+        "O bairro será preenchido automaticamente quando você informar o CEP. Caso necessário, você pode editar manualmente.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-clients-form-street",
+    popover: {
+      title: "Rua",
+      description:
+        "A rua será preenchida automaticamente quando você informar o CEP. Caso necessário, você pode editar manualmente.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-clients-form-number",
+    popover: {
+      title: "Número",
+      description:
+        "Informe o número do endereço do cliente. Este campo é obrigatório e deve ser preenchido manualmente.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-clients-form-additional-info",
+    popover: {
+      title: "Complemento",
+      description:
+        "Informe informações adicionais do endereço, como apartamento, bloco, andar, etc. Este campo é opcional e pode ser deixado em branco.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-clients-form-submit",
+    popover: {
+      title: "Botão Salvar",
+      description:
+        "Após preencher todos os campos obrigatórios (Nome, E-mail, CPF/CNPJ, Telefone e CEP), clique neste botão para salvar o novo cliente. O sistema validará os dados antes de criar o registro.",
+      side: "top",
+      align: "center",
+    },
+  },
+  {
     element: "#tutorial-clients-table",
     popover: {
       title: "Tabela de Clientes",

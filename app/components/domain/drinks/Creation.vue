@@ -54,6 +54,7 @@ async function creation(events: DrinkWithIngredients) {
 <template>
   <v-bottom-sheet content-class="rounded-t-xl">
     <v-card
+      id="tutorial-drinks-form"
       rounded="t-xl"
       title="Nova receita"
       prepend-icon="mdi-bookmark-outline"

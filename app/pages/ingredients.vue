@@ -28,15 +28,15 @@ const { data: units, status } = useFetchUnits({ lazy: true });
     />
 
     <div id="tutorial-ingredients-table">
-      <IngredientsTable
-        v-if="status === 'success'"
-        :units="units"
-        @open-creation="dialogCreation = true"
-        @open-update="dialogUpdate = true"
-        @open-filter="filterDrawer = true"
-        @open-delete="dialogDelete = true"
-        @open-quotation="dialogQuotation = true"
-      />
+    <IngredientsTable
+      v-if="status === 'success'"
+      :units="units"
+      @open-creation="dialogCreation = true"
+      @open-update="dialogUpdate = true"
+      @open-filter="filterDrawer = true"
+      @open-delete="dialogDelete = true"
+      @open-quotation="dialogQuotation = true"
+    />
     </div>
 
     <IngredientsCreation

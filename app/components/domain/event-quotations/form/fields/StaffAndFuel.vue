@@ -73,6 +73,7 @@ onMounted(async () => {
     <v-col cols="12" md="4">
       <div class="d-flex align-center ga-2">
         <UiNumberField
+          id="tutorial-event-quotations-form-num-bartenders"
           v-model="numBartenders"
           label="Número de Bartenders"
           prepend-inner-icon="mdi-account-tie"
@@ -80,6 +81,7 @@ onMounted(async () => {
         />
 
         <UiNumberField
+          id="tutorial-event-quotations-form-bartender-hourly-rate"
           v-model="bartenderHourlyRate"
           label="Taxa Horária do Bartender (R$)"
           prepend-inner-icon="mdi-currency-usd"
@@ -101,6 +103,7 @@ onMounted(async () => {
     <v-col cols="12" md="4">
       <div class="d-flex align-center ga-2">
         <UiNumberField
+          id="tutorial-event-quotations-form-num-helpers"
           v-model="numHelpers"
           label="Número de Ajudantes"
           prepend-inner-icon="mdi-account-group"
@@ -108,6 +111,7 @@ onMounted(async () => {
         />
 
         <UiNumberField
+          id="tutorial-event-quotations-form-helper-hourly-rate"
           v-model="helperHourlyRate"
           label="Taxa Horária dos Ajudantes (R$)"
           prepend-inner-icon="mdi-currency-usd"
@@ -126,7 +130,7 @@ onMounted(async () => {
       </div>
     </v-col>
 
-    <v-col cols="12" md="2">
+    <v-col id="tutorial-event-quotations-form-distance" cols="12" md="2">
       <UiNumberField
         v-model="distance"
         label="Km"
@@ -137,7 +141,7 @@ onMounted(async () => {
       />
     </v-col>
 
-    <v-col cols="12" md="2">
+    <v-col id="tutorial-event-quotations-form-fuel-cost" cols="12" md="2">
       <UiNumberField
         v-model="fuelCostPerKm"
         label="Custo Combustível/km (R$)"

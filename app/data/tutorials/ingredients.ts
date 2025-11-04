@@ -42,6 +42,76 @@ export const ingredientsTutorialSteps = (isMobile: boolean): TutorialStep[] => [
     },
   },
   {
+    element: "#tutorial-ingredients-form",
+    popover: {
+      title: "Formulário de Criação de Ingrediente",
+      description:
+        "Este é o formulário para cadastrar um novo ingrediente. Vamos percorrer cada campo passo a passo.",
+      side: "bottom",
+      align: "center",
+    },
+  },
+  {
+    element: "#tutorial-ingredients-form-name",
+    popover: {
+      title: "Nome do Ingrediente",
+      description:
+        "Digite o nome do ingrediente. Este campo é obrigatório e será usado para identificar o ingrediente no sistema e nas receitas de bebidas.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-ingredients-form-unit",
+    popover: {
+      title: "Unidade de Medida",
+      description:
+        "Selecione a unidade de medida padrão do ingrediente (ex: litro, quilo, unidade). Esta unidade será usada como base para cálculos de custo. A unidade deve estar cadastrada no sistema. Este campo é obrigatório.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-ingredients-form-volume",
+    popover: {
+      title: "Volume da Unidade (ml)",
+      description:
+        "Informe o volume da unidade de medida em mililitros (ml). Este valor é usado para conversões entre unidades de volume. Este campo é opcional, mas recomendado para ingredientes líquidos.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-ingredients-form-weight",
+    popover: {
+      title: "Peso da Unidade (g)",
+      description:
+        "Informe o peso da unidade de medida em gramas (g). Este valor é usado para conversões entre unidades de peso. Este campo é opcional, mas recomendado para ingredientes sólidos.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-ingredients-form-wastage",
+    popover: {
+      title: "Percentual de Desperdício",
+      description:
+        "Defina a porcentagem de desperdício esperada para este ingrediente (0% a 100%). Este valor será usado para calcular o custo real considerando perdas durante o preparo. Este campo é obrigatório.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-ingredients-form-submit",
+    popover: {
+      title: "Botão Salvar",
+      description:
+        "Após preencher todos os campos obrigatórios (Nome, Unidade e Percentual de Desperdício), clique neste botão para salvar o ingrediente. Após criar, você pode vincular cotações para atualizar o custo real por unidade base (C.R.U.B).",
+      side: "top",
+      align: "center",
+    },
+  },
+  {
     element: "#tutorial-ingredients-table",
     popover: {
       title: "Tabela de Ingredientes",

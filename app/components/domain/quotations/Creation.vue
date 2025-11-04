@@ -43,7 +43,7 @@ async function creation(events: FormQuotations) {
 
 <template>
   <v-dialog width="300">
-    <v-card title="Nova cotação" rounded="xl">
+    <v-card id="tutorial-quotations-form" title="Nova cotação" rounded="xl">
       <v-card-text>
         <Form
           :units="units"

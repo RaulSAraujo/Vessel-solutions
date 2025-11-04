@@ -24,7 +24,12 @@ export const useTutorialDriver = () => {
   };
 
   // Iniciar tutorial
-  const startTutorial = (steps: TutorialStep[]) => {
+  const startTutorial = (
+    steps: TutorialStep[],
+    onStepHighlighted?: (stepIndex: number, element: HTMLElement | null) => void | Promise<void>,
+    onDestroyed?: () => void | Promise<void>,
+    onStepLeft?: (stepIndex: number) => void | Promise<void>
+  ) => {
     if (!process.client) return;
 
     // Limpar instância anterior se existir
@@ -32,6 +37,10 @@ export const useTutorialDriver = () => {
       driverInstance.destroy();
       driverInstance = null;
     }
+
+    // Rastrear o passo anterior para detectar quando sair do formulário
+    let previousStepIndex: number | null = null;
+    let currentStepIndex: number | null = null;
 
     // Configurar Driver.js
     driverInstance = driver({
@@ -46,11 +55,70 @@ export const useTutorialDriver = () => {
           align: step.popover.align || 'center',
         },
       })),
-      onDestroyed: () => {
+      onHighlighted: async (element, step) => {
+        // Executar callback quando um step é destacado
+        if (onStepHighlighted && step) {
+          // Encontrar o índice do step atual comparando com os steps
+          const stepIndex = steps.findIndex((s) => s.element === step.element);
+          if (stepIndex === -1) return;
+          
+          const htmlElement = element ? (element as HTMLElement) : null;
+          const currentStep = steps[stepIndex];
+          
+          // Verificar se estamos saindo do passo do formulário
+          // Comparar o passo atual (currentStepIndex) com o novo passo (stepIndex)
+          if (currentStepIndex !== null && onStepLeft) {
+            const previousStep = steps[currentStepIndex];
+            // Se o passo atual (antes da atualização) era um formulário e o novo passo não é, fechar o dialog
+            if (previousStep && previousStep.element.includes('-form') && 
+                currentStep && !currentStep.element.includes('-form')) {
+              await onStepLeft(currentStepIndex);
+              // Aguardar um pouco para o dialog fechar
+              await new Promise((resolve) => setTimeout(resolve, 200));
+            }
+          }
+          
+          // Se é o passo do formulário, verificar se o elemento existe no DOM
+          if (currentStep && currentStep.element.includes('-form') && !htmlElement) {
+            // Elemento não existe, abrir dialog primeiro
+            await onStepHighlighted(stepIndex, htmlElement);
+            
+            // Aguardar o elemento aparecer no DOM (polling)
+            let attempts = 0;
+            const maxAttempts = 20;
+            while (attempts < maxAttempts) {
+              await new Promise((resolve) => setTimeout(resolve, 100));
+              const formElement = document.querySelector(currentStep.element) as HTMLElement;
+              if (formElement && driverInstance) {
+                // Forçar o driver a destacar novamente (agora com o elemento visível)
+                await driverInstance.movePrevious();
+                await new Promise((resolve) => setTimeout(resolve, 150));
+                await driverInstance.moveNext();
+                break;
+              }
+              attempts++;
+            }
+          } else {
+            // Executar callback normal para outros steps
+            await onStepHighlighted(stepIndex, htmlElement);
+          }
+          
+          // Atualizar o passo anterior e atual
+          previousStepIndex = currentStepIndex;
+          currentStepIndex = stepIndex;
+        }
+      },
+      onDestroyed: async () => {
         // Marcar como completado quando o tutorial é destruído
         if (process.client) {
           localStorage.setItem(tutorialCompletedKey, 'true');
         }
+        
+        // Executar callback de limpeza (para fechar dialogs, etc)
+        if (onDestroyed) {
+          await onDestroyed();
+        }
+        
         // Limpar referência após destruição
         driverInstance = null;
       },
@@ -69,11 +137,16 @@ export const useTutorialDriver = () => {
   };
 
   // Reiniciar tutorial (limpar localStorage e iniciar)
-  const restartTutorial = (steps: TutorialStep[]) => {
+  const restartTutorial = (
+    steps: TutorialStep[],
+    onStepHighlighted?: (stepIndex: number, element: HTMLElement | null) => void | Promise<void>,
+    onDestroyed?: () => void | Promise<void>,
+    onStepLeft?: (stepIndex: number) => void | Promise<void>
+  ) => {
     if (process.client) {
       localStorage.removeItem(tutorialCompletedKey);
     }
-    startTutorial(steps);
+    startTutorial(steps, onStepHighlighted, onDestroyed, onStepLeft);
   };
 
   return {

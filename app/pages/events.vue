@@ -19,12 +19,12 @@ const dialogDelete = ref(false);
     <EventsFilter v-model="filterDrawer" />
 
     <div id="tutorial-events-table">
-      <EventsTable
-        @open-creation="dialogCreation = true"
-        @open-update="dialogUpdate = true"
-        @open-filter="filterDrawer = true"
-        @open-delete="dialogDelete = true"
-      />
+    <EventsTable
+      @open-creation="dialogCreation = true"
+      @open-update="dialogUpdate = true"
+      @open-filter="filterDrawer = true"
+      @open-delete="dialogDelete = true"
+    />
     </div>
 
     <EventsCreation v-model="dialogCreation" @close="dialogCreation = false" />

@@ -23,12 +23,12 @@ const { data: units, status: unitsStatus } = useFetchUnits({ lazy: true });
     <DrinksFilter v-model="filterDrawer" />
 
     <div id="tutorial-drinks-table">
-      <DrinksTable
-        @open-creation="dialogCreation = true"
-        @open-update="dialogUpdate = true"
-        @open-filter="filterDrawer = true"
-        @open-delete="dialogDelete = true"
-      />
+    <DrinksTable
+      @open-creation="dialogCreation = true"
+      @open-update="dialogUpdate = true"
+      @open-filter="filterDrawer = true"
+      @open-delete="dialogDelete = true"
+    />
     </div>
 
     <DrinksCreation

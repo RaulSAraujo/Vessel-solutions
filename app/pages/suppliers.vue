@@ -19,12 +19,12 @@ const dialogDelete = ref(false);
     <SuppliersFilter v-model="filterDrawer" />
 
     <div id="tutorial-suppliers-table">
-      <SuppliersTable
-        @open-creation="dialogCreation = true"
-        @open-update="dialogUpdate = true"
-        @open-filter="filterDrawer = true"
-        @open-delete="dialogDelete = true"
-      />
+    <SuppliersTable
+      @open-creation="dialogCreation = true"
+      @open-update="dialogUpdate = true"
+      @open-filter="filterDrawer = true"
+      @open-delete="dialogDelete = true"
+    />
     </div>
 
     <SuppliersCreation

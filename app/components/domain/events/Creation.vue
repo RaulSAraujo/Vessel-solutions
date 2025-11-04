@@ -65,6 +65,7 @@ async function creation(events: EventWithDrinks) {
 <template>
   <v-bottom-sheet :fullscreen="mobile" content-class="rounded-t-xl">
     <v-card
+      id="tutorial-events-form"
       title="Novo evento"
       :rounded="!mobile && 't-xl'"
       prepend-icon="mdi-calendar"

@@ -30,7 +30,7 @@ async function creation(events: FormClient & FormClientAddresses) {
 
 <template>
   <v-bottom-sheet content-class="rounded-t-xl">
-    <v-card title="Novo Cliente" rounded="t-xl">
+    <v-card id="tutorial-clients-form" title="Novo Cliente" rounded="t-xl">
       <v-card-text>
         <Form :loading="loading" @submit="creation" />
       </v-card-text>

@@ -48,27 +48,27 @@ onMounted(async () => {
 <template>
   <v-form @submit.prevent="onSubmit">
     <v-row dense>
-      <v-col cols="12">
+      <v-col id="tutorial-quotations-form-supplier" cols="12">
         <UiAutocompleteField v-model="supplierId" :items="suppliers" item-value="id" item-title="name"
           label="Fornecedor" prepend-inner-icon="mdi-account" :error-messages="errors.supplier_id" />
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-quotations-form-ingredient" cols="12">
         <UiAutocompleteField v-model="ingredientId" :items="ingredients" item-value="id" item-title="name"
           label="Ingrediente" prepend-inner-icon="mdi-food-variant" :error-messages="errors.ingredient_id" />
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-quotations-form-price" cols="12">
         <UiNumberField v-model="purchasePrice" :min="0" :step="0.01" :precision="2" hide-details="auto"
           label="Preço de compra" :error-messages="errors.purchase_price" />
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-quotations-form-quantity" cols="12">
         <UiNumberField v-model="purchaseQuantity" :min="0" :step="0.01" :precision="2" label="Quantidade"
           hide-details="auto" :error-messages="errors.purchase_quantity" />
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-quotations-form-unit" cols="12">
         <UiAutocompleteField v-model="purchaseUnitId" :items="units || []" item-value="id" item-title="name"
           label="Unidade" prepend-inner-icon="mdi-ruler" :error-messages="errors.purchase_unit_id">
           <template #item="{ props: bind, item }">
@@ -81,12 +81,12 @@ onMounted(async () => {
         </UiAutocompleteField>
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-quotations-form-date" cols="12">
         <UiDateField v-model="quotationDate" label="Data da cotação" hide-details="auto"
           :error-messages="errors.quotation_date" @save="quotationDate = $event" />
       </v-col>
 
-      <v-col cols="12" class="d-flex justify-center">
+      <v-col id="tutorial-quotations-form-submit" cols="12" class="d-flex justify-center">
         <v-btn type="submit" color="primary" block :loading="loading">
           Salvar
         </v-btn>

@@ -20,13 +20,13 @@ const dialogConvert = ref(false);
     <EventQuotationsFilter v-model="filterDrawer" />
 
     <div id="tutorial-event-quotations-table">
-      <EventQuotationsTable
-        @open-creation="dialogCreation = true"
-        @open-update="dialogUpdate = true"
-        @open-filter="filterDrawer = true"
-        @open-delete="dialogDelete = true"
-        @open-convert="dialogConvert = true"
-      />
+    <EventQuotationsTable
+      @open-creation="dialogCreation = true"
+      @open-update="dialogUpdate = true"
+      @open-filter="filterDrawer = true"
+      @open-delete="dialogDelete = true"
+      @open-convert="dialogConvert = true"
+    />
     </div>
 
     <EventQuotationsCreation

@@ -34,7 +34,7 @@ async function creation(events: FormIngredients) {
 
 <template>
   <v-dialog width="300">
-    <v-card title="Novo ingrediente" rounded="xl">
+    <v-card id="tutorial-ingredients-form" title="Novo ingrediente" rounded="xl">
       <v-card-text>
         <Form :units="units" :loading="loading" @submit="creation" />
       </v-card-text>

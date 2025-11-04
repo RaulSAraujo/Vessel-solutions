@@ -65,7 +65,7 @@ if (props.client) {
 <template>
   <v-form @submit.prevent="onSubmit">
     <v-row dense justify="center">
-      <v-col cols="12" md="8">
+      <v-col id="tutorial-clients-form-name" cols="12" md="8">
         <UiTextField
           v-model="name"
           label="Nome completo"
@@ -74,7 +74,7 @@ if (props.client) {
         />
       </v-col>
 
-      <v-col cols="12" md="4">
+      <v-col id="tutorial-clients-form-email" cols="12" md="4">
         <UiTextField
           v-model="email"
           label="E-mail"
@@ -84,7 +84,7 @@ if (props.client) {
         />
       </v-col>
 
-      <v-col cols="12" md="4">
+      <v-col id="tutorial-clients-form-document" cols="12" md="4">
         <UiTextField
           v-model="document"
           v-maska="options"
@@ -94,7 +94,7 @@ if (props.client) {
         />
       </v-col>
 
-      <v-col cols="12" md="4">
+      <v-col id="tutorial-clients-form-phone" cols="12" md="4">
         <UiTextField
           v-model="phone"
           v-maska="optionsPhone"
@@ -104,7 +104,7 @@ if (props.client) {
         />
       </v-col>
 
-      <v-col cols="12" md="4">
+      <v-col id="tutorial-clients-form-phone-optional" cols="12" md="4">
         <UiTextField
           v-model="phoneOptional"
           v-maska="optionsPhone"
@@ -114,7 +114,7 @@ if (props.client) {
         />
       </v-col>
 
-      <v-col cols="12" md="3">
+      <v-col id="tutorial-clients-form-zipcode" cols="12" md="3">
         <ViaCep
           v-model="zipCode"
           :error-messages="errors.zipCode"
@@ -125,7 +125,7 @@ if (props.client) {
         />
       </v-col>
 
-      <v-col cols="12" md="4">
+      <v-col id="tutorial-clients-form-city" cols="12" md="4">
         <UiTextField
           v-model="city"
           v-maska="'Ax'"
@@ -135,7 +135,7 @@ if (props.client) {
         />
       </v-col>
 
-      <v-col cols="12" md="1">
+      <v-col id="tutorial-clients-form-state" cols="12" md="1">
         <UiTextField
           v-model="state"
           v-maska="'AA'"
@@ -144,7 +144,7 @@ if (props.client) {
         />
       </v-col>
 
-      <v-col cols="12" md="4">
+      <v-col id="tutorial-clients-form-neighborhood" cols="12" md="4">
         <UiTextField
           v-model="neighborhood"
           v-maska="'Ax'"
@@ -154,7 +154,7 @@ if (props.client) {
         />
       </v-col>
 
-      <v-col cols="12" md="9">
+      <v-col id="tutorial-clients-form-street" cols="12" md="9">
         <UiTextField
           v-model="street"
           v-maska="'Ax'"
@@ -164,7 +164,7 @@ if (props.client) {
         />
       </v-col>
 
-      <v-col cols="12" md="3">
+      <v-col id="tutorial-clients-form-number" cols="12" md="3">
         <UiTextField
           v-model="number"
           v-maska="'N'"
@@ -174,7 +174,7 @@ if (props.client) {
         />
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-clients-form-additional-info" cols="12">
         <UiTextField
           v-model="additionalInfo"
           v-maska="'Ax'"
@@ -184,7 +184,7 @@ if (props.client) {
         />
       </v-col>
 
-      <v-col cols="12" md="4">
+      <v-col id="tutorial-clients-form-submit" cols="12" md="4">
         <v-btn type="submit" color="primary" block :loading="loading">
           Salvar
         </v-btn>

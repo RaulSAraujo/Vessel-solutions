@@ -30,7 +30,7 @@ async function creation(events: FormSupplier) {
 
 <template>
   <v-dialog width="300">
-    <v-card title="Novo fornecedor" rounded="xl">
+    <v-card id="tutorial-suppliers-form" title="Novo fornecedor" rounded="xl">
       <v-card-text>
         <Form :loading="loading" @submit="creation" />
       </v-card-text>

@@ -40,7 +40,7 @@ if (props.supplier) {
 <template>
   <v-form @submit.prevent="onSubmit">
     <v-row dense>
-      <v-col cols="12">
+      <v-col id="tutorial-suppliers-form-name" cols="12">
         <UiTextField
           v-model="name"
           v-maska="'Ax'"
@@ -50,7 +50,7 @@ if (props.supplier) {
         />
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-suppliers-form-email" cols="12">
         <UiTextField
           v-model="email"
           label="E-mail"
@@ -60,7 +60,7 @@ if (props.supplier) {
         />
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-suppliers-form-phone" cols="12">
         <UiTextField
           v-model="phone"
           v-maska="options"
@@ -70,7 +70,7 @@ if (props.supplier) {
         />
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-suppliers-form-observation" cols="12">
         <UiTextField
           v-model="observation"
           v-maska="'Ax'"
@@ -80,7 +80,7 @@ if (props.supplier) {
         />
       </v-col>
 
-      <v-col cols="12" class="d-flex justify-center">
+      <v-col id="tutorial-suppliers-form-submit" cols="12" class="d-flex justify-center">
         <v-btn type="submit" color="primary" block :loading="loading">
           Salvar
         </v-btn>

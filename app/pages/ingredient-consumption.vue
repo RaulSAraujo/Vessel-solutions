@@ -25,21 +25,21 @@ const { currentPeriod, updatePeriod } = usePeriodFilter();
     <v-container fluid class="py-6">
       <!-- Overview Cards -->
       <div id="tutorial-ingredient-consumption-overview">
-        <IngredientConsumptionOverview :period="currentPeriod" />
+      <IngredientConsumptionOverview :period="currentPeriod" />
       </div>
 
       <v-row class="mt-6">
         <!-- Gráfico de Consumo -->
         <v-col cols="12" lg="8">
           <div id="tutorial-ingredient-consumption-chart">
-            <IngredientConsumptionChart :period="currentPeriod" />
+          <IngredientConsumptionChart :period="currentPeriod" />
           </div>
         </v-col>
 
         <!-- Insights -->
         <v-col cols="12" lg="4">
           <div id="tutorial-ingredient-consumption-insights">
-            <IngredientConsumptionInsights :period="currentPeriod" />
+          <IngredientConsumptionInsights :period="currentPeriod" />
           </div>
         </v-col>
       </v-row>
@@ -48,7 +48,7 @@ const { currentPeriod, updatePeriod } = usePeriodFilter();
       <v-row class="mt-6">
         <v-col cols="12">
           <div id="tutorial-ingredient-consumption-table">
-            <IngredientConsumptionTable :period="currentPeriod" />
+          <IngredientConsumptionTable :period="currentPeriod" />
           </div>
         </v-col>
       </v-row>

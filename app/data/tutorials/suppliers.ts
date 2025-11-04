@@ -42,6 +42,66 @@ export const suppliersTutorialSteps = (isMobile: boolean): TutorialStep[] => [
     },
   },
   {
+    element: "#tutorial-suppliers-form",
+    popover: {
+      title: "Formulário de Criação de Fornecedor",
+      description:
+        "Este é o formulário para cadastrar um novo fornecedor. Vamos percorrer cada campo passo a passo.",
+      side: "bottom",
+      align: "center",
+    },
+  },
+  {
+    element: "#tutorial-suppliers-form-name",
+    popover: {
+      title: "Nome do Fornecedor",
+      description:
+        "Digite o nome completo ou razão social do fornecedor. Este campo é obrigatório e será usado para identificar o fornecedor no sistema.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-suppliers-form-email",
+    popover: {
+      title: "E-mail",
+      description:
+        "Informe o e-mail de contato do fornecedor. Este campo é opcional, mas recomendado para comunicação e envio de informações.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-suppliers-form-phone",
+    popover: {
+      title: "Telefone",
+      description:
+        "Informe o número de telefone de contato do fornecedor. O formato será aplicado automaticamente (XX) XXXXX-XXXX. Este campo é opcional.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-suppliers-form-observation",
+    popover: {
+      title: "Observação",
+      description:
+        "Adicione informações adicionais sobre o fornecedor, como observações sobre produtos, condições especiais, etc. Este campo é opcional.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-suppliers-form-submit",
+    popover: {
+      title: "Botão Salvar",
+      description:
+        "Após preencher as informações do fornecedor (pelo menos o nome é obrigatório), clique neste botão para salvar. O fornecedor ficará disponível para ser usado em cotações.",
+      side: "top",
+      align: "center",
+    },
+  },
+  {
     element: "#tutorial-suppliers-table",
     popover: {
       title: "Tabela de Fornecedores",

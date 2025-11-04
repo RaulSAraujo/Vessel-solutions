@@ -38,11 +38,12 @@ watch(selectedDrink, async () => {
 <template>
   <div>
     <FindDrink
+      id="tutorial-events-form-find-drink"
       v-model="selectedDrink"
       :disabled="disabledFindDrink"
       class="mt-5"
     />
 
-    <Table class="my-5" :form="form" :event="event" />
+    <Table id="tutorial-events-form-drinks-table" class="my-5" :form="form" :event="event" />
   </div>
 </template>

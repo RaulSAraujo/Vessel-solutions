@@ -81,7 +81,7 @@ onMounted(async () => {
 
 <template>
   <v-row dense justify="center">
-    <v-col cols="12" md="3">
+    <v-col id="tutorial-events-form-client" cols="12" md="3">
       <FindClient
         v-model="client"
         :disabled="disabledFindClient"
@@ -89,7 +89,7 @@ onMounted(async () => {
       />
     </v-col>
 
-    <v-col cols="12" md="3">
+    <v-col id="tutorial-events-form-client-name" cols="12" md="3">
       <UiTextField
         :model-value="(client as Client)?.name || ''"
         label="Nome completo"
@@ -98,7 +98,7 @@ onMounted(async () => {
       />
     </v-col>
 
-    <v-col cols="12" md="2">
+    <v-col id="tutorial-events-form-client-phone" cols="12" md="2">
       <UiTextField
         :model-value="(client as Client)?.phone || ''"
         label="Telefone"
@@ -107,7 +107,7 @@ onMounted(async () => {
       />
     </v-col>
 
-    <v-col cols="12" md="2">
+    <v-col id="tutorial-events-form-client-phone-optional" cols="12" md="2">
       <UiTextField
         :model-value="(client as Client)?.phone_optional || ''"
         label="Telefone opcional"
@@ -116,11 +116,11 @@ onMounted(async () => {
       />
     </v-col>
 
-    <v-col cols="12" md="2">
+    <v-col id="tutorial-events-form-status" cols="12" md="2">
       <Status v-model="status" :error-messages="errors.status" />
     </v-col>
 
-    <v-col cols="12" md="4">
+    <v-col id="tutorial-events-form-location" cols="12" md="4">
       <UiTextField
         v-model="location"
         label="Endereço completo"
@@ -136,6 +136,7 @@ onMounted(async () => {
         "
       >
         <UiTextField
+          id="tutorial-events-form-start-time"
           v-model="startTime"
           v-maska="'##/##/#### ##:##'"
           label="Inicio do evento"
@@ -144,6 +145,7 @@ onMounted(async () => {
         />
 
         <UiTextField
+          id="tutorial-events-form-end-time"
           v-model="endTime"
           v-maska="'##/##/#### ##:##'"
           label="Final do evento"
@@ -160,7 +162,7 @@ onMounted(async () => {
       </div>
     </v-col>
 
-    <v-col cols="12" md="2">
+    <v-col id="tutorial-events-form-guests" cols="12" md="2">
       <UiTextField
         v-model="guestCount"
         label="Número de Convidados"
@@ -169,14 +171,14 @@ onMounted(async () => {
       />
     </v-col>
 
-    <v-col cols="12" md="2">
+    <v-col id="tutorial-events-form-audience" cols="12" md="2">
       <AudienceProfile
         v-model="audienceProfile"
         :error-messages="errors.audience_profile"
       />
     </v-col>
 
-    <v-col cols="12">
+    <v-col id="tutorial-events-form-notes" cols="12">
       <UiTextField
         v-model="notes"
         label="Observação"

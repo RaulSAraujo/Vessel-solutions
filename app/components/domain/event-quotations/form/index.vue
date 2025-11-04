@@ -81,6 +81,7 @@ onUnmounted(() => {
     <Drinks :event-quotation="eventQuotation" :form="values" />
 
     <v-btn
+      id="tutorial-event-quotations-form-submit"
       type="submit"
       color="primary"
       block

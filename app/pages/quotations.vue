@@ -47,12 +47,12 @@ function handleOpenLinkToIngredient() {
     />
 
     <div id="tutorial-quotations-table">
-      <QuotationsTable
-        @open-creation="dialogCreation = true"
-        @open-update="dialogUpdate = true"
-        @open-filter="filterDrawer = true"
-        @open-delete="dialogDelete = true"
-      />
+    <QuotationsTable
+      @open-creation="dialogCreation = true"
+      @open-update="dialogUpdate = true"
+      @open-filter="filterDrawer = true"
+      @open-delete="dialogDelete = true"
+    />
     </div>
 
     <QuotationsCreation

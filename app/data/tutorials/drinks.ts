@@ -42,6 +42,86 @@ export const drinksTutorialSteps = (isMobile: boolean): TutorialStep[] => [
     },
   },
   {
+    element: "#tutorial-drinks-form",
+    popover: {
+      title: "Formulário de Criação de Bebida",
+      description:
+        "Este é o formulário para cadastrar uma nova receita de bebida. Vamos percorrer cada seção passo a passo.",
+      side: "bottom",
+      align: "center",
+    },
+  },
+  {
+    element: "#tutorial-drinks-form-name",
+    popover: {
+      title: "Nome da Bebida",
+      description:
+        "Digite o nome da bebida ou receita. Este campo é obrigatório e será usado para identificar a bebida no catálogo.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-drinks-form-description",
+    popover: {
+      title: "Descrição",
+      description:
+        "Descreva a bebida, incluindo informações sobre preparo, características e outros detalhes relevantes. Este campo é opcional.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-drinks-form-image",
+    popover: {
+      title: "URL da Imagem",
+      description:
+        "Cole a URL de uma imagem da bebida para exibir no catálogo. Este campo é opcional, mas recomendado para melhor apresentação visual.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-drinks-form-profit",
+    popover: {
+      title: "Margem de Lucro",
+      description:
+        "Ajuste a margem de lucro desejada usando o controle deslizante (0% a 100%). O sistema calculará automaticamente o preço de venda baseado no custo dos ingredientes e nesta margem.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-drinks-form-find-ingredient",
+    popover: {
+      title: "Buscar Ingrediente",
+      description:
+        "Use este campo para buscar e adicionar ingredientes à receita. Digite o nome do ingrediente e selecione da lista. Certifique-se de que o ingrediente já esteja cadastrado no sistema antes de adicionar à receita.",
+      side: "right",
+      align: "start",
+    },
+  },
+  {
+    element: "#tutorial-drinks-form-ingredients-table",
+    popover: {
+      title: "Tabela de Ingredientes",
+      description:
+        "Aqui você verá todos os ingredientes adicionados à receita. Para cada ingrediente, informe a quantidade e a unidade de medida. O sistema calculará automaticamente o custo unitário. Você pode remover ingredientes clicando no botão de excluir. É necessário adicionar pelo menos um ingrediente antes de salvar.",
+      side: "top",
+      align: "center",
+    },
+  },
+  {
+    element: "#tutorial-drinks-form-submit",
+    popover: {
+      title: "Botão Salvar",
+      description:
+        "Após preencher o nome da bebida, ajustar a margem de lucro e adicionar pelo menos um ingrediente com quantidade definida, clique neste botão para salvar a receita. O sistema calculará automaticamente o custo total e o preço de venda.",
+      side: "top",
+      align: "center",
+    },
+  },
+  {
     element: "#tutorial-drinks-table",
     popover: {
       title: "Tabela de Bebidas",

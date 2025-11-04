@@ -155,7 +155,7 @@ function calculeCostUnit(item: TableDrinkIngredients) {
 <template>
   <v-form @submit.prevent="onSubmit">
     <v-row dense>
-      <v-col cols="12" md="3">
+      <v-col id="tutorial-drinks-form-name" cols="12" md="3">
         <UiTextField
           v-model="name"
           v-maska="'Ax'"
@@ -165,7 +165,7 @@ function calculeCostUnit(item: TableDrinkIngredients) {
         />
       </v-col>
 
-      <v-col cols="12" md="6">
+      <v-col id="tutorial-drinks-form-description" cols="12" md="6">
         <UiTextField
           v-model="description"
           v-maska="'Ax'"
@@ -175,7 +175,7 @@ function calculeCostUnit(item: TableDrinkIngredients) {
         />
       </v-col>
 
-      <v-col cols="12" md="3">
+      <v-col id="tutorial-drinks-form-image" cols="12" md="3">
         <UiTextField
           v-model="imageUrl"
           label="Url da Imagem"
@@ -184,7 +184,7 @@ function calculeCostUnit(item: TableDrinkIngredients) {
         />
       </v-col>
 
-      <v-col cols="12">
+      <v-col id="tutorial-drinks-form-profit" cols="12">
         <v-slider
           v-model="profitMarginPercentage"
           min="0"
@@ -201,9 +201,14 @@ function calculeCostUnit(item: TableDrinkIngredients) {
       </v-col>
     </v-row>
 
-    <FindIngredient v-model="selectedIngredient" class="mt-5" />
+    <FindIngredient
+      id="tutorial-drinks-form-find-ingredient"
+      v-model="selectedIngredient"
+      class="mt-5"
+    />
 
     <Table
+      id="tutorial-drinks-form-ingredients-table"
       class="my-5"
       :units="units"
       :drink-id="drink?.id"
@@ -212,7 +217,13 @@ function calculeCostUnit(item: TableDrinkIngredients) {
       @delete="deleteItem"
     />
 
-    <v-btn type="submit" color="primary" block :loading="loading">
+    <v-btn
+      id="tutorial-drinks-form-submit"
+      type="submit"
+      color="primary"
+      block
+      :loading="loading"
+    >
       Salvar
     </v-btn>
   </v-form>
