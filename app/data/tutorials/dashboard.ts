@@ -6,7 +6,7 @@ export const dashboardTutorialSteps = (isMobile: boolean): TutorialStep[] => [
     popover: {
       title: "Bem-vindo ao Dashboard!",
       description:
-        "Esta é a página principal do sistema. Aqui você pode ver uma visão geral completa do seu negócio de coquetelaria. Use o filtro de período no topo para visualizar dados de diferentes intervalos de tempo.",
+        "Esta é a página principal do sistema. Aqui você pode ver uma visão geral completa do seu negócio de coquetelaria. Use o filtro de período no topo para visualizar dados de diferentes intervalos de tempo.\n\n💡 Dica: Use as setas do teclado (← →) para navegar entre os passos do tutorial.",
       side: "bottom",
       align: "center",
     },

@@ -178,7 +178,7 @@ const handleUpdateOptions = (options: VDataTableServerOptions) => {
       density="compact"
       class="rounded-t-xl border-sm"
     >
-      <v-chip color="primary" density="compact" class="text-caption mr-2">
+      <v-chip id="tutorial-table-total" color="primary" density="compact" class="text-caption mr-2">
         Total: {{ totalItems }}
       </v-chip>
 
@@ -260,6 +260,7 @@ const handleUpdateOptions = (options: VDataTableServerOptions) => {
           style="gap: 8px; width: 100%"
         >
           <div
+            id="tutorial-table-items-per-page"
             class="d-flex align-center"
             style="width: fit-content; min-width: 150px"
           >
@@ -274,6 +275,7 @@ const handleUpdateOptions = (options: VDataTableServerOptions) => {
           </div>
 
           <v-pagination
+            id="tutorial-table-pagination"
             v-model="internalPage"
             :length="pageCount"
             total-visible="7"
