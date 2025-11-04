@@ -20,3 +20,14 @@ themeStore.applySavedTheme(theme);
     <NuxtPage />
   </NuxtLayout>
 </template>
+
+<style>
+/* Barra de scroll aparece apenas quando necessário */
+html {
+  overflow-y: auto;
+}
+
+body {
+  overflow-y: auto;
+}
+</style>
