@@ -3,10 +3,11 @@ interface Props {
   tooltip: string;
   icon: string;
   to?: string;
-  onClick?: () => void;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
+
+defineEmits(["click"]);
 </script>
 
 <template>
@@ -15,14 +16,13 @@ const props = defineProps<Props>();
       <v-btn
         v-bind="tooltipProps"
         icon
+        :to="to"
         size="small"
         variant="text"
-        :to="to"
-        @click="onClick"
+        @click="$emit('click')"
       >
         <v-icon>{{ icon }}</v-icon>
       </v-btn>
     </template>
   </v-tooltip>
 </template>
-
