@@ -48,7 +48,8 @@ export default defineNuxtConfig({
 
   plugins: [
     { src: '~/plugins/maska.ts', mode: 'client' },
-    { src: '~/plugins/toast.ts', mode: 'client' }
+    { src: '~/plugins/toast.ts', mode: 'client' },
+    { src: '~/plugins/tutorial.ts', mode: 'client' }
   ],
 
   pinia: {

@@ -13,19 +13,43 @@ export interface TutorialStep {
 
 export const useTutorialDriver = () => {
   let driverInstance: ReturnType<typeof driver> | null = null;
-  const tutorialCompletedKey = 'tutorial_completed';
 
-  // Verificar se o tutorial já foi completado
-  const isTutorialCompleted = () => {
+  // Gerar chave de localStorage baseada na rota
+  const getTutorialKey = (routePath: string) => {
+    // Normalizar a rota (remover barra inicial e substituir / por _)
+    const normalizedPath = routePath.replace(/^\//, '').replace(/\//g, '_') || 'dashboard';
+    return `tutorial_completed_${normalizedPath}`;
+  };
+
+  // Verificar se o tutorial já foi completado para uma rota específica
+  const isTutorialCompleted = (routePath: string) => {
     if (process.client) {
-      return localStorage.getItem(tutorialCompletedKey) === 'true';
+      const key = getTutorialKey(routePath);
+      return localStorage.getItem(key) === 'true';
     }
     return false;
+  };
+
+  // Marcar tutorial como completado para uma rota específica
+  const markTutorialCompleted = (routePath: string) => {
+    if (process.client) {
+      const key = getTutorialKey(routePath);
+      localStorage.setItem(key, 'true');
+    }
+  };
+
+  // Limpar marcação de tutorial completado para uma rota específica
+  const clearTutorialCompleted = (routePath: string) => {
+    if (process.client) {
+      const key = getTutorialKey(routePath);
+      localStorage.removeItem(key);
+    }
   };
 
   // Iniciar tutorial
   const startTutorial = (
     steps: TutorialStep[],
+    routePath: string,
     onStepHighlighted?: (stepIndex: number, element: HTMLElement | null) => void | Promise<void>,
     onDestroyed?: () => void | Promise<void>,
     onStepLeft?: (stepIndex: number) => void | Promise<void>
@@ -110,9 +134,7 @@ export const useTutorialDriver = () => {
       },
       onDestroyed: async () => {
         // Marcar como completado quando o tutorial é destruído
-        if (process.client) {
-          localStorage.setItem(tutorialCompletedKey, 'true');
-        }
+        markTutorialCompleted(routePath);
         
         // Executar callback de limpeza (para fechar dialogs, etc)
         if (onDestroyed) {
@@ -139,18 +161,19 @@ export const useTutorialDriver = () => {
   // Reiniciar tutorial (limpar localStorage e iniciar)
   const restartTutorial = (
     steps: TutorialStep[],
+    routePath: string,
     onStepHighlighted?: (stepIndex: number, element: HTMLElement | null) => void | Promise<void>,
     onDestroyed?: () => void | Promise<void>,
     onStepLeft?: (stepIndex: number) => void | Promise<void>
   ) => {
-    if (process.client) {
-      localStorage.removeItem(tutorialCompletedKey);
-    }
-    startTutorial(steps, onStepHighlighted, onDestroyed, onStepLeft);
+    clearTutorialCompleted(routePath);
+    startTutorial(steps, routePath, onStepHighlighted, onDestroyed, onStepLeft);
   };
 
   return {
     isTutorialCompleted,
+    markTutorialCompleted,
+    clearTutorialCompleted,
     startTutorial,
     stopTutorial,
     restartTutorial,
