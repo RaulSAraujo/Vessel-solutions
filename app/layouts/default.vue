@@ -12,5 +12,7 @@ defineOptions({
         <slot />
       </v-container>
     </v-main>
+
+    <Toolbox />
   </v-app>
 </template>

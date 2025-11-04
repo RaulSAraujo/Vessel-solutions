@@ -5,20 +5,10 @@ import LogoVessel from "~/assets/images/logo-vessel.png";
 const theme = useTheme();
 const useAuth = useAuthApi();
 const user = useSupabaseUser();
-const themeStore = useThemeStore();
 
 const logout = async () => {
   await useAuth.logout();
   await navigateTo("/");
-};
-
-const handleThemeChange = async () => {
-  // Alterna o tema
-  theme.cycle();
-
-  // Salva a preferência usando o Pinia store
-  const currentTheme = theme.current.value.dark ? "dark" : "light";
-  await themeStore.saveTheme(currentTheme, user);
 };
 </script>
 
@@ -35,16 +25,8 @@ const handleThemeChange = async () => {
       </v-btn>
     </template>
 
-    <v-card width="200" rounded="lg">
+    <v-card width="250" rounded="lg">
       <v-list density="compact" lines="one">
-        <v-list-item
-          title="Alterar tema"
-          prepend-icon="mdi-theme-light-dark"
-          @click="handleThemeChange"
-        />
-
-        <v-divider />
-
         <v-list-item title="Perfil" prepend-icon="mdi-account" to="/profile" />
 
         <v-divider />
