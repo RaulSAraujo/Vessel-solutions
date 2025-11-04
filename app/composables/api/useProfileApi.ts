@@ -34,6 +34,9 @@ export function useProfileApi() {
 
             if (error) throw error;
 
+            // Atualizar o usuário no cliente para refletir as mudanças
+            await supabase.auth.getUser();
+
             return true;
         } catch (error: unknown) {
             const err = error as FetchError;
@@ -83,6 +86,8 @@ export function useProfileApi() {
             loading.value = true;
             errorMessage.value = null;
 
+            const supabase = useSupabaseClient();
+
             // Criar FormData para enviar o arquivo
             const formData = new FormData();
             formData.append('file', file);
@@ -92,6 +97,9 @@ export function useProfileApi() {
                 method: 'POST',
                 body: formData
             });
+
+            // Atualizar o usuário no cliente para refletir as mudanças
+            await supabase.auth.getUser();
 
             return response.avatar_url;
         } catch (error: unknown) {
@@ -118,10 +126,23 @@ export function useProfileApi() {
             loading.value = true;
             errorMessage.value = null;
 
+            const supabase = useSupabaseClient();
+
             // Fazer requisição para o endpoint de remoção
             await $fetch('/api/profile/remove-avatar', {
                 method: 'POST'
             });
+
+            // Aguardar um pouco para garantir que o servidor processou
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            // Atualizar o usuário no cliente para refletir as mudanças
+            const { data: { user: updatedUser } } = await supabase.auth.getUser();
+            
+            // Forçar atualização do usuário no estado reativo
+            if (updatedUser) {
+                await supabase.auth.refreshSession();
+            }
 
             return true;
         } catch (error: unknown) {

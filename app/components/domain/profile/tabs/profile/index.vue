@@ -19,7 +19,7 @@ const { loading, errorMessage, updateProfile, uploadAvatar, removeAvatar } =
   useProfileApi();
 
 // Formulário de perfil
-const { handleSubmit, isSubmitting, meta, errors } = useForm({
+const { handleSubmit, isSubmitting, meta, errors, setValues } = useForm({
   validationSchema: profileSchema,
   initialValues: {
     full_name: props.user.user_metadata?.full_name || "",
@@ -31,6 +31,17 @@ const { handleSubmit, isSubmitting, meta, errors } = useForm({
 const { value: fullName } = useField<string>("full_name");
 const { value: phone } = useField<string>("phone");
 const { value: avatarUrl } = useField<string>("avatar_url");
+
+// Observar mudanças no usuário para atualizar o formulário
+watch(() => props.user.user_metadata, (newMetadata) => {
+  if (newMetadata) {
+    setValues({
+      full_name: newMetadata.full_name || "",
+      phone: newMetadata.phone || "",
+      avatar_url: newMetadata.avatar_url || "",
+    });
+  }
+}, { deep: true });
 
 // Função para lidar com o upload do avatar
 const handleAvatarUpload = async (file: File) => {
@@ -49,13 +60,15 @@ const handleRemoveAvatar = async () => {
   const success = await removeAvatar();
 
   if (success) {
+    // Limpar o avatarUrl local
+    avatarUrl.value = "";
+    
+    // Aguardar um pouco para garantir que o servidor processou
+    await nextTick();
+    
     $toast().success("Avatar removido com sucesso!");
   } else {
     $toast().error("Erro ao remover avatar");
-  }
-
-  if (avatarUrl.value) {
-    avatarUrl.value = "";
   }
 };
 

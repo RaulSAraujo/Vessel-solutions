@@ -130,9 +130,12 @@ export default defineEventHandler(async (event) => {
             .from('avatars')
             .getPublicUrl(filePath);
 
-        // Atualizar o avatar_url nos metadados do usuário com a URL pública
+        // Atualizar o avatar_url e avatar_path nos metadados do usuário
         const { error: updateError } = await client.auth.updateUser({
-            data: { avatar_url: data.publicUrl }
+            data: { 
+                avatar_url: data.publicUrl,
+                avatar_path: filePath
+            }
         });
 
         if (updateError) {

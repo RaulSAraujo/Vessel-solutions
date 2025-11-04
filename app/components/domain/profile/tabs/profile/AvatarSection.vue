@@ -54,8 +54,11 @@ const userInitials = computed(() => {
     .slice(0, 2);
 });
 
-// Computed para a URL da imagem
-const imageUrl = computed(() => props.avatarUrl);
+// Computed para a URL da imagem (só retorna se for válida)
+const imageUrl = computed(() => {
+  const url = props.avatarUrl;
+  return url && url.trim() !== "" ? url : undefined;
+});
 </script>
 
 <template>
@@ -68,8 +71,15 @@ const imageUrl = computed(() => props.avatarUrl);
     <div class="text-center">
       <div class="avatar-container mb-4">
         <v-avatar
+          v-if="imageUrl"
           size="140"
           :image="imageUrl"
+          class="avatar-image text-h3 font-weight-bold elevation-4"
+        />
+        
+        <v-avatar
+          v-else
+          size="140"
           :text="userInitials"
           class="avatar-image text-h3 font-weight-bold elevation-4"
         />
@@ -80,7 +90,10 @@ const imageUrl = computed(() => props.avatarUrl);
           class="avatar-overlay"
           @click="avatarFileInput?.click()"
         >
-          <v-icon icon="mdi-camera" size="24" color="white" />
+          <div class="d-flex flex-column align-center">
+            <v-icon icon="mdi-camera" size="24" color="white" class="mb-1" />
+            <span class="text-white text-caption">Adicionar foto</span>
+          </div>
         </div>
       </div>
 
@@ -149,7 +162,7 @@ const imageUrl = computed(() => props.avatarUrl);
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
+  opacity: 0.7;
   transition: opacity 0.3s ease;
   cursor: pointer;
 }

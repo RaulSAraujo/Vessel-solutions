@@ -6,32 +6,39 @@ export default defineEventHandler(async (event) => {
         const { client, user } = await getSupabaseClientAndUser(event);
 
         const avatarUrl = user.user_metadata?.avatar_url;
+        const avatarPath = user.user_metadata?.avatar_path;
 
         // Se existe um avatar, tentar remover do storage
-        if (avatarUrl) {
+        // Tentar usar avatar_path primeiro, depois avatar_url
+        let fileNameToDelete: string | null = null;
+
+        if (avatarPath) {
+            fileNameToDelete = avatarPath;
+        } else if (avatarUrl) {
             // Extrair o nome do arquivo da URL
-            const fileName = avatarUrl.split('/').pop();
+            fileNameToDelete = avatarUrl.split('/').pop() || null;
+        }
 
-            if (fileName) {
-                const { error: deleteError } = await client.storage
-                    .from('avatars')
-                    .remove([fileName]);
+        if (fileNameToDelete) {
+            const { error: deleteError } = await client.storage
+                .from('avatars')
+                .remove([fileNameToDelete]);
 
-                if (deleteError) {
-                    throw createError({
-                        statusCode: 500,
-                        statusMessage: "Erro ao remover arquivo do storage",
-                        message: deleteError.message
-                    });
-                }
-            } else {
-                console.warn('Não foi possível extrair o nome do arquivo da URL');
+            if (deleteError) {
+                throw createError({
+                    statusCode: 500,
+                    statusMessage: "Erro ao remover arquivo do storage",
+                    message: deleteError.message
+                });
             }
         }
 
-        // Remover a URL do avatar dos metadados do usuário
+        // Remover o avatar_url e avatar_path dos metadados do usuário
         const { error: updateError } = await client.auth.updateUser({
-            data: { avatar_url: null }
+            data: { 
+                avatar_url: null,
+                avatar_path: null
+            }
         });
 
         if (updateError) {

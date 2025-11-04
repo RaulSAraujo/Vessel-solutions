@@ -26,6 +26,12 @@ const userInitials = computed(() => {
     .toUpperCase()
     .slice(0, 2);
 });
+
+// Computed para obter a URL do avatar ou undefined (só passa para :image se for válida)
+const avatarUrl = computed(() => {
+  const url = props.user.user_metadata?.avatar_url;
+  return url && url.trim() !== "" ? url : undefined;
+});
 </script>
 
 <template>
@@ -42,9 +48,15 @@ const userInitials = computed(() => {
                   <v-col cols="12" md="8">
                     <div class="d-flex align-center mb-4">
                       <v-avatar
+                        v-if="avatarUrl"
+                        size="80"
+                        :image="avatarUrl"
+                        class="mr-4 text-h4 font-weight-bold text-white elevation-4"
+                      />
+                      <v-avatar
+                        v-else
                         size="80"
                         :text="userInitials"
-                        :image="user?.user_metadata?.avatar_url"
                         class="mr-4 text-h4 font-weight-bold text-white elevation-4"
                       />
 
