@@ -708,6 +708,42 @@ export type Database = {
         }
         Relationships: []
       }
+      temporary_access: {
+        Row: {
+          contact_info: string | null
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          reason: string | null
+          starts_at: string | null
+          status: Database["public"]["Enums"]["temporary_access_status"] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          contact_info?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          reason?: string | null
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["temporary_access_status"] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          contact_info?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          reason?: string | null
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["temporary_access_status"] | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       units: {
         Row: {
           abbreviation: string
@@ -726,11 +762,65 @@ export type Database = {
         }
         Relationships: []
       }
+      user_subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean | null
+          created_at: string | null
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_price_id: string | null
+          stripe_subscription_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_price_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_price_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      check_email_already_used: {
+        Args: { email_to_check: string }
+        Returns: Json
+      }
+      check_email_exists: {
+        Args: { email_to_check: string }
+        Returns: boolean
+      }
+      check_trial_used: {
+        Args: { email_to_check: string }
+        Returns: boolean
+      }
       insertion_client_and_address: {
         Args: {
           p_additional_info?: string | null
@@ -818,9 +908,13 @@ export type Database = {
           updated_at: string
         }[]
       }
+      mark_expired_temporary_access: {
+        Args: {}
+        Returns: void
+      }
     }
     Enums: {
-      [_ in never]: never
+      temporary_access_status: "pending" | "active" | "expired" | "revoked"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -947,6 +1041,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      temporary_access_status: ["pending", "active", "expired", "revoked"],
+    },
   },
 } as const

@@ -11,6 +11,7 @@ export interface SubscriptionStatus {
   } | null;
   temporaryAccess: {
     expiresAt: string;
+    startsAt: string | null;
     reason: string | null;
   } | null;
 }

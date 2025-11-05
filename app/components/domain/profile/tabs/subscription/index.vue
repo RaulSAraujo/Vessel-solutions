@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useSubscriptionApi } from '~/composables/api/useSubscriptionApi';
-import SubscriptionStatus from './SubscriptionStatus.vue';
+import { useSubscriptionApi, type SubscriptionStatus } from '~/composables/api/useSubscriptionApi';
+import SubscriptionStatusComponent from './SubscriptionStatus.vue';
 import SubscriptionForm from './SubscriptionForm.vue';
 import TemporaryAccessForm from './TemporaryAccessForm.vue';
+import TemporaryAccessTimer from './TemporaryAccessTimer.vue';
 
 const route = useRoute();
 const { 
-  checkSubscriptionStatus, 
   createCheckout, 
   cancelSubscription, 
   resumeSubscription, 
@@ -16,23 +16,26 @@ const {
 } = useSubscriptionApi();
 
 const config = useRuntimeConfig();
-const subscriptionStatus = ref<any>(null);
 const priceId = ref(config.public.stripePriceId || 'price_1SPqCbRqS0dsHWTKABXy1sHt');
 const showTemporaryForm = ref(false);
 
-const loadStatus = async () => {
-  const status = await checkSubscriptionStatus();
-  if (status) {
-    subscriptionStatus.value = status;
+// Usar composable para gerenciar atualização em tempo real do status
+// onlyHasAccess: false porque precisamos do status completo
+const { status, loadStatus } = useSubscriptionRealtime({
+  onlyHasAccess: false,
+  autoStart: true,
+  onStatusChange: (newStatus) => {
     // Se vier da landing page com tab=temporary, mostrar formulário
     if (route.query.tab === 'temporary') {
       showTemporaryForm.value = true;
     }
-  }
-};
+  },
+});
 
-onMounted(() => {
-  loadStatus();
+// Converter para SubscriptionStatus | null
+const subscriptionStatus = computed(() => {
+  const s = status.value;
+  return (typeof s === 'boolean' ? null : s) as SubscriptionStatus | null;
 });
 
 // Observar mudanças na query string
@@ -106,7 +109,11 @@ const handleTemporaryAccessSubmit = async (reason: string, contactInfo: string) 
                   Assinatura ativa até {{ $dayjs(subscriptionStatus.subscription.currentPeriodEnd).format('DD/MM/YYYY') }}
                 </div>
                 <div v-else-if="subscriptionStatus.hasTemporaryAccess && subscriptionStatus.temporaryAccess?.expiresAt" class="text-caption mt-1">
-                  Acesso temporário válido até {{ $dayjs(subscriptionStatus.temporaryAccess.expiresAt).format('DD/MM/YYYY') }}
+                  <div class="d-flex align-center flex-wrap ga-2">
+                    <span>Acesso temporário válido até {{ $dayjs(subscriptionStatus.temporaryAccess.expiresAt).format('DD/MM/YYYY [às] HH:mm') }}</span>
+                    <v-divider vertical class="mx-1" />
+                    <TemporaryAccessTimer :expires-at="subscriptionStatus.temporaryAccess.expiresAt" />
+                  </div>
                 </div>
               </div>
               <v-chip color="success" size="small" variant="flat">
@@ -127,7 +134,7 @@ const handleTemporaryAccessSubmit = async (reason: string, contactInfo: string) 
               </v-card-title>
 
               <v-card-text>
-                <SubscriptionStatus
+                <SubscriptionStatusComponent
                   :status="subscriptionStatus"
                   :loading="loading"
                   @cancel="handleCancel"
@@ -194,7 +201,7 @@ const handleTemporaryAccessSubmit = async (reason: string, contactInfo: string) 
 
             <!-- Se tem acesso, mostrar informações adicionais -->
             <div v-else>
-              <v-card variant="outlined">
+              <v-card class="border-sm rounded-lg">
                 <v-card-title class="d-flex align-center">
                   <v-icon class="mr-2">mdi-help-circle</v-icon>
                   Precisa de ajuda?

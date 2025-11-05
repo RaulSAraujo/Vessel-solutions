@@ -20,6 +20,17 @@ export default defineEventHandler(async (event) => {
     }
 
     // Buscar acesso temporário ativo
+    // Primeiro, marcar como expirados os que já passaram da data (atualização automática)
+    // Isso é feito silenciosamente - se falhar, não impede a busca
+    try {
+      await client.rpc('mark_expired_temporary_access');
+    } catch (rpcError) {
+      // Se a função RPC falhar, apenas logar e continuar
+      // O trigger já deve ter atualizado na inserção/atualização
+      console.warn('Failed to mark expired temporary access:', rpcError);
+    }
+    
+    // Depois, buscar apenas os que estão realmente ativos e não expirados
     const { data: tempAccess } = await client
       .from('temporary_access')
       .select('*')
@@ -46,6 +57,7 @@ export default defineEventHandler(async (event) => {
       } : null,
       temporaryAccess: tempAccess ? {
         expiresAt: tempAccess.expires_at,
+        startsAt: tempAccess.starts_at,
         reason: tempAccess.reason,
       } : null,
     };

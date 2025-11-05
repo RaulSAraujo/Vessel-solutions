@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { SubscriptionStatus } from '~/composables/api/useSubscriptionApi';
-import dayjs from 'dayjs';
+import TemporaryAccessTimer from './TemporaryAccessTimer.vue';
+
+const dayjs = useDayjs();
 
 interface Props {
   status: SubscriptionStatus | null;
@@ -14,8 +16,11 @@ const emit = defineEmits<{
   resume: [];
 }>();
 
-const formatDate = (date: string | null) => {
+const formatDate = (date: string | null, includeTime = false) => {
   if (!date) return '-';
+  if (includeTime) {
+    return dayjs(date).format('DD/MM/YYYY [às] HH:mm');
+  }
   return dayjs(date).format('DD/MM/YYYY');
 };
 </script>
@@ -95,7 +100,31 @@ const formatDate = (date: string | null) => {
 
       <div v-else-if="status.hasTemporaryAccess">
         <h3 class="text-h6 mb-4">Acesso Temporário</h3>
+        
+        <!-- Timer de contagem regressiva -->
+        <v-card 
+          v-if="status.temporaryAccess?.expiresAt"
+          variant="tonal"
+          :color="status.temporaryAccess?.expiresAt ? 'warning' : 'error'"
+          class="mb-4"
+        >
+          <v-card-text class="py-3">
+            <TemporaryAccessTimer :expires-at="status.temporaryAccess.expiresAt" />
+          </v-card-text>
+        </v-card>
+
         <v-list density="comfortable">
+          <v-list-item v-if="status.temporaryAccess?.startsAt">
+            <template #prepend>
+              <v-icon>mdi-calendar-start</v-icon>
+            </template>
+            <v-list-item-title>Início</v-list-item-title>
+            <template #append>
+              <span class="text-body-2 font-weight-medium">
+                {{ formatDate(status.temporaryAccess.startsAt, true) }}
+              </span>
+            </template>
+          </v-list-item>
           <v-list-item>
             <template #prepend>
               <v-icon>mdi-calendar-clock</v-icon>
@@ -103,7 +132,7 @@ const formatDate = (date: string | null) => {
             <v-list-item-title>Válido até</v-list-item-title>
             <template #append>
               <span class="text-body-2 font-weight-medium">
-                {{ formatDate(status.temporaryAccess?.expiresAt ?? null) }}
+                {{ formatDate(status.temporaryAccess?.expiresAt ?? null, true) }}
               </span>
             </template>
           </v-list-item>

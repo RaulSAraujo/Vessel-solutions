@@ -67,7 +67,7 @@ export default defineNuxtConfig({
 
   dayjs: {
     locales: ['pt-br'],
-    plugins: ['relativeTime', 'utc', 'timezone', 'customParseFormat'],
+    plugins: ['relativeTime', 'duration', 'utc', 'timezone', 'customParseFormat'],
     defaultLocale: 'pt-br',
     defaultTimezone: 'America/Sao_Paulo',
   },

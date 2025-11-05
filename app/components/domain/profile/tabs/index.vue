@@ -17,19 +17,60 @@ defineProps({
 
 // Estados para controlar as abas
 const route = useRoute();
+const router = useRouter();
 const activeTab = ref("profile");
 
-// Verificar query param para abrir aba de subscription
-onMounted(() => {
-  if (route.query.tab === 'subscription' || route.query.tab === 'temporary') {
+// Mapeamento de abas para query params
+const tabToQueryMap: Record<string, string | null> = {
+  profile: null, // Não precisa de query param para a aba padrão
+  password: 'password',
+  info: 'info',
+  subscription: 'subscription',
+};
+
+// Verificar query param para abrir aba correta
+const initializeTabFromQuery = () => {
+  const queryTab = route.query.tab as string;
+  
+  if (queryTab === 'subscription' || queryTab === 'temporary') {
     activeTab.value = 'subscription';
+  } else if (queryTab === 'password') {
+    activeTab.value = 'password';
+  } else if (queryTab === 'info') {
+    activeTab.value = 'info';
+  } else {
+    activeTab.value = 'profile';
+  }
+};
+
+// Atualizar URL quando a aba mudar
+watch(activeTab, (newTab) => {
+  const queryParam = tabToQueryMap[newTab];
+  
+  // Se for a aba padrão (profile), remover o query param
+  if (!queryParam) {
+    if (route.query.tab) {
+      router.replace({ query: { ...route.query, tab: undefined } });
+    }
+  } else {
+    // Atualizar apenas o param tab, mantendo outros (como 'temporary')
+    router.replace({ 
+      query: { 
+        ...route.query, 
+        tab: queryParam 
+      } 
+    });
   }
 });
 
+// Observar mudanças na query string (útil para navegação direta ou botão voltar)
 watch(() => route.query.tab, (newTab) => {
-  if (newTab === 'subscription' || newTab === 'temporary') {
-    activeTab.value = 'subscription';
-  }
+  initializeTabFromQuery();
+});
+
+// Inicializar ao montar
+onMounted(() => {
+  initializeTabFromQuery();
 });
 </script>
 
