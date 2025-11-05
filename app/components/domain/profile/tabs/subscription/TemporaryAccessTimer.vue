@@ -7,27 +7,45 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const timeRemaining = ref<string>('');
-const isExpired = ref(false);
+// Usar VueUse para obter o tempo atual reativo (atualiza a cada segundo)
+const now = useNow({ interval: 1000 });
 
-const updateTimer = () => {
+// Calcular tempo restante
+const timeRemaining = computed(() => {
   if (!props.expiresAt) {
-    timeRemaining.value = '-';
-    return;
+    return null;
   }
 
-  const now = dayjs();
   const expiry = dayjs(props.expiresAt);
-  const diff = expiry.diff(now);
+  const diff = expiry.diff(now.value);
 
   if (diff <= 0) {
-    isExpired.value = true;
-    timeRemaining.value = 'Expirado';
-    return;
+    return 0;
   }
 
-  isExpired.value = false;
-  const duration = dayjs.duration(diff);
+  return diff;
+});
+
+// Verificar se expirou
+const isExpired = computed(() => {
+  return timeRemaining.value !== null && timeRemaining.value <= 0;
+});
+
+// Formatar tempo restante
+const formattedTimeRemaining = computed(() => {
+  if (!props.expiresAt) {
+    return '-';
+  }
+
+  if (isExpired.value) {
+    return 'Expirado';
+  }
+
+  if (timeRemaining.value === null) {
+    return '-';
+  }
+
+  const duration = dayjs.duration(timeRemaining.value);
   
   const days = Math.floor(duration.asDays());
   const hours = duration.hours();
@@ -35,45 +53,13 @@ const updateTimer = () => {
   const seconds = duration.seconds();
 
   if (days > 0) {
-    timeRemaining.value = `${days}d ${hours}h ${minutes}m`;
+    return `${days}d ${hours}h ${minutes}m`;
   } else if (hours > 0) {
-    timeRemaining.value = `${hours}h ${minutes}m ${seconds}s`;
+    return `${hours}h ${minutes}m ${seconds}s`;
   } else if (minutes > 0) {
-    timeRemaining.value = `${minutes}m ${seconds}s`;
+    return `${minutes}m ${seconds}s`;
   } else {
-    timeRemaining.value = `${seconds}s`;
-  }
-};
-
-let intervalId: NodeJS.Timeout | null = null;
-
-onMounted(() => {
-  updateTimer();
-  
-  if (props.expiresAt) {
-    intervalId = setInterval(() => {
-      updateTimer();
-    }, 1000);
-  }
-});
-
-onUnmounted(() => {
-  if (intervalId) {
-    clearInterval(intervalId);
-  }
-});
-
-watch(() => props.expiresAt, () => {
-  updateTimer();
-  
-  if (intervalId) {
-    clearInterval(intervalId);
-  }
-  
-  if (props.expiresAt) {
-    intervalId = setInterval(() => {
-      updateTimer();
-    }, 1000);
+    return `${seconds}s`;
   }
 });
 </script>
@@ -91,7 +77,7 @@ watch(() => props.expiresAt, () => {
         isExpired ? 'text-error' : 'text-warning'
       ]"
     >
-      {{ isExpired ? 'Expirado' : `Faltam ${timeRemaining}` }}
+      {{ isExpired ? 'Expirado' : `Faltam ${formattedTimeRemaining}` }}
     </span>
   </div>
 </template>

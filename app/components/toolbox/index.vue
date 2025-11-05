@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 const isHovered = ref(false);
-let hideTimeout: NodeJS.Timeout | null = null;
 
 // Estado para controlar a posição da barra
 const toolbarClass = computed(() => ({
@@ -8,29 +7,21 @@ const toolbarClass = computed(() => ({
   "toolbar-hidden": !isHovered.value,
 }));
 
+// Usar VueUse para gerenciar timeout com debounce
+const { start, stop } = useTimeoutFn(() => {
+  isHovered.value = false;
+}, 500);
+
 const handleMouseEnter = () => {
-  // Limpar timeout se existir
-  if (hideTimeout) {
-    clearTimeout(hideTimeout);
-    hideTimeout = null;
-  }
+  // Parar timeout se existir
+  stop();
   isHovered.value = true;
 };
 
 const handleMouseLeave = () => {
-  // Adicionar delay antes de esconder para evitar piscar
-  hideTimeout = setTimeout(() => {
-    isHovered.value = false;
-    hideTimeout = null;
-  }, 500);
+  // Iniciar timeout para esconder após delay
+  start();
 };
-
-// Limpar timeout ao desmontar
-onUnmounted(() => {
-  if (hideTimeout) {
-    clearTimeout(hideTimeout);
-  }
-});
 </script>
 
 <template>

@@ -3,13 +3,13 @@ import type { TutorialStep } from "~/composables/useTutorialDriver";
 export const useTutorialRouter = () => {
   const tutorial = useTutorialDriver();
 
+  // Usar VueUse para detectar tamanho da janela
+  const { width } = useWindowSize();
+  
   // Função helper para detectar se é mobile
-  const isMobile = () => {
-    if (process.client) {
-      return window.innerWidth < 960; // Breakpoint padrão do Vuetify para mobile
-    }
-    return false;
-  };
+  const isMobile = computed(() => {
+    return width.value < 960; // Breakpoint padrão do Vuetify para mobile
+  });
 
   // Função helper para fechar dialogs/bottom-sheets
   const closeDialogHelper = async () => {
@@ -87,7 +87,7 @@ export const useTutorialRouter = () => {
     let steps: TutorialStep[] | null = null;
 
     // Importar e obter os steps do tutorial da página atual
-    const mobile = isMobile();
+    const mobile = isMobile.value;
     
     if (routePath === "/dashboard") {
       const { dashboardTutorialSteps } = await import(
