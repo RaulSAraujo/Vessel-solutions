@@ -414,25 +414,37 @@ export function useGlobalSubscriptionRealtime(options: {
   // Observar mudanças no status para redirecionar quando perder acesso
   const initialStatus = status.value;
   let previousHasAccess: boolean | null = typeof initialStatus === 'boolean' ? initialStatus : (initialStatus?.hasAccess ?? false);
+  let hasRedirected = false;
 
-  watch(status, (newStatus) => {
+  watch(status, async (newStatus) => {
     const currentHasAccess = typeof newStatus === 'boolean' ? newStatus : (newStatus?.hasAccess ?? false);
     
     // Se o acesso foi perdido (tinha antes e agora não tem), redirecionar
-    if (previousHasAccess === true && currentHasAccess === false) {
+    if (previousHasAccess === true && currentHasAccess === false && !hasRedirected) {
+      hasRedirected = true;
+      
       const publicRoutes = ['/', '/auth/login', '/auth/register', '/auth/callback', '/profile', '/subscription/success', '/subscription/cancel', '/temporary-access/request'];
-      const isPublicRoute = publicRoutes.some(routePath => route.path === routePath || route.path.startsWith(routePath));
+      const isPublicRoute = publicRoutes.some(routePath => {
+        if (routePath === '/') {
+          return route.path === '/';
+        }
+        return route.path.startsWith(routePath);
+      });
       
       if (!isPublicRoute) {
-        // Usar nextTick para garantir que a navegação aconteça após o ciclo de atualização
-        nextTick(() => {
-          router.push('/profile?tab=subscription');
-        });
+        // Aguardar um tick para garantir que a navegação aconteça após o ciclo de atualização
+        await nextTick();
+        router.push('/profile?tab=subscription');
       }
     }
     
+    // Resetar flag quando acesso é recuperado
+    if (previousHasAccess === false && currentHasAccess === true) {
+      hasRedirected = false;
+    }
+    
     previousHasAccess = currentHasAccess;
-  });
+  }, { immediate: false });
 
   return {
     status: onlyHasAccess ? hasAccess : status,

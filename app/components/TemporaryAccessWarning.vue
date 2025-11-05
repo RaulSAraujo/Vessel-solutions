@@ -129,16 +129,53 @@ watch(() => {
   }
 });
 
-// Redirecionar quando expirar
-watch(timeRemaining, (remaining) => {
-  if (remaining <= 0 && expiresAt.value) {
+// Flag para evitar múltiplos redirecionamentos
+const hasRedirected = ref(false);
+
+// Redirecionar quando expirar (observar tanto o tempo quanto o status)
+watch([timeRemaining, () => status.value?.hasAccess], async ([remaining, hasAccess]) => {
+  // Se o tempo expirou OU o status indicar que não tem mais acesso
+  const timeExpired = remaining <= 0 && expiresAt.value;
+  const accessLost = hasAccess === false;
+  
+  if ((timeExpired || accessLost) && !hasRedirected.value) {
+    hasRedirected.value = true;
+    
+    // Marcar como expirado no banco primeiro
+    const supabase = useSupabaseClient();
+    try {
+      await supabase.rpc('mark_expired_temporary_access');
+    } catch (error) {
+      console.warn('Failed to mark expired temporary access:', error);
+    }
+    
+    // Recarregar status para atualizar
+    const { loadStatus } = useGlobalSubscriptionRealtime({
+      onlyHasAccess: false,
+      autoStart: false,
+    });
+    await loadStatus();
+    
     // Redirecionar quando expirar (se não estiver em rota pública)
     const publicRoutes = ['/', '/auth/login', '/auth/register', '/auth/callback', '/profile', '/subscription/success', '/subscription/cancel'];
-    const isPublicRoute = publicRoutes.some(routePath => route.path === routePath || route.path.startsWith(routePath));
+    const isPublicRoute = publicRoutes.some(routePath => {
+      if (routePath === '/') {
+        return route.path === '/';
+      }
+      return route.path.startsWith(routePath);
+    });
     
     if (!isPublicRoute && user.value) {
+      await nextTick();
       navigateTo('/profile?tab=subscription');
     }
+  }
+}, { immediate: false });
+
+// Resetar flag quando novo acesso é concedido
+watch(() => status.value?.hasTemporaryAccess, (hasTemporaryAccess) => {
+  if (hasTemporaryAccess) {
+    hasRedirected.value = false;
   }
 });
 </script>
