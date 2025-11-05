@@ -1,4 +1,4 @@
-import { serverSupabaseClient, serverSupabaseUser } from "#supabase/server";
+import { serverSupabaseClient, serverSupabaseUser, serverSupabaseServiceRole } from "#supabase/server";
 import type { H3Event } from "h3";
 import type { Database } from "../types/database";
 
@@ -26,4 +26,18 @@ export async function getSupabaseClientAndUser(event: H3Event) {
   };
 
   return { client, user: userWithId };
+}
+
+/**
+ * Obtém apenas o cliente Supabase (sem verificar autenticação)
+ */
+export async function getSupabaseClient(event: H3Event) {
+  return await serverSupabaseClient<Database>(event);
+}
+
+/**
+ * Obtém o cliente Supabase com service role (para operações administrativas)
+ */
+export async function getSupabaseServiceRole(event: H3Event) {
+  return await serverSupabaseServiceRole<Database>(event);
 }

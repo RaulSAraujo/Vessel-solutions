@@ -33,6 +33,11 @@ const activeTab = computed({
         <v-icon icon="mdi-information-outline" class="mr-2" />
         <span class="tab-text">Informações da Conta</span>
       </v-tab>
+
+      <v-tab value="subscription" class="tab-item">
+        <v-icon icon="mdi-credit-card" class="mr-2" />
+        <span class="tab-text">Assinatura</span>
+      </v-tab>
     </v-tabs>
   </v-card>
 </template>

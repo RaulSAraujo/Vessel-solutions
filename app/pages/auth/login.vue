@@ -24,7 +24,7 @@ const onSubmit = handleSubmit(async (values) => {
   const success: boolean = await login(values.email, values.password);
 
   if (success) {
-    await navigateTo("/dashboard");
+    navigateTo("/auth/callback");
   }
 });
 

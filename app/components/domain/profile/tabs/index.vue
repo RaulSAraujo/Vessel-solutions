@@ -6,6 +6,7 @@ import Header from "./Header.vue";
 import Info from "./info/index.vue";
 import Profile from "./profile/index.vue";
 import Password from "./password/index.vue";
+import Subscription from "./subscription/index.vue";
 
 defineProps({
   user: {
@@ -15,7 +16,21 @@ defineProps({
 });
 
 // Estados para controlar as abas
+const route = useRoute();
 const activeTab = ref("profile");
+
+// Verificar query param para abrir aba de subscription
+onMounted(() => {
+  if (route.query.tab === 'subscription' || route.query.tab === 'temporary') {
+    activeTab.value = 'subscription';
+  }
+});
+
+watch(() => route.query.tab, (newTab) => {
+  if (newTab === 'subscription' || newTab === 'temporary') {
+    activeTab.value = 'subscription';
+  }
+});
 </script>
 
 <template>
@@ -33,6 +48,9 @@ const activeTab = ref("profile");
 
       <!-- Aba de Informações da Conta -->
       <Info :user="user" />
+
+      <!-- Aba de Assinatura -->
+      <Subscription />
     </v-tabs-window>
   </div>
 </template>

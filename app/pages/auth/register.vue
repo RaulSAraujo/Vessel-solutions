@@ -69,7 +69,7 @@ const onSubmit = handleSubmit(async (values) => {
     <v-alert
       v-if="registrationSuccess"
       type="success"
-      class="mb-4"
+      class="mb-4 text-white"
       density="compact"
     >
       Registro realizado! Verifique seu e-mail para confirmar a conta.

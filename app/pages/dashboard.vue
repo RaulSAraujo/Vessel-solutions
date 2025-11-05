@@ -2,7 +2,7 @@
 import { usePeriodFilter } from "~/composables/usePeriodFilter";
 
 definePageMeta({
-  middleware: ["auth"],
+  middleware: ["auth", "subscription"],
 });
 
 const { mobile } = useDisplay();

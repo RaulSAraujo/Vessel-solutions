@@ -47,7 +47,7 @@ export function useAuthApi() {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: `${getBaseUrl()}/dashboard`
+                    redirectTo: `${getBaseUrl()}/auth/callback`
                 }
             });
 

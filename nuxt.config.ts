@@ -30,13 +30,22 @@ export default defineNuxtConfig({
   ],
 
   supabase: {
-    redirect: true, // Habilita redirecionamento automático
+    redirect: true,
     redirectOptions: {
       login: '/auth/login',
-      callback: '/dashboard',
+      callback: '/auth/callback',
       include: undefined,
-      exclude: ['/', '/auth/login', '/auth/register'],
-      saveRedirectToCookie: true, // Salva rota original para redirecionar após login
+      exclude: [
+        '/',
+        '/auth/login', 
+        '/auth/register', 
+        '/auth/callback',
+        '/profile', 
+        '/subscription/success', 
+        '/subscription/cancel', 
+        '/temporary-access/request'
+      ],
+      saveRedirectToCookie: true,
     },
     types: '~~/server/types/database.d.ts',
   },
@@ -115,6 +124,16 @@ export default defineNuxtConfig({
   },
 
   sourcemap: true,
+
+  runtimeConfig: {
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
+    public: {
+      stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+      stripePriceId: process.env.NUXT_PUBLIC_STRIPE_PRICE_ID || 'price_1SPqCbRqS0dsHWTKABXy1sHt',
+      baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    },
+  },
 
   // Configurações de cache para rotas
   routeRules: {

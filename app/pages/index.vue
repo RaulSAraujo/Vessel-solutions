@@ -13,9 +13,9 @@ definePageMeta({
 
     <LandingPageHowItWorksSection />
 
-    <LandingPageAboutSection />
+    <LandingPagePricingSection />
 
-    <LandingPageTestimonialsSection />
+    <LandingPageAboutSection />
 
     <LandingPageFaqSection />
 

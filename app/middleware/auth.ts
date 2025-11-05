@@ -3,7 +3,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     const supabase = useSupabaseClient();
 
     // Rotas públicas que não exigem autenticação
-    const publicRoutes = ['/', '/auth/login', '/auth/register', '/subscription', '/subscription/success', '/subscription/cancel', '/temporary-access/request'];
+    const publicRoutes = ['/', '/auth/login', '/auth/register', '/auth/callback', '/subscription/success', '/subscription/cancel', '/temporary-access/request'];
     
     // Rotas de autenticação (login e registro)
     const authRoutes = ['/auth/login', '/auth/register'];
@@ -40,12 +40,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
     // Se o usuário está logado
     if (user.value) {
         // Se tentar acessar rota de autenticação, redirecionar para dashboard
+        // Usuário já autenticado não precisa ver páginas de login/registro
         if (authRoutes.includes(to.path)) {
             return navigateTo('/dashboard');
         }
-        // Se tentar acessar landing page, redirecionar para dashboard
+        // Se tentar acessar landing page, verificar assinatura e redirecionar
         if (to.path === '/') {
-            return navigateTo('/dashboard');
+            // Deixar o middleware subscription verificar e redirecionar adequadamente
+            return;
         }
     } else {
         // Se o usuário NÃO está logado e tenta acessar uma rota protegida

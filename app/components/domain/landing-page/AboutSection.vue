@@ -1,7 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <v-row class="d-flex align-center py-8 py-md-16">
+  <v-row class="about-section d-flex align-center py-8 py-md-16">
     <v-container>
       <v-row align="center" justify="center">
         <v-col cols="12" md="6" :order="$vuetify.display.mobile ? '2' : '1'">
@@ -57,3 +57,14 @@
     </v-container>
   </v-row>
 </template>
+
+<style scoped>
+.about-section {
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--v-theme-background)),
+    rgb(var(--v-theme-primary)),
+    rgb(var(--v-theme-background))
+  );
+}
+</style>
