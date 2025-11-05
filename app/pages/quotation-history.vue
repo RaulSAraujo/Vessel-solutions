@@ -4,7 +4,7 @@ import { usePeriodFilter } from "~/composables/usePeriodFilter";
 // Meta
 definePageMeta({
   layout: "default",
-  middleware: "auth",
+  middleware: ["auth", "subscription"],
 });
 
 // Composables

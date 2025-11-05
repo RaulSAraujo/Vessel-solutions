@@ -2,7 +2,7 @@
 import { useFetchUnits } from "~/composables/api/useUnitsApi";
 
 definePageMeta({
-  middleware: ["auth"],
+  middleware: ["auth", "subscription"],
 });
 
 const filterDrawer = ref(false);

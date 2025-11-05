@@ -3,7 +3,7 @@ import { ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 
 definePageMeta({
-  middleware: ["auth"],
+  middleware: ["auth", "subscription"],
 });
 
 const filterDrawer = ref(false);

@@ -19,9 +19,9 @@ const config = useRuntimeConfig();
 const priceId = ref(config.public.stripePriceId || 'price_1SPqCbRqS0dsHWTKABXy1sHt');
 const showTemporaryForm = ref(false);
 
-// Usar composable para gerenciar atualização em tempo real do status
+// Usar composable global otimizado para gerenciar atualização em tempo real do status
 // onlyHasAccess: false porque precisamos do status completo
-const { status, loadStatus } = useSubscriptionRealtime({
+const { status, loadStatus } = useGlobalSubscriptionRealtime({
   onlyHasAccess: false,
   autoStart: true,
   onStatusChange: (newStatus) => {

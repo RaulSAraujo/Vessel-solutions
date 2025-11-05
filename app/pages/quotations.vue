@@ -4,7 +4,7 @@ import { useFetchSuppliers } from "~/composables/api/useSuppliersApi";
 import { useFetchIngredients } from "~/composables/api/useIngredientsApi";
 
 definePageMeta({
-  middleware: ["auth"],
+  middleware: ["auth", "subscription"],
 });
 
 const filterDrawer = ref(false);

@@ -6,9 +6,9 @@ import MobileDrawer from "./MobileDrawer.vue";
 // Estado para controlar o drawer mobile
 const drawerMobile = ref(false);
 
-// Usar composable para gerenciar atualização em tempo real do status
+// Usar composable global otimizado para gerenciar atualização em tempo real do status
 // onlyHasAccess: true porque só precisamos saber se tem acesso ou não
-const { hasAccess, loadStatus } = useSubscriptionRealtime({
+const { hasAccess, loadStatus } = useGlobalSubscriptionRealtime({
   onlyHasAccess: true,
   autoStart: true,
 });
