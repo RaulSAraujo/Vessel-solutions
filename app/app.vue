@@ -19,6 +19,9 @@ themeStore.applySavedTheme(theme);
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
+
+  <!-- Componente global para alerta de expiração de acesso temporário -->
+  <TemporaryAccessWarning />
 </template>
 
 <style>

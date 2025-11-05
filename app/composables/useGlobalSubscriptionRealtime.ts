@@ -354,6 +354,8 @@ export function useGlobalSubscriptionRealtime(options: {
 
   const { checkSubscriptionStatus } = useSubscriptionApi();
   const manager = GlobalSubscriptionRealtimeManager.getInstance();
+  const route = useRoute();
+  const router = useRouter();
   
   // Função para carregar status
   const loadStatus = async (): Promise<SubscriptionStatus | null> => {
@@ -379,11 +381,19 @@ export function useGlobalSubscriptionRealtime(options: {
     }
   };
 
+  // Callback para passar para o manager
+  const handleStatusChange = (newStatus: SubscriptionStatus | null) => {
+    // Chamar callback original se fornecido
+    if (onStatusChange) {
+      onStatusChange(newStatus);
+    }
+  };
+
   let unregister: (() => void) | null = null;
 
   if (autoStart) {
     onMounted(() => {
-      const registration = manager.registerComponent(loadStatus, onStatusChange);
+      const registration = manager.registerComponent(loadStatus, handleStatusChange);
       unregister = registration.unregister;
     });
 
@@ -400,6 +410,29 @@ export function useGlobalSubscriptionRealtime(options: {
   const status = computed(() => statusRef.value);
   const loading = computed(() => loadingRef.value);
   const hasAccess = computed(() => status.value?.hasAccess ?? false);
+
+  // Observar mudanças no status para redirecionar quando perder acesso
+  const initialStatus = status.value;
+  let previousHasAccess: boolean | null = typeof initialStatus === 'boolean' ? initialStatus : (initialStatus?.hasAccess ?? false);
+
+  watch(status, (newStatus) => {
+    const currentHasAccess = typeof newStatus === 'boolean' ? newStatus : (newStatus?.hasAccess ?? false);
+    
+    // Se o acesso foi perdido (tinha antes e agora não tem), redirecionar
+    if (previousHasAccess === true && currentHasAccess === false) {
+      const publicRoutes = ['/', '/auth/login', '/auth/register', '/auth/callback', '/profile', '/subscription/success', '/subscription/cancel', '/temporary-access/request'];
+      const isPublicRoute = publicRoutes.some(routePath => route.path === routePath || route.path.startsWith(routePath));
+      
+      if (!isPublicRoute) {
+        // Usar nextTick para garantir que a navegação aconteça após o ciclo de atualização
+        nextTick(() => {
+          router.push('/profile?tab=subscription');
+        });
+      }
+    }
+    
+    previousHasAccess = currentHasAccess;
+  });
 
   return {
     status: onlyHasAccess ? hasAccess : status,
