@@ -13,7 +13,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     
     // Aguarda o carregamento do usuário (máximo 250ms)
     // Isso evita redirecionamentos incorretos enquanto o Supabase está verificando a sessão
-    if (process.client && user.value === null) {
+    if (import.meta.client && user.value === null) {
         try {
             // Verifica a sessão diretamente primeiro (mais rápido)
             const { data: { session } } = await supabase.auth.getSession();
@@ -31,7 +31,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
                 // Se não há sessão, aguarda um pouco para garantir que não há sessão pendente
                 await new Promise(resolve => setTimeout(resolve, 100));
             }
-        } catch (error) {
+        } catch {
             // Em caso de erro, continua normalmente após um pequeno delay
             await new Promise(resolve => setTimeout(resolve, 100));
         }

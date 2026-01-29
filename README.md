@@ -1,75 +1,125 @@
-# Nuxt Minimal Starter
+# Vessel — Gestão Inteligente para Coquetelaria
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Plataforma completa para gestão de eventos, controle de ingredientes, precificação de drinks e análise de lucratividade para bares, restaurantes e empresas de eventos.
 
-## Setup
+![Nuxt](https://img.shields.io/badge/Nuxt-4.x-00DC82?logo=nuxt.js)
+![Vue](https://img.shields.io/badge/Vue-3.x-4FC08D?logo=vue.js)
+![Vuetify](https://img.shields.io/badge/Vuetify-3.x-1867C0?logo=vuetify)
+![Supabase](https://img.shields.io/badge/Supabase-Auth%20%26%20DB-3ECF8E?logo=supabase)
 
-Make sure to install dependencies:
+---
+
+## 📸 Telas do projeto
+
+### Página inicial (Landing)
+
+Página de apresentação com proposta de valor, recursos, planos e FAQ.
+
+![Página inicial](public/readme/01-home.png)
+
+### Login
+
+Acesso com e-mail/senha ou conta Google.
+
+![Tela de login](public/readme/02-login.png)
+
+### Registro
+
+Criação de conta para novos usuários.
+
+![Tela de registro](public/readme/03-register.png)
+
+---
+
+## ✨ Funcionalidades principais
+
+- **Gestão de eventos** — Cadastro de clientes, endereços, datas e cálculo automático de demanda de drinks
+- **Drinks e receitas** — Criação de drinks com ingredientes e custos
+- **Ingredientes** — Controle de preços, unidades e cotações com fornecedores
+- **Cotações e orçamentos** — Cotações para eventos e conversão em evento
+- **Lista de compras** — Geração automática a partir de eventos e estoque
+- **Relatórios** — KPIs, lucratividade, consumo de ingredientes, histórico de cotações
+- **Fornecedores** — Cadastro e gestão de fornecedores
+- **Perfil** — Dados do usuário, avatar e alteração de senha
+- **Assinatura** — Integração com Stripe para planos (mensal/temporário)
+
+---
+
+## 🛠 Tecnologias
+
+- **Frontend:** Nuxt 4, Vue 3, Vuetify 3, Pinia, VeeValidate + Yup
+- **Backend:** Nuxt Server (Nitro), API REST
+- **Auth e banco:** Supabase (Auth, PostgreSQL)
+- **Pagamentos:** Stripe
+- **Utilitários:** Day.js, VueUse, Maska, Driver.js (tutoriais)
+
+---
+
+## 📋 Pré-requisitos
+
+- Node.js 18+
+- Yarn, pnpm, npm ou bun
+- Conta Supabase (para auth e banco)
+- Variáveis de ambiente configuradas (veja `.env.example` ou documentação do Nuxt/Supabase)
+
+---
+
+## 🚀 Instalação e execução
+
+### Instalar dependências
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
 yarn install
-
-# bun
-bun install
+# ou: npm install | pnpm install | bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+### Servidor de desenvolvimento
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
 yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+Acesse: **http://localhost:3000** (ou a porta indicada no terminal).
 
-Build the application for production:
+### Build para produção
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
 yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+### Preview da build de produção
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
 yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+---
+
+## 📁 Estrutura resumida
+
+```
+app/
+├── pages/          # Rotas (dashboard, clientes, drinks, eventos, etc.)
+├── components/     # Componentes Vue
+├── layouts/       # Layouts (default, auth, guest, profile)
+├── composables/   # Lógica reutilizável e chamadas de API
+├── stores/        # Pinia stores
+├── middleware/    # Auth e subscription
+server/
+├── api/           # Endpoints da API (clientes, drinks, eventos, etc.)
+├── utils/         # Supabase, filtros, listas de compras
+```
+
+---
+
+## 📄 Documentação
+
+- [Nuxt](https://nuxt.com/docs)
+- [Vuetify](https://vuetifyjs.com/)
+- [Supabase](https://supabase.com/docs)
+
+---
+
+## Licença
+
+Projeto privado. © 2026 Vessel. Todos os direitos reservados.
