@@ -7,30 +7,6 @@ Plataforma completa para gestão de eventos, controle de ingredientes, precifica
 ![Vuetify](https://img.shields.io/badge/Vuetify-3.x-1867C0?logo=vuetify)
 ![Supabase](https://img.shields.io/badge/Supabase-Auth%20%26%20DB-3ECF8E?logo=supabase)
 
----
-
-## 📸 Telas do projeto
-
-### Página inicial (Landing)
-
-Página de apresentação com proposta de valor, recursos, planos e FAQ.
-
-![Página inicial](public/readme/01-home.png)
-
-### Login
-
-Acesso com e-mail/senha ou conta Google.
-
-![Tela de login](public/readme/02-login.png)
-
-### Registro
-
-Criação de conta para novos usuários.
-
-![Tela de registro](public/readme/03-register.png)
-
----
-
 ## ✨ Funcionalidades principais
 
 - **Gestão de eventos** — Cadastro de clientes, endereços, datas e cálculo automático de demanda de drinks
