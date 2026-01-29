@@ -26,6 +26,12 @@ export default defineEventHandler(async (event) => {
         }
 
         const file = formData[0];
+        if (!file) {
+            throw createError({
+                statusCode: 400,
+                statusMessage: "Nenhum arquivo foi enviado",
+            });
+        }
 
         if (!file.data || !file.filename) {
             throw createError({
@@ -53,8 +59,8 @@ export default defineEventHandler(async (event) => {
         }
 
         // Verificar se existe avatar antigo e removê-lo
-        const currentAvatarUrl = user.user_metadata?.avatar_url;
-        if (currentAvatarUrl) {
+        const currentAvatarUrl = user.user_metadata?.avatar_url as string | undefined;
+        if (currentAvatarUrl && typeof currentAvatarUrl === 'string') {
             const oldFileName = currentAvatarUrl.split('/').pop();
             if (oldFileName) {
                 const { error: deleteError } = await client.storage

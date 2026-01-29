@@ -28,8 +28,8 @@ export default defineEventHandler(async (event) => {
 
         if (startDate && endDate) {
             eventsQuery = eventsQuery
-                .gte('start_time', startDate)
-                .lte('start_time', endDate);
+                .gte('start_time', startDate as string)
+                .lte('start_time', endDate as string);
         }
 
         const { data: eventsData, error } = await eventsQuery;
@@ -59,12 +59,12 @@ export default defineEventHandler(async (event) => {
 
         sortedYearMonths.forEach(yearMonth => {
             const [year, month] = yearMonth.split('-');
-            const date = new Date(parseInt(year), parseInt(month) - 1); // Mês é 0-indexado
+            const date = new Date(parseInt(year ?? '0', 10), parseInt(month ?? '1', 10) - 1); // Mês é 0-indexado
             const formattedMonth = date.toLocaleString('pt-BR', { month: 'short', year: '2-digit' });
 
             chartData.push({
                 month: formattedMonth, // Mês já formatado
-                'Número de Eventos': monthlyEventsMap[yearMonth], // Contagem de eventos
+                'Número de Eventos': monthlyEventsMap[yearMonth] ?? 0, // Contagem de eventos
             });
         });
 

@@ -50,10 +50,17 @@ export default defineEventHandler(async (event) => {
         }
 
         const updatedEvent = data[0];
+        if (!updatedEvent) {
+            throw createError({
+                statusCode: 404,
+                statusMessage: 'Not Found',
+                message: `Event with ID ${eventId} not found or not accessible for update.`,
+            });
+        }
 
         // Verificar se o status foi alterado para 'purchase'
         if (body.status === 'purchase' && currentEvent?.status !== 'purchase') {
-            await generatePurchaseListItems(client, eventId, updatedEvent);
+            await generatePurchaseListItems(client, eventId, updatedEvent as import("~~/server/types/database").Tables<"events">);
         }
 
         // Verificar se a quantidade estimada de drinks foi alterada

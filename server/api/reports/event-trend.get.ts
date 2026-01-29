@@ -29,8 +29,8 @@ export default defineEventHandler(async (event) => {
 
         if (startDate && endDate) {
             eventsQuery = eventsQuery
-                .gte('start_time', startDate)
-                .lte('start_time', endDate);
+                .gte('start_time', startDate as string)
+                .lte('start_time', endDate as string);
         } else {
             // Fallback para últimos 6 meses se não houver período especificado
             const sixMonthsAgo = new Date();
@@ -69,13 +69,14 @@ export default defineEventHandler(async (event) => {
             .sort()
             .map(monthKey => {
                 const [year, month] = monthKey.split('-');
-                const dateObj = new Date(parseInt(year), parseInt(month) - 1);
+                const dateObj = new Date(parseInt(year ?? '0', 10), parseInt(month ?? '1', 10) - 1);
                 const formattedMonth = dateObj.toLocaleString('pt-BR', { month: 'short', year: '2-digit' });
+                const entry = monthlyData[monthKey];
 
                 return {
                     month: formattedMonth,
-                    events: monthlyData[monthKey].events,
-                    revenue: Math.round(monthlyData[monthKey].revenue * 100) / 100,
+                    events: entry?.events ?? 0,
+                    revenue: Math.round((entry?.revenue ?? 0) * 100) / 100,
                 };
             });
 

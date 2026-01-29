@@ -5,8 +5,8 @@ export default defineEventHandler(async (event) => {
     try {
         const { client, user } = await getSupabaseClientAndUser(event);
 
-        const avatarUrl = user.user_metadata?.avatar_url;
-        const avatarPath = user.user_metadata?.avatar_path;
+        const avatarUrl = user.user_metadata?.avatar_url as string | undefined;
+        const avatarPath = user.user_metadata?.avatar_path as string | undefined;
 
         // Se existe um avatar, tentar remover do storage
         // Tentar usar avatar_path primeiro, depois avatar_url

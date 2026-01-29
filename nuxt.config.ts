@@ -37,12 +37,12 @@ export default defineNuxtConfig({
       include: undefined,
       exclude: [
         '/',
-        '/auth/login', 
-        '/auth/register', 
+        '/auth/login',
+        '/auth/register',
         '/auth/callback',
-        '/profile', 
-        '/subscription/success', 
-        '/subscription/cancel', 
+        '/profile',
+        '/subscription/success',
+        '/subscription/cancel',
         '/temporary-access/request'
       ],
       saveRedirectToCookie: true,
@@ -132,6 +132,20 @@ export default defineNuxtConfig({
       stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
       stripePriceId: process.env.NUXT_PUBLIC_STRIPE_PRICE_ID || 'price_1SPqCbRqS0dsHWTKABXy1sHt',
       baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    },
+  },
+
+  // Evitar bundle do VueUse no server (evita erro useMediaQuery no Nitro)
+  nitro: {
+    externals: {
+      inline: ['@vueuse/core', '@vueuse/shared', '@vueuse/metadata'],
+    },
+  },
+  vite: {
+    build: {
+      rollupOptions: {
+        external: ['@vueuse/core'],
+      },
     },
   },
 

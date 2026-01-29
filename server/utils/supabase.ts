@@ -2,15 +2,24 @@ import { serverSupabaseClient, serverSupabaseUser, serverSupabaseServiceRole } f
 import type { H3Event } from "h3";
 import type { Database } from "../types/database";
 
+/** Usuário retornado pelas rotas de API (com id, email e user_metadata) */
+export interface ServerAuthUser {
+  id: string;
+  sub: string;
+  email?: string;
+  user_metadata?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
 /**
  * Obtém o cliente Supabase e o usuário autenticado para uma rota Nitro.
  * Lança um erro 401 se o usuário não estiver autenticado.
  */
-export async function getSupabaseClientAndUser(event: H3Event) {
+export async function getSupabaseClientAndUser(event: H3Event): Promise<{ client: Awaited<ReturnType<typeof serverSupabaseClient<Database>>>; user: ServerAuthUser }> {
   const client = await serverSupabaseClient<Database>(event);
-  const user = await serverSupabaseUser(event);
+  const jwtUser = await serverSupabaseUser(event);
 
-  if (!user) {
+  if (!jwtUser) {
     throw createError({
       statusCode: 401,
       statusMessage: "Unauthorized",
@@ -18,11 +27,16 @@ export async function getSupabaseClientAndUser(event: H3Event) {
     });
   }
 
-  // No v2, o ID do usuário está em user.sub (JWT claims)
-  // Criamos um objeto compatível com o formato anterior
-  const userWithId = {
+  // Buscar usuário completo (com email, user_metadata) via auth.getUser (usa sessão da requisição)
+  const { data: { user: fullUser } } = await client.auth.getUser();
+  const user = fullUser ?? jwtUser;
+
+  const userWithId: ServerAuthUser = {
     ...user,
-    id: user.sub // user.sub contém o ID do usuário nas JWT claims
+    id: (user as { id?: string }).id ?? jwtUser.sub,
+    sub: jwtUser.sub,
+    email: (user as { email?: string }).email ?? undefined,
+    user_metadata: (user as { user_metadata?: Record<string, unknown> }).user_metadata ?? {},
   };
 
   return { client, user: userWithId };

@@ -56,7 +56,8 @@ export default defineEventHandler(async (event) => {
         const customerId = session.customer as string;
 
         if (subscriptionId && customerId) {
-          const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+          const subscriptionResponse = await stripe.subscriptions.retrieve(subscriptionId);
+          const subscription = subscriptionResponse as unknown as Stripe.Subscription;
           const userId = session.metadata?.user_id;
 
           if (userId) {
@@ -69,8 +70,8 @@ export default defineEventHandler(async (event) => {
                 stripe_subscription_id: subscriptionId,
                 stripe_price_id: subscription.items.data[0]?.price.id,
                 status: subscription.status,
-                current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-                current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+                current_period_start: new Date((subscription as { current_period_start?: number }).current_period_start! * 1000).toISOString(),
+                current_period_end: new Date((subscription as { current_period_end?: number }).current_period_end! * 1000).toISOString(),
                 cancel_at_period_end: subscription.cancel_at_period_end,
               }, {
                 onConflict: 'user_id',
@@ -82,14 +83,14 @@ export default defineEventHandler(async (event) => {
 
       case 'customer.subscription.updated':
       case 'customer.subscription.deleted': {
-        const subscription = stripeEvent.data.object as Stripe.Subscription;
+        const subscription = stripeEvent.data.object as Stripe.Subscription & { current_period_start?: number; current_period_end?: number };
         
         await supabaseAdmin
           .from('user_subscriptions')
           .update({
             status: subscription.status,
-            current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-            current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+            current_period_start: subscription.current_period_start != null ? new Date(subscription.current_period_start * 1000).toISOString() : undefined,
+            current_period_end: subscription.current_period_end != null ? new Date(subscription.current_period_end * 1000).toISOString() : undefined,
             cancel_at_period_end: subscription.cancel_at_period_end,
           })
           .eq('stripe_subscription_id', subscription.id);
@@ -97,8 +98,8 @@ export default defineEventHandler(async (event) => {
       }
 
       case 'invoice.payment_succeeded': {
-        const invoice = stripeEvent.data.object as Stripe.Invoice;
-        const subscriptionId = invoice.subscription as string;
+        const invoice = stripeEvent.data.object as Stripe.Invoice & { subscription?: string };
+        const subscriptionId = invoice.subscription as string | undefined;
 
         if (subscriptionId) {
           await supabaseAdmin
@@ -112,8 +113,8 @@ export default defineEventHandler(async (event) => {
       }
 
       case 'invoice.payment_failed': {
-        const invoice = stripeEvent.data.object as Stripe.Invoice;
-        const subscriptionId = invoice.subscription as string;
+        const invoice = stripeEvent.data.object as Stripe.Invoice & { subscription?: string };
+        const subscriptionId = invoice.subscription as string | undefined;
 
         if (subscriptionId) {
           await supabaseAdmin

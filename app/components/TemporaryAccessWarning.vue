@@ -133,7 +133,7 @@ watch(() => {
 const hasRedirected = ref(false);
 
 // Redirecionar quando expirar (observar tanto o tempo quanto o status)
-watch([timeRemaining, () => status.value?.hasAccess], async ([remaining, hasAccess]) => {
+watch([timeRemaining, () => (typeof status.value === 'object' && status.value !== null ? status.value.hasAccess : undefined)], async ([remaining, hasAccess]) => {
   // Se o tempo expirou OU o status indicar que não tem mais acesso
   const timeExpired = remaining <= 0 && expiresAt.value;
   const accessLost = hasAccess === false;
@@ -173,7 +173,7 @@ watch([timeRemaining, () => status.value?.hasAccess], async ([remaining, hasAcce
 }, { immediate: false });
 
 // Resetar flag quando novo acesso é concedido
-watch(() => status.value?.hasTemporaryAccess, (hasTemporaryAccess) => {
+watch(() => (typeof status.value === 'object' && status.value !== null ? status.value.hasTemporaryAccess : undefined), (hasTemporaryAccess) => {
   if (hasTemporaryAccess) {
     hasRedirected.value = false;
   }

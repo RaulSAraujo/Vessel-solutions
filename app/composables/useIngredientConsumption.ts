@@ -146,18 +146,19 @@ export function useIngredientConsumption() {
             const summary = response.summary;
 
             // Encontrar ingrediente mais usado
-            const mostUsed = data.length > 0
+            const firstItem = data[0];
+            const mostUsed = data.length > 0 && firstItem
                 ? data.reduce(
                     (max, item) => (item.totalQuantity > max.totalQuantity ? item : max),
-                    data[0]
+                    firstItem
                 )
                 : null;
 
             // Encontrar ingrediente mais caro
-            const mostExpensive = data.length > 0
+            const mostExpensive = data.length > 0 && firstItem
                 ? data.reduce(
                     (max, item) => (item.totalCost > max.totalCost ? item : max),
-                    data[0]
+                    firstItem
                 )
                 : null;
 
@@ -181,8 +182,8 @@ export function useIngredientConsumption() {
             });
 
             return {
-                mostUsedIngredient: mostUsed,
-                mostExpensiveIngredient: mostExpensive,
+                mostUsedIngredient: mostUsed ?? null,
+                mostExpensiveIngredient: mostExpensive ?? null,
                 averageCostPerEvent: summary.averageCostPerEvent,
                 totalIngredients: summary.totalIngredients,
                 totalEvents: summary.totalEvents,

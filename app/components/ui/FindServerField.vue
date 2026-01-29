@@ -1,6 +1,9 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script lang="ts" setup>
+import type { Database } from "~~/server/types/database";
+
 const supabase = useSupabaseClient();
+type TableName = keyof Database["public"]["Tables"];
 
 const props = defineProps({
   /**
@@ -169,7 +172,7 @@ const fetchData = async () => {
     loading.value = true;
 
     const { data, error } = await supabase
-      .from(props.tableName) // Nome da tabela
+      .from(props.tableName as TableName)
       .select(props.selectQuery)
       .ilike(props.searchField, `%${debounced.value}%`) // Busca insensível a maiúsculas/minúsculas
       .limit(10); // Limita os resultados

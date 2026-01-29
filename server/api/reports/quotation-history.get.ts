@@ -388,8 +388,9 @@ function calculateIngredientPriceTrend(
       };
     }
 
-    if (!ingredientPriceTrend[item.ingredient].suppliers.includes(item.supplier)) {
-      ingredientPriceTrend[item.ingredient].suppliers.push(item.supplier);
+    const trendEntry = ingredientPriceTrend[item.ingredient];
+    if (trendEntry && !trendEntry.suppliers.includes(item.supplier)) {
+      trendEntry.suppliers.push(item.supplier);
     }
   });
 
@@ -399,14 +400,15 @@ function calculateIngredientPriceTrend(
       .filter((item) => item.ingredient === ingredient)
       .map((item) => item.unitPrice);
 
-    if (prices.length > 0) {
+    const trendEntry = ingredientPriceTrend[ingredient];
+    if (prices.length > 0 && trendEntry) {
       const averagePrice = prices.reduce((sum, price) => sum + price, 0) / prices.length;
       const minPrice = Math.min(...prices);
       const maxPrice = Math.max(...prices);
       const priceVariation = minPrice > 0 ? ((maxPrice - minPrice) / minPrice) * 100 : 0;
 
-      ingredientPriceTrend[ingredient].averagePrice = averagePrice;
-      ingredientPriceTrend[ingredient].priceVariation = priceVariation;
+      trendEntry.averagePrice = averagePrice;
+      trendEntry.priceVariation = priceVariation;
     }
   });
 

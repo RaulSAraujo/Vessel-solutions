@@ -29,6 +29,13 @@ export default defineEventHandler(async (event) => {
         }
 
         const newEventDrink = data[0];
+        if (!newEventDrink) {
+            throw createError({
+                statusCode: 500,
+                statusMessage: 'Failed to create event drink',
+                message: 'No data returned after insertion.',
+            });
+        }
 
         // Se o evento já está com status 'purchase', gerar itens da purchase-list
         const { data: eventData } = await client
@@ -37,8 +44,8 @@ export default defineEventHandler(async (event) => {
             .eq('id', body.event_id)
             .single();
 
-        if (eventData && eventData.status === 'purchase' && eventData.user_id && newEventDrink.drink_name) {
-            await generatePurchaseListForNewDrink(client, body.event_id, newEventDrink, eventData.user_id);
+        if (eventData && eventData.status === 'purchase' && newEventDrink.drink_name) {
+            await generatePurchaseListForNewDrink(client, body.event_id, newEventDrink);
         }
 
         return newEventDrink;

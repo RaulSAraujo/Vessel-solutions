@@ -78,6 +78,7 @@ export default defineEventHandler(async (event) => {
             p_street: body.street || "",
             p_number: body.number || "",
             p_additional_info: body.additional_info || "",
+            p_document: body.document || "",
           }
         );
 
@@ -109,7 +110,7 @@ export default defineEventHandler(async (event) => {
         start_time: eventQuotation.start_time,
         end_time: eventQuotation.end_time,
         guest_count: eventQuotation.guest_count,
-        distance: eventQuotation.distance,
+        distance: eventQuotation.distance ?? 0,
         audience_profile: eventQuotation.audience_profile,
         status: "confirmed", // Status padrão para eventos convertidos
         notes: eventQuotation.notes,

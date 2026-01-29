@@ -39,7 +39,9 @@ export function applySupabaseFilters<Q extends PostgrestFilterBuilder<any, any, 
 
     for (const field in filters) {
         if (Object.prototype.hasOwnProperty.call(filters, field)) {
-            const { op, value } = filters[field];
+            const filter = filters[field];
+            if (!filter) continue;
+            const { op, value } = filter;
 
             // Verifica se o operador é válido e existe no nosso mapeamento
             if (op && value !== undefined && SUPABASE_OPERATORS[op]) {

@@ -31,8 +31,8 @@ export default defineEventHandler(async (event) => {
 
         if (startDate && endDate) {
             eventsQuery = eventsQuery
-                .gte('start_time', startDate)
-                .lte('start_time', endDate);
+                .gte('start_time', startDate as string)
+                .lte('start_time', endDate as string);
         }
 
         const { data: eventsData, error } = await eventsQuery;
@@ -70,15 +70,16 @@ export default defineEventHandler(async (event) => {
             .sort() // Garante que os meses estejam em ordem cronológica
             .map(yearMonthKey => {
                 const [year, month] = yearMonthKey.split('-');
-                const dateObj = new Date(parseInt(year), parseInt(month) - 1); // Mês é 0-indexado
+                const dateObj = new Date(parseInt(year ?? '0', 10), parseInt(month ?? '1', 10) - 1); // Mês é 0-indexado
                 // Formata a data para exibição no gráfico (ex: "Jan 23")
                 const formattedDate = dateObj.toLocaleString('pt-BR', { month: 'short', year: '2-digit' });
+                const entry = monthlySummary[yearMonthKey];
 
                 return {
                     date: formattedDate,
-                    cost: monthlySummary[yearMonthKey].cost.toFixed(2),
-                    revenue: monthlySummary[yearMonthKey].revenue.toFixed(2),
-                    profit: monthlySummary[yearMonthKey].profit.toFixed(2),
+                    cost: (entry?.cost ?? 0).toFixed(2),
+                    revenue: (entry?.revenue ?? 0).toFixed(2),
+                    profit: (entry?.profit ?? 0).toFixed(2),
                 };
             });
 
