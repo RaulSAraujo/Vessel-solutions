@@ -154,9 +154,7 @@ export default defineNuxtConfig({
     // Dashboard - cache com SWR (stale-while-revalidate) por 5 minutos
     '/dashboard': { swr: 300 },
 
-    // Páginas estáticas que podem ser pré-renderizadas
-    '/': { prerender: true },
-    '/auth/login': { prerender: true },
-    '/auth/register': { prerender: true },
+    // Rotas /, /auth/login e /auth/register não usam prerender para evitar 500
+    // durante o build (dependem de Supabase/auth no SSR).
   }
 })

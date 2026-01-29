@@ -1,4 +1,4 @@
-import { serverSupabaseClient } from "#supabase/server";
+import { serverSupabaseClient } from "@nuxtjs/supabase/dist/runtime/server/services/serverSupabaseClient.js";
 import type { FetchError } from "ofetch"
 import type { Tables } from '~~/server/types/database';
 

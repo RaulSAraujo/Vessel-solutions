@@ -11,31 +11,31 @@
     "typecheck": "npx nuxt typecheck"
   },
   "dependencies": {
-    "@nuxt/eslint": "1.9.0",
-    "@nuxtjs/supabase": "2.0.1",
-    "@pinia/nuxt": "0.11.2",
-    "@stripe/stripe-js": "^8.3.0",
+    "@nuxt/eslint": "1.13.0",
+    "@nuxtjs/supabase": "2.0.3",
+    "@pinia/nuxt": "0.11.3",
+    "@stripe/stripe-js": "8.7.0",
     "@vee-validate/nuxt": "^4.15.1",
     "@vee-validate/yup": "^4.15.1",
-    "@vueuse/nuxt": "14.0.0",
-    "dayjs": "^1.11.18",
+    "@vueuse/nuxt": "14.1.0",
+    "dayjs": "1.11.19",
     "dayjs-nuxt": "2.1.11",
     "dayjs-plugin-utc": "^0.1.2",
-    "driver.js": "^1.3.6",
-    "eslint": "9.38.0",
+    "driver.js": "1.4.0",
+    "eslint": "9.39.2",
     "maska": "^3.2.0",
-    "nuxt": "4.1.3",
-    "nuxt-charts": "1.0.2",
-    "pinia": "^3.0.3",
-    "stripe": "^19.2.0",
-    "vue": "^3.5.21",
-    "vue-router": "4.6.3",
+    "nuxt": "4.3.0",
+    "nuxt-charts": "2.1.1",
+    "pinia": "3.0.4",
+    "stripe": "20.3.0",
+    "vue": "3.5.27",
+    "vue-router": "4.6.4",
     "vue3-toastify": "^0.2.8",
-    "vuetify-nuxt-module": "0.18.8",
+    "vuetify-nuxt-module": "0.19.5",
     "yup": "^1.7.1"
   },
   "devDependencies": {
     "typescript": "5.9.3",
-    "vue-tsc": "3.1.1"
+    "vue-tsc": "3.2.4"
   }
 }
